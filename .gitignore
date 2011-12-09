@@ -1,0 +1,14 @@
+./target
+.classpath
+.project
+.settings
+
+animation-editor-main/target
+animation-editor-main/.classpath
+animation-editor-main/.project
+animation-editor-main/.settings
+
+animation-editor-core/target
+animation-editor-core/.classpath
+animation-editor-core/.project
+animation-editor-core/.settings
