@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -26,7 +27,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	float nodeSize = 2f;
 	float backgroundNodeSize = 4f;
-	
+
 	float selectDistance = 4f;
 
 	Vector2 position = new Vector2();
@@ -46,8 +47,79 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		public static final String LeftMouseButton = "leftMouseButton";
 		public static final String RightMouseButton = "rightMouseButton";
+		public static final String DeleteNodeButton = "deleteNodeButton";
 
 	}
+
+	interface EditorState {
+
+		void update();
+
+	}
+
+	class NormalEditorState implements EditorState {
+
+		public void update() {
+
+			int x = Gdx.input.getX();
+			int y = Gdx.graphics.getHeight() - Gdx.input.getY();
+
+			position.set(nearNode.getX(), nearNode.getY());
+
+			if (inputMonitor.getButton(Actions.RightMouseButton).isReleased()) {
+				selectedNode = nearNode;
+			}
+			
+			if (inputMonitor.getButton(Actions.DeleteNodeButton).isReleased()) {
+				if (selectedNode != root) {
+					Node parent = selectedNode.getParent();
+					parent.getChildren().remove(selectedNode);
+					nodes.remove(selectedNode);
+					selectedNode = parent;
+				}
+			}
+
+			if (inputMonitor.getButton(Actions.LeftMouseButton).isPressed()) {
+				if (position.dst(x, y) < selectDistance) {
+					selectedNode = nearNode;
+					currentState = new DraggingNodeState();
+					return;
+				}
+			}
+
+			if (inputMonitor.getButton(Actions.LeftMouseButton).isReleased()) {
+				Node newNode = new Bone();
+				newNode.setParent(selectedNode);
+				newNode.setPosition(x, y);
+				selectedNode = newNode;
+				nodes.add(newNode);
+			}
+
+		}
+
+	}
+
+	class DraggingNodeState implements EditorState {
+
+		@Override
+		public void update() {
+
+			int x = Gdx.input.getX();
+			int y = Gdx.graphics.getHeight() - Gdx.input.getY();
+
+			if (inputMonitor.getButton(Actions.LeftMouseButton).isHolded()) {
+				selectedNode.setPosition(x, y);
+			}
+
+			if (inputMonitor.getButton(Actions.LeftMouseButton).isReleased()) {
+				currentState = new NormalEditorState();
+			}
+
+		}
+
+	}
+
+	EditorState currentState;
 
 	@Override
 	public void create() {
@@ -60,6 +132,8 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		selectedNode = root;
 
+		currentState = new NormalEditorState();
+
 		nodes = new ArrayList<Node>();
 		nodes.add(root);
 
@@ -71,6 +145,7 @@ public class EditorLibgdxApplicationListener extends Game {
 			{
 				monitorMouseLeftButton(Actions.LeftMouseButton);
 				monitorMouseRightButton(Actions.RightMouseButton);
+				monitorKeys(Actions.DeleteNodeButton, Keys.DEL, Keys.BACKSPACE);
 			}
 		};
 
@@ -78,40 +153,29 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	@Override
 	public void render() {
-		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
+		realUpdate();
+		realRender();
+	}
 
+	private void realUpdate() {
 		inputMonitor.update();
 
 		int x = Gdx.input.getX();
 		int y = Gdx.graphics.getHeight() - Gdx.input.getY();
 
-		if (inputMonitor.getButton(Actions.RightMouseButton).isReleased()) {
-			selectedNode = nearNode;
-		}
-		
-		if (inputMonitor.getButton(Actions.LeftMouseButton).isReleased()) {
-
-			position.set(nearNode.getX(), nearNode.getY());
-
-			if (position.dst(x, y) < selectDistance) {
-				selectedNode = nearNode;
-			} else {
-				Node newNode = new Bone();
-				newNode.setParent(selectedNode);
-				newNode.setPosition(x, y);
-				selectedNode = newNode;
-				nodes.add(newNode);
-			}
-		}
-
 		nearNode = updateNearNode(x, y);
+
+		currentState.update();
+
+	}
+
+	private void realRender() {
+		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		spriteBatch.begin();
 		spriteBatch.end();
 
 		renderNodeTree(root);
-		// renderNodeOnly(nearNode);
-		// renderNodeOnly(selectedNode);
 	}
 
 	private Node updateNearNode(int x, int y) {
