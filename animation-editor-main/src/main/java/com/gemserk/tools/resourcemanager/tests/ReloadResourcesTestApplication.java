@@ -1,4 +1,4 @@
-package com.gemserk.tools.animationeditor.main;
+package com.gemserk.tools.resourcemanager.tests;
 
 import java.io.File;
 
