@@ -15,6 +15,9 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.gemserk.commons.gdx.resources.LibgdxResourceBuilder;
+import com.gemserk.commons.tasks.Task;
+import com.gemserk.commons.tasks.TaskDelayedImpl;
+import com.gemserk.commons.tasks.TaskImpl;
 import com.gemserk.componentsengine.input.ButtonMonitor;
 import com.gemserk.componentsengine.input.LibgdxInputMappingBuilder;
 import com.gemserk.resources.Resource;
@@ -28,109 +31,9 @@ import com.gemserk.resources.monitor.FilesMonitorImpl;
 import com.gemserk.resources.monitor.ResourceStatusMonitor;
 import com.gemserk.resources.monitor.handlers.FileStatusChangedHandler;
 
-public class MainApplication {
+public class ReloadResourcesTestApplication {
 
-	protected static final Logger logger = LoggerFactory.getLogger(MainApplication.class);
-
-	// Ideas to detect the file is opened, but didnt work well.
-
-	// public static boolean isFileOpened(File file) {
-	// FileChannel channel = getFileChannel(file);
-	//
-	// FileLock lock = null;
-	//
-	// try {
-	// lock = performChannelLock(channel);
-	// } catch (OverlappingFileLockException e) {
-	// return true;
-	// } finally {
-	// try {
-	// channel.close();
-	// } catch (IOException e) {
-	// throw new RuntimeException(e);
-	// }
-	// releaseLock(lock);
-	// }
-	//
-	// return false;
-	// }
-	//
-	// private static FileChannel getFileChannel(File file) {
-	// FileChannel channel;
-	//
-	// try {
-	// channel = new RandomAccessFile(file, "rw").getChannel();
-	// } catch (FileNotFoundException e) {
-	// throw new RuntimeException(e);
-	// }
-	//
-	// return channel;
-	// }
-	//
-	// private static FileLock performChannelLock(FileChannel channel) {
-	// try {
-	// return channel.lock();
-	// } catch (IOException e) {
-	// throw new RuntimeException(e);
-	// }
-	// }
-	//
-	// private static void releaseLock(FileLock lock) {
-	// if (lock == null)
-	// return;
-	// try {
-	// lock.release();
-	// } catch (ClosedChannelException e) {
-	//
-	// } catch (IOException e) {
-	// throw new RuntimeException(e);
-	// }
-	// }
-
-	static interface Task {
-
-		boolean isDone();
-
-		void update(float delta);
-
-	}
-
-	static abstract class TaskImpl implements Task {
-
-		boolean done = false;
-
-		@Override
-		public boolean isDone() {
-			return done;
-		}
-
-	}
-
-	static class TaskDelayedImpl implements Task {
-
-		Task task;
-		float delay;
-
-		public TaskDelayedImpl(Task task, float delay) {
-			this.task = task;
-			this.delay = delay;
-		}
-
-		@Override
-		public boolean isDone() {
-			return task.isDone();
-		}
-
-		@Override
-		public void update(float delta) {
-			if (delay < 0)
-				// should call with delta - delay?
-				task.update(delta);
-			else
-				delay -= delta;
-		}
-
-	}
+	protected static final Logger logger = LoggerFactory.getLogger(ReloadResourcesTestApplication.class);
 
 	private static final class TestApplicationListener extends Game {
 
@@ -148,7 +51,7 @@ public class MainApplication {
 
 			reloadTask = new TaskImpl() {
 				public void update(float delta) {
-					done = true;
+					setDone(true);
 				};
 			};
 
@@ -171,8 +74,6 @@ public class MainApplication {
 
 			ClassPathDataSource islandDataSource = new ClassPathDataSource("data/island01.png");
 
-			// filesMonitor.monitor(islandDataSource, resourceManager.get("IslandTexture"));
-
 			filesMonitor.register(new FileMonitor(new FileInformationImpl(new File(islandDataSource.getUri())), new FileStatusChangedHandler() {
 				@Override
 				public void onFileModified(final File file) {
@@ -180,29 +81,21 @@ public class MainApplication {
 					reloadTask = new TaskDelayedImpl(new TaskImpl() {
 						@Override
 						public void update(float delta) {
-							done = true;
+							setDone(true);
 							try {
 								logger.debug("trying to reload resource");
 								resourceManager.get("IslandTexture").unload();
-//								islandSpriteResource.reload();
 							} catch (GdxRuntimeException e) {
 								logger.error("failed to reload resource, cant reload resource yet", e);
-								reloadTask= new TaskDelayedImpl(this, 0.5f);
+								reloadTask = new TaskDelayedImpl(this, 0.5f);
 							}
 						}
 					}, 0.5f);
 
 				}
 			}));
-			
+
 			resourceStatusMonitor = new ResourceStatusMonitor(resourceManager.get("IslandTexture"));
-			
-			// filesMonitor.register(new FileMonitor(new FileInformationImpl(new File(islandDataSource.getUri())), new FileHandler() {
-			// @Override
-			// public void onFileModified(File file) {
-			// islandSpriteResource.reload();
-			// }
-			// }));
 
 			Gdx.graphics.getGL10().glClearColor(0f, 0f, 0f, 1f);
 
@@ -215,14 +108,14 @@ public class MainApplication {
 			buttonMonitor.update();
 
 			filesMonitor.checkModifiedFiles();
-			
+
 			resourceStatusMonitor.checkChanges();
-			
+
 			if (resourceStatusMonitor.wasUnloaded()) {
 				logger.debug("island texture was unloaded, unloading sprite resource");
 				islandSpriteResource.unload();
 			}
-			
+
 			if (resourceStatusMonitor.wasLoaded()) {
 				logger.debug("island texture was loaded, reloading sprite resource");
 				islandSpriteResource.reload();
