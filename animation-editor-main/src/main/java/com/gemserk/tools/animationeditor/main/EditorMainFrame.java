@@ -18,7 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 
 public class EditorMainFrame extends JFrame {
 
@@ -45,9 +45,9 @@ public class EditorMainFrame extends JFrame {
 		editorApplication = new EditorLibgdxApplicationListener();
 
 		JMenuBar menuBar = new JMenuBar();
-		JMenu fileMenu = new JMenu("File");
+		JMenu fileMenu = new JMenu(messages.getString(Messages.MenuFileTitle));
 
-		JMenuItem exitMenuItem = new JMenuItem("Exit");
+		JMenuItem exitMenuItem = new JMenuItem(messages.getString(Messages.MenuFileExit));
 		
 		exitMenuItem.addActionListener(new ActionListener() {
 			@Override
@@ -71,14 +71,30 @@ public class EditorMainFrame extends JFrame {
 		
 		setJMenuBar(menuBar);
 
-		LwjglCanvas lwjglCanvas = new LwjglCanvas(editorApplication, false);
+		Canvas canvas = new Canvas() {
+			
+			private LwjglApplication lwjglApplication;
+
+			public final void addNotify() {
+				super.addNotify();
+				lwjglApplication = new LwjglApplication(editorApplication, false, this);
+			}
+			
+			public final void removeNotify() {
+				lwjglApplication.stop();
+				super.removeNotify();
+			}
+			
+		};
 		
-		Canvas canvas = lwjglCanvas.getCanvas();
+		canvas.setIgnoreRepaint(true);
 		
 		add(canvas);
 
-		setVisible(true);
 		validate();
+
+		setVisible(true);
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		addWindowListener(new WindowAdapter() {
