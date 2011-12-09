@@ -1,14 +1,17 @@
 package com.gemserk.tools.animationeditor.main;
 
+import java.awt.Canvas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ResourceBundle;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 import org.slf4j.Logger;
@@ -21,12 +24,13 @@ import com.badlogic.gdx.graphics.GL10;
 
 public class EditorApplication {
 	
-	protected static final Logger logger = LoggerFactory.getLogger(EditorApplication.Actions.class);
-
-	static class Actions {
-
-		public static final String ExitActionCommand = "exit";
-
+	protected static final Logger logger = LoggerFactory.getLogger(EditorApplication.class);
+	
+	public static class Messages {
+		
+		public static final String DialogExitMessage = "dialogs.exit.message";
+		public static final String DialogExitTitle = "dialogs.exit.title";
+		
 	}
 
 	static class EditorLibgdxApplicationListener extends Game {
@@ -46,9 +50,13 @@ public class EditorApplication {
 	static class EditorMainFrame extends JFrame {
 
 		private EditorLibgdxApplicationListener editorApplication;
-
+		
+		private ResourceBundle messages;
+		
 		public EditorMainFrame() {
-
+			
+			messages = ResourceBundle.getBundle("messages");
+			
 			try {
 				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 			} catch (Exception ex) {
@@ -58,18 +66,26 @@ public class EditorApplication {
 			setResizable(true);
 
 			editorApplication = new EditorLibgdxApplicationListener();
-			// mainFrame.setLayout(new GridLayout(2, 1));
 
 			JMenuBar menuBar = new JMenuBar();
 			JMenu fileMenu = new JMenu("File");
 
 			JMenuItem exitMenuItem = new JMenuItem("Exit");
-			exitMenuItem.setActionCommand(Actions.ExitActionCommand);
 			
 			exitMenuItem.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
+					
+					int showConfirmDialog = JOptionPane.showConfirmDialog(EditorMainFrame.this, // 
+							messages.getString(Messages.DialogExitMessage), //
+							messages.getString(Messages.DialogExitTitle), // 
+							JOptionPane.YES_NO_OPTION);
+					
+					if (showConfirmDialog == JOptionPane.NO_OPTION)
+						return;
+					
 					logger.info("Exit action, closing application");
+					
 					Gdx.app.exit();					
 				}
 			});
@@ -81,7 +97,10 @@ public class EditorApplication {
 			setJMenuBar(menuBar);
 
 			LwjglCanvas lwjglCanvas = new LwjglCanvas(editorApplication, false);
-			add(lwjglCanvas.getCanvas());
+			
+			Canvas canvas = lwjglCanvas.getCanvas();
+			
+			add(canvas);
 
 			setVisible(true);
 			validate();
