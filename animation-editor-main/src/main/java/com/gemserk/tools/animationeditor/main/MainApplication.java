@@ -1,13 +1,6 @@
 package com.gemserk.tools.animationeditor.main;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.channels.ClosedChannelException;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
-import java.nio.channels.OverlappingFileLockException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,75 +25,132 @@ import com.gemserk.resources.monitor.FileInformationImpl;
 import com.gemserk.resources.monitor.FileMonitor;
 import com.gemserk.resources.monitor.FilesMonitor;
 import com.gemserk.resources.monitor.FilesMonitorImpl;
-import com.gemserk.resources.monitor.handlers.FileHandler;
+import com.gemserk.resources.monitor.ResourceStatusMonitor;
+import com.gemserk.resources.monitor.handlers.FileStatusChangedHandler;
 
 public class MainApplication {
 
 	protected static final Logger logger = LoggerFactory.getLogger(MainApplication.class);
 
-	public static boolean isFileOpened(File file) {
-		FileChannel channel = getFileChannel(file);
+	// Ideas to detect the file is opened, but didnt work well.
 
-		FileLock lock = null;
+	// public static boolean isFileOpened(File file) {
+	// FileChannel channel = getFileChannel(file);
+	//
+	// FileLock lock = null;
+	//
+	// try {
+	// lock = performChannelLock(channel);
+	// } catch (OverlappingFileLockException e) {
+	// return true;
+	// } finally {
+	// try {
+	// channel.close();
+	// } catch (IOException e) {
+	// throw new RuntimeException(e);
+	// }
+	// releaseLock(lock);
+	// }
+	//
+	// return false;
+	// }
+	//
+	// private static FileChannel getFileChannel(File file) {
+	// FileChannel channel;
+	//
+	// try {
+	// channel = new RandomAccessFile(file, "rw").getChannel();
+	// } catch (FileNotFoundException e) {
+	// throw new RuntimeException(e);
+	// }
+	//
+	// return channel;
+	// }
+	//
+	// private static FileLock performChannelLock(FileChannel channel) {
+	// try {
+	// return channel.lock();
+	// } catch (IOException e) {
+	// throw new RuntimeException(e);
+	// }
+	// }
+	//
+	// private static void releaseLock(FileLock lock) {
+	// if (lock == null)
+	// return;
+	// try {
+	// lock.release();
+	// } catch (ClosedChannelException e) {
+	//
+	// } catch (IOException e) {
+	// throw new RuntimeException(e);
+	// }
+	// }
 
-		try {
-			lock = performChannelLock(channel);
-		} catch (OverlappingFileLockException e) {
-			return true;
-		} finally {
-			try {
-				channel.close();
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-			releaseLock(lock);
-		}
+	static interface Task {
 
-		return false;
+		boolean isDone();
+
+		void update(float delta);
+
 	}
 
-	private static FileChannel getFileChannel(File file) {
-		FileChannel channel;
+	static abstract class TaskImpl implements Task {
 
-		try {
-			channel = new RandomAccessFile(file, "rw").getChannel();
-		} catch (FileNotFoundException e) {
-			throw new RuntimeException(e);
+		boolean done = false;
+
+		@Override
+		public boolean isDone() {
+			return done;
 		}
 
-		return channel;
 	}
 
-	private static FileLock performChannelLock(FileChannel channel) {
-		try {
-			return channel.lock();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-	}
+	static class TaskDelayedImpl implements Task {
 
-	private static void releaseLock(FileLock lock) {
-		if (lock == null)
-			return;
-		try {
-			lock.release();
-		} catch (ClosedChannelException e) {
+		Task task;
+		float delay;
 
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+		public TaskDelayedImpl(Task task, float delay) {
+			this.task = task;
+			this.delay = delay;
 		}
+
+		@Override
+		public boolean isDone() {
+			return task.isDone();
+		}
+
+		@Override
+		public void update(float delta) {
+			if (delay < 0)
+				// should call with delta - delay?
+				task.update(delta);
+			else
+				delay -= delta;
+		}
+
 	}
 
 	private static final class TestApplicationListener extends Game {
 
 		ResourceManager<String> resourceManager;
 		ButtonMonitor buttonMonitor;
-		private SpriteBatch spriteBatch;
-		private Resource<Sprite> islandSpriteResource;
-		private FilesMonitor filesMonitor;
+		SpriteBatch spriteBatch;
+		Resource<Sprite> islandSpriteResource;
+		FilesMonitor filesMonitor;
+
+		Task reloadTask;
+		private ResourceStatusMonitor resourceStatusMonitor;
 
 		@Override
 		public void create() {
+
+			reloadTask = new TaskImpl() {
+				public void update(float delta) {
+					done = true;
+				};
+			};
 
 			resourceManager = new ResourceManagerImpl<String>();
 
@@ -123,56 +173,37 @@ public class MainApplication {
 
 			// filesMonitor.monitor(islandDataSource, resourceManager.get("IslandTexture"));
 
-			filesMonitor.register(new FileMonitor(new FileInformationImpl(new File(islandDataSource.getUri())), new FileHandler() {
+			filesMonitor.register(new FileMonitor(new FileInformationImpl(new File(islandDataSource.getUri())), new FileStatusChangedHandler() {
 				@Override
 				public void onFileModified(final File file) {
-					Runnable runnable = new Runnable() {
-						@Override
-						public void run() {
 
+					reloadTask = new TaskDelayedImpl(new TaskImpl() {
+						@Override
+						public void update(float delta) {
+							done = true;
 							try {
 								logger.debug("trying to reload resource");
-								resourceManager.get("IslandTexture").reload();
-								islandSpriteResource.reload();
+								resourceManager.get("IslandTexture").unload();
+//								islandSpriteResource.reload();
 							} catch (GdxRuntimeException e) {
 								logger.error("failed to reload resource, cant reload resource yet", e);
-								try {
-									Thread.sleep(100L);
-								} catch (InterruptedException e1) {
-									e1.printStackTrace();
-								}
-								Gdx.app.postRunnable(this);
+								reloadTask= new TaskDelayedImpl(this, 0.5f);
 							}
-
-							// if (!isFileOpened(file)) {
-							// logger.debug("file is not locked, performing resource reload");
-							// resourceManager.get("IslandTexture").reload();
-							// } else {
-							// logger.debug("file is locked, cant reload resource yet");
-							// try {
-							// Thread.sleep(1000L);
-							// } catch (InterruptedException e) {
-							// e.printStackTrace();
-							// }
-							// Gdx.app.postRunnable(this);
-							// }
-
 						}
-					};
-
-					Gdx.app.postRunnable(runnable);
+					}, 0.5f);
 
 				}
 			}));
-
+			
+			resourceStatusMonitor = new ResourceStatusMonitor(resourceManager.get("IslandTexture"));
+			
 			// filesMonitor.register(new FileMonitor(new FileInformationImpl(new File(islandDataSource.getUri())), new FileHandler() {
 			// @Override
 			// public void onFileModified(File file) {
 			// islandSpriteResource.reload();
 			// }
 			// }));
-			
-			
+
 			Gdx.graphics.getGL10().glClearColor(0f, 0f, 0f, 1f);
 
 		}
@@ -184,11 +215,26 @@ public class MainApplication {
 			buttonMonitor.update();
 
 			filesMonitor.checkModifiedFiles();
+			
+			resourceStatusMonitor.checkChanges();
+			
+			if (resourceStatusMonitor.wasUnloaded()) {
+				logger.debug("island texture was unloaded, unloading sprite resource");
+				islandSpriteResource.unload();
+			}
+			
+			if (resourceStatusMonitor.wasLoaded()) {
+				logger.debug("island texture was loaded, reloading sprite resource");
+				islandSpriteResource.reload();
+			}
 
 			if (buttonMonitor.isReleased()) {
 				resourceManager.get("IslandTexture").reload();
 				islandSpriteResource.reload();
 			}
+
+			if (!reloadTask.isDone())
+				reloadTask.update(Gdx.graphics.getDeltaTime());
 
 			spriteBatch.begin();
 			islandSpriteResource.get().draw(spriteBatch);
