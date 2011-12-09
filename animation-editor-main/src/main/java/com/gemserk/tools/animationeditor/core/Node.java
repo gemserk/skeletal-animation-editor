@@ -1,5 +1,7 @@
 package com.gemserk.tools.animationeditor.core;
 
+import java.util.ArrayList;
+
 public interface Node {
 	
 	float getX();
@@ -9,5 +11,11 @@ public interface Node {
 	float getAngle();
 	
 	void setPosition(float x, float y);
+	
+	void setParent(Node node);
+	
+	Node getParent();
+	
+	ArrayList<Node> getChildren();
 
 }

@@ -27,13 +27,13 @@ public class EditorMainFrame extends JFrame {
 	private static final long serialVersionUID = 1269100988236728215L;
 
 	private EditorLibgdxApplicationListener editorApplication;
-	
+
 	private ResourceBundle messages;
-	
+
 	public EditorMainFrame() {
-		
+
 		messages = ResourceBundle.getBundle("messages");
-		
+
 		try {
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 		} catch (Exception ex) {
@@ -48,55 +48,55 @@ public class EditorMainFrame extends JFrame {
 		JMenu fileMenu = new JMenu(messages.getString(Messages.MenuFileTitle));
 
 		JMenuItem exitMenuItem = new JMenuItem(messages.getString(Messages.MenuFileExit));
-		
+
 		exitMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				int showConfirmDialog = JOptionPane.showConfirmDialog(EditorMainFrame.this, // 
+
+				int showConfirmDialog = JOptionPane.showConfirmDialog(EditorMainFrame.this, //
 						messages.getString(Messages.DialogExitMessage), //
-						messages.getString(Messages.DialogExitTitle), // 
+						messages.getString(Messages.DialogExitTitle), //
 						JOptionPane.YES_NO_OPTION);
-				
+
 				if (showConfirmDialog == JOptionPane.NO_OPTION)
 					return;
-				
-				Gdx.app.exit();					
+
+				Gdx.app.exit();
 			}
 		});
 
 		fileMenu.add(exitMenuItem);
 
 		menuBar.add(fileMenu);
-		
+
 		setJMenuBar(menuBar);
 
 		Canvas canvas = new Canvas() {
-			
+
 			private LwjglApplication lwjglApplication;
 
 			public final void addNotify() {
 				super.addNotify();
 				lwjglApplication = new LwjglApplication(editorApplication, false, this);
 			}
-			
+
 			public final void removeNotify() {
 				lwjglApplication.stop();
 				super.removeNotify();
 			}
-			
+
 		};
-		
-		canvas.setIgnoreRepaint(true);
-		
+
+		// canvas.setIgnoreRepaint(true);
+
 		add(canvas);
 
 		validate();
 
 		setVisible(true);
-		
+
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {

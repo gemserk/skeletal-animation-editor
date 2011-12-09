@@ -11,8 +11,8 @@ public class Bone implements Node {
 	 */
 	Vector2 position = new Vector2();
 
-	Node parent = new NodeNullImpl();
-	ArrayList<Bone> children = new ArrayList<Bone>();
+	Node parent = new NodeRootImpl();
+	ArrayList<Node> children = new ArrayList<Node>();
 	
 	@Override
 	public float getX() {
@@ -31,6 +31,24 @@ public class Bone implements Node {
 	@Override
 	public void setPosition(float x, float y) {
 		position.set(x - parent.getX(), y - parent.getY());
+	}
+
+	@Override
+	public void setParent(Node parent) {
+		// should convert coordinates to this other parent?
+		this.parent.getChildren().remove(this);
+		this.parent = parent;
+		this.parent.getChildren().add(this);
+	}
+
+	@Override
+	public Node getParent() {
+		return parent;
+	}
+
+	@Override
+	public ArrayList<Node> getChildren() {
+		return children;
 	}
 	
 }
