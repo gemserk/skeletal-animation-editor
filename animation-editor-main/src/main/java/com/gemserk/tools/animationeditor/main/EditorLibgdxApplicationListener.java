@@ -12,8 +12,10 @@ import com.gemserk.tools.animationeditor.core.Node;
 public class EditorLibgdxApplicationListener extends Game {
 
 	private SpriteBatch spriteBatch;
-	
+
 	private Node root;
+	
+	float dotSize = 3f;
 
 	@Override
 	public void create() {
@@ -21,19 +23,21 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		root = new Bone();
 		root.setPosition(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f);
-		
+
 		spriteBatch = new SpriteBatch();
-		
+
 	}
 
 	@Override
 	public void render() {
 		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
+
 		spriteBatch.begin();
 		spriteBatch.end();
-		
-		ImmediateModeRendererUtils.drawSolidCircle(root.getX(), root.getY(), 50f, Color.WHITE);
+
+		// ImmediateModeRendererUtils.drawSolidCircle(root.getX(), root.getY(), 50f, Color.WHITE);
+
+		ImmediateModeRendererUtils.fillRectangle(root.getX() - dotSize, root.getY() - dotSize, root.getX() + dotSize, root.getY() + dotSize, Color.WHITE);
 	}
 
 }
