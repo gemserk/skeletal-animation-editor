@@ -83,7 +83,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>animation-editor-core</artifactId>
+			<artifactId>animationeditor-core</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
