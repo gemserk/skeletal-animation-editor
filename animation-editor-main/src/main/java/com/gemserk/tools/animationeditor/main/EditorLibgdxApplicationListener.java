@@ -48,6 +48,7 @@ public class EditorLibgdxApplicationListener extends Game {
 		public static final String LeftMouseButton = "leftMouseButton";
 		public static final String RightMouseButton = "rightMouseButton";
 		public static final String DeleteNodeButton = "deleteNodeButton";
+		public static final String RotateButton = "rotateButton";
 
 	}
 
@@ -77,6 +78,10 @@ public class EditorLibgdxApplicationListener extends Game {
 					nodes.remove(selectedNode);
 					selectedNode = parent;
 				}
+			}
+			
+			if (inputMonitor.getButton(Actions.RotateButton).isPressed()) {
+				currentState = new RotatingNodeState();
 			}
 
 			if (inputMonitor.getButton(Actions.LeftMouseButton).isPressed()) {
@@ -118,6 +123,34 @@ public class EditorLibgdxApplicationListener extends Game {
 		}
 
 	}
+	
+	class RotatingNodeState implements EditorState {
+		
+		private int currentY;
+		float rotationSpeed = 1f;
+
+		public RotatingNodeState() {
+			currentY = Gdx.graphics.getHeight() - Gdx.input.getY();
+		}
+
+		@Override
+		public void update() {
+
+			int y = Gdx.graphics.getHeight() - Gdx.input.getY();
+
+			if (inputMonitor.getButton(Actions.RotateButton).isReleased()) {
+				currentState = new NormalEditorState();
+				return;
+			}
+			
+			float currentAngle = selectedNode.getAngle();
+			float rotation = (float) (currentY - y) * rotationSpeed;
+			selectedNode.setAngle(currentAngle + rotation);
+			
+			currentY = y;
+		}
+
+	}
 
 	EditorState currentState;
 
@@ -146,6 +179,8 @@ public class EditorLibgdxApplicationListener extends Game {
 				monitorMouseLeftButton(Actions.LeftMouseButton);
 				monitorMouseRightButton(Actions.RightMouseButton);
 				monitorKeys(Actions.DeleteNodeButton, Keys.DEL, Keys.BACKSPACE);
+				
+				monitorKey(Actions.RotateButton, Keys.CONTROL_LEFT);
 			}
 		};
 

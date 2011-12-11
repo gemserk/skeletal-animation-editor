@@ -7,8 +7,9 @@ import com.badlogic.gdx.math.Vector2;
 public class NodeRootImpl implements Node {
 
 	Vector2 position = new Vector2(0f, 0f);
+	Vector2 tmp = new Vector2(0f, 0f);
 	float angle = 0f;
-	
+
 	ArrayList<Node> children = new ArrayList<Node>();
 
 	@Override
@@ -49,6 +50,20 @@ public class NodeRootImpl implements Node {
 	@Override
 	public void setAngle(float angle) {
 		this.angle = angle;
+	}
+
+	@Override
+	public float getLocalX(float x, float y) {
+		tmp.set(x - position.x, y - position.y);
+		tmp.rotate(-angle);
+		return tmp.x;
+	}
+
+	@Override
+	public float getLocalY(float x, float y) {
+		tmp.set(x - position.x, y - position.y);
+		tmp.rotate(-angle);
+		return tmp.y;
 	}
 
 }
