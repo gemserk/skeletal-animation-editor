@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class Bone implements Node {
+public class NodeImpl implements Node {
 
 	/**
 	 * Local position to parent or absolute if no parent.

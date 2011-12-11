@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.gemserk.commons.gdx.graphics.ImmediateModeRendererUtils;
 import com.gemserk.componentsengine.input.InputDevicesMonitorImpl;
 import com.gemserk.componentsengine.input.LibgdxInputMappingBuilder;
-import com.gemserk.tools.animationeditor.core.Bone;
+import com.gemserk.tools.animationeditor.core.NodeImpl;
 import com.gemserk.tools.animationeditor.core.Node;
 
 public class EditorLibgdxApplicationListener extends Game {
@@ -93,7 +93,7 @@ public class EditorLibgdxApplicationListener extends Game {
 			}
 
 			if (inputMonitor.getButton(Actions.LeftMouseButton).isReleased()) {
-				Node newNode = new Bone();
+				Node newNode = new NodeImpl();
 				newNode.setParent(selectedNode);
 				newNode.setPosition(x, y);
 				selectedNode = newNode;
@@ -160,7 +160,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		Gdx.graphics.getGL10().glClearColor(0f, 0f, 0f, 1f);
 
-		root = new Bone();
+		root = new NodeImpl();
 		root.setPosition(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f);
 
 		selectedNode = root;
