@@ -9,6 +9,10 @@ public class TreeNodeEditorImpl extends DefaultMutableTreeNode {
 	private static final long serialVersionUID = -5346981181496467679L;
 	
 	Node node;
+	
+	public Node getNode() {
+		return node;
+	}
 
 	public TreeNodeEditorImpl(Node node) {
 		super(node);

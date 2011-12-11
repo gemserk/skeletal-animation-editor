@@ -5,5 +5,7 @@ import com.gemserk.tools.animationeditor.core.Node;
 public interface TreeObserver {
 	
 	void update(Node root);
+	
+	void nodeSelected(Node node);
 
 }

@@ -76,6 +76,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			if (inputMonitor.getButton(Actions.RightMouseButton).isReleased()) {
 				selectedNode = nearNode;
+				treeObserver.nodeSelected(selectedNode);
 			}
 
 			if (inputMonitor.getButton(Actions.DeleteNodeButton).isReleased()) {
@@ -84,6 +85,7 @@ public class EditorLibgdxApplicationListener extends Game {
 					parent.getChildren().remove(selectedNode);
 					nodes.remove(selectedNode);
 					selectedNode = parent;
+					treeObserver.nodeSelected(selectedNode);
 				}
 			}
 
@@ -94,6 +96,7 @@ public class EditorLibgdxApplicationListener extends Game {
 			if (inputMonitor.getButton(Actions.LeftMouseButton).isPressed()) {
 				if (position.dst(x, y) < selectDistance) {
 					selectedNode = nearNode;
+					treeObserver.nodeSelected(selectedNode);
 					currentState = new DraggingNodeState();
 					return;
 				}
@@ -107,6 +110,7 @@ public class EditorLibgdxApplicationListener extends Game {
 				nodes.add(newNode);
 				
 				treeObserver.update(root);
+				treeObserver.nodeSelected(selectedNode);
 			}
 
 		}

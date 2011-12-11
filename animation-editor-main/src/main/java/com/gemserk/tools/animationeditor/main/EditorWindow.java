@@ -6,6 +6,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -23,6 +27,7 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
@@ -31,14 +36,18 @@ import com.gemserk.tools.animationeditor.core.Node;
 public class EditorWindow {
 
 	/**
-	 * Updates the TreeModel based on changes made over the Nodes of the current skeleton. 
+	 * Updates the TreeModel based on changes made over the Nodes of the current skeleton.
 	 */
 	static class UpdateTreeModelWithNodeChanges implements TreeObserver {
-		
-		private final DefaultTreeModel model;
 
-		UpdateTreeModelWithNodeChanges(DefaultTreeModel model) {
-			this.model = model;
+		JTree tree;
+		DefaultTreeModel model;
+
+		Map<String, TreeNodeEditorImpl> treeNodes = new HashMap<String, TreeNodeEditorImpl>();
+
+		UpdateTreeModelWithNodeChanges(JTree tree) {
+			this.tree = tree;
+			this.model = (DefaultTreeModel) tree.getModel();
 		}
 
 		@Override
@@ -47,6 +56,7 @@ public class EditorWindow {
 			if (treeRoot == null)
 				throw new IllegalStateException("Expected to have a root DefaultMutableTreeNode in the TreeModel");
 			treeRoot.removeAllChildren();
+			treeNodes.clear();
 			update(root, treeRoot);
 			model.reload();
 		}
@@ -58,6 +68,21 @@ public class EditorWindow {
 				update(child, childNode);
 			}
 			parentTreeNode.add(childNode);
+			treeNodes.put(node.getId(), childNode);
+		}
+
+		@Override
+		public void nodeSelected(Node node) {
+			TreeNodeEditorImpl treeNodeEditorImpl = treeNodes.get(node.getId());
+			// model.nodeChanged(treeNodeEditorImpl);
+			if (treeNodeEditorImpl == null) {
+				Node parent = node.getParent();
+				treeNodeEditorImpl = treeNodes.get(parent.getId());
+				// return;
+			}
+			TreePath path = new TreePath(treeNodeEditorImpl.getPath());
+			tree.setSelectionPath(path);
+			tree.scrollPathToVisible(path);
 		}
 	}
 
@@ -93,7 +118,7 @@ public class EditorWindow {
 
 		final EditorLibgdxApplicationListener editorApplication = new EditorLibgdxApplicationListener();
 
-		Canvas canvasEditor = new Canvas() {
+		final Canvas canvasEditor = new Canvas() {
 
 			private LwjglApplication lwjglApplication;
 
@@ -105,6 +130,15 @@ public class EditorWindow {
 			public final void removeNotify() {
 				lwjglApplication.stop();
 				super.removeNotify();
+			}
+			
+			{
+				addMouseListener(new MouseAdapter() {
+					@Override
+					public void mouseEntered(MouseEvent e) {
+						requestFocus();
+					}
+				});
 			}
 		};
 
@@ -226,7 +260,11 @@ public class EditorWindow {
 
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e) {
-				System.out.println(e.getPath().getLastPathComponent());
+				Object treeNode = e.getPath().getLastPathComponent();
+				if (treeNode instanceof TreeNodeEditorImpl) {
+					Node editorNode = ((TreeNodeEditorImpl) treeNode).getNode();
+					editorApplication.selectedNode = editorNode;
+				}
 			}
 		});
 
@@ -235,7 +273,7 @@ public class EditorWindow {
 		panel_2.add(tree);
 		tree.setBackground(Color.LIGHT_GRAY);
 
-		editorApplication.setTreeObserver(new UpdateTreeModelWithNodeChanges((DefaultTreeModel) tree.getModel()));
+		editorApplication.setTreeObserver(new UpdateTreeModelWithNodeChanges(tree));
 
 		JPanel panel_3 = new JPanel();
 		splitPane_1.setRightComponent(panel_3);
