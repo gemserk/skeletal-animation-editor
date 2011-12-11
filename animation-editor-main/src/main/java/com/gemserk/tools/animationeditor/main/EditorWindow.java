@@ -138,6 +138,10 @@ public class EditorWindow {
 					public void mouseEntered(MouseEvent e) {
 						requestFocus();
 					}
+					@Override
+					public void mouseExited(MouseEvent e) {
+						getParent().requestFocus();
+					};
 				});
 			}
 		};
