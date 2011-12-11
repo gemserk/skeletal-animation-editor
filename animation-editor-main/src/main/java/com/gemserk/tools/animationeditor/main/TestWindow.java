@@ -16,8 +16,13 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
+import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.DefaultTreeModel;
 
 public class TestWindow {
 
@@ -51,6 +56,7 @@ public class TestWindow {
 	 */
 	private void initialize() {
 		frmGemserksAnimationEditor = new JFrame();
+		frmGemserksAnimationEditor.setPreferredSize(new Dimension(1024, 768));
 		frmGemserksAnimationEditor.setTitle("Gemserk's Animation Editor");
 		frmGemserksAnimationEditor.setMinimumSize(new Dimension(800, 600));
 		BorderLayout borderLayout = (BorderLayout) frmGemserksAnimationEditor.getContentPane().getLayout();
@@ -71,10 +77,11 @@ public class TestWindow {
 		panelTools.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		frmGemserksAnimationEditor.getContentPane().add(panelTools, BorderLayout.WEST);
 		panelTools.setMinimumSize(new Dimension(300, 400));
-		panelTools.setPreferredSize(new Dimension(300, 400));
+		panelTools.setPreferredSize(new Dimension(200, 400));
 		panelTools.setLayout(new BorderLayout(0, 0));
 		
 		JSplitPane splitPane = new JSplitPane();
+		splitPane.setPreferredSize(new Dimension(200, 29));
 		splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
 		panelTools.add(splitPane);
 		
@@ -136,6 +143,61 @@ public class TestWindow {
 		
 		JButton btnNewButton = new JButton("Stop");
 		panelTimeline.add(btnNewButton);
+		
+		JPanel panelStructure = new JPanel();
+		panelStructure.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
+		panelStructure.setPreferredSize(new Dimension(200, 10));
+		panelStructure.setMinimumSize(new Dimension(150, 10));
+		frmGemserksAnimationEditor.getContentPane().add(panelStructure, BorderLayout.EAST);
+		panelStructure.setLayout(new BorderLayout(0, 0));
+		
+		JSplitPane splitPane_1 = new JSplitPane();
+		splitPane_1.setOrientation(JSplitPane.VERTICAL_SPLIT);
+		panelStructure.add(splitPane_1, BorderLayout.CENTER);
+		
+		JPanel panel_2 = new JPanel();
+		panel_2.setMinimumSize(new Dimension(10, 400));
+		splitPane_1.setLeftComponent(panel_2);
+		panel_2.setLayout(new BorderLayout(0, 0));
+		
+		JLabel labelPanelStructureTitle = new JLabel("Structure");
+		panel_2.add(labelPanelStructureTitle, BorderLayout.NORTH);
+		
+		JTree tree = new JTree();
+		tree.addTreeSelectionListener(new TreeSelectionListener() {
+			public void valueChanged(TreeSelectionEvent e) {
+				System.out.println(e.getPath().getLastPathComponent());
+			}
+		});
+		tree.setEditable(true);
+		tree.setModel(new DefaultTreeModel(
+			new DefaultMutableTreeNode("root") {
+				{
+					DefaultMutableTreeNode node_1;
+					node_1 = new DefaultMutableTreeNode("leftArm");
+						node_1.add(new DefaultMutableTreeNode("hand"));
+					add(node_1);
+					node_1 = new DefaultMutableTreeNode("rightArm");
+						node_1.add(new DefaultMutableTreeNode("hand"));
+					add(node_1);
+					node_1 = new DefaultMutableTreeNode("leftLeg");
+						node_1.add(new DefaultMutableTreeNode("foot"));
+					add(node_1);
+					node_1 = new DefaultMutableTreeNode("rightLeg");
+						node_1.add(new DefaultMutableTreeNode("foot"));
+					add(node_1);
+				}
+			}
+		));
+		panel_2.add(tree);
+		tree.setBackground(Color.LIGHT_GRAY);
+		
+		JPanel panel_3 = new JPanel();
+		splitPane_1.setRightComponent(panel_3);
+		panel_3.setLayout(new BorderLayout(0, 0));
+		
+		JLabel lblNewLabel_2 = new JLabel("Properties");
+		panel_3.add(lblNewLabel_2, BorderLayout.NORTH);
 	}
 
 }

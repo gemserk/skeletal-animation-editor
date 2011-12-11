@@ -8,31 +8,15 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.gemserk.commons.gdx.graphics.ImmediateModeRendererUtils;
 import com.gemserk.componentsengine.input.InputDevicesMonitorImpl;
 import com.gemserk.componentsengine.input.LibgdxInputMappingBuilder;
-import com.gemserk.tools.animationeditor.core.NodeImpl;
 import com.gemserk.tools.animationeditor.core.Node;
+import com.gemserk.tools.animationeditor.core.NodeImpl;
 
 public class EditorLibgdxApplicationListener extends Game {
-
-	SpriteBatch spriteBatch;
-
-	Node root;
-	Node selectedNode;
-	Node nearNode;
-
-	ArrayList<Node> nodes;
-
-	float nodeSize = 2f;
-	float backgroundNodeSize = 4f;
-
-	float selectDistance = 4f;
-
-	Vector2 position = new Vector2();
-
-	private InputDevicesMonitorImpl<String> inputMonitor;
 
 	private static class Colors {
 
@@ -50,6 +34,29 @@ public class EditorLibgdxApplicationListener extends Game {
 		public static final String DeleteNodeButton = "deleteNodeButton";
 		public static final String RotateButton = "rotateButton";
 
+	}
+
+	SpriteBatch spriteBatch;
+
+	Node root;
+	Node selectedNode;
+	Node nearNode;
+
+	ArrayList<Node> nodes;
+
+	float nodeSize = 2f;
+	float backgroundNodeSize = 4f;
+
+	float selectDistance = 4f;
+
+	Vector2 position = new Vector2();
+
+	TreeObserver treeObserver;
+
+	private InputDevicesMonitorImpl<String> inputMonitor;
+
+	public void setTreeObserver(TreeObserver treeObserver) {
+		this.treeObserver = treeObserver;
 	}
 
 	interface EditorState {
@@ -79,7 +86,7 @@ public class EditorLibgdxApplicationListener extends Game {
 					selectedNode = parent;
 				}
 			}
-			
+
 			if (inputMonitor.getButton(Actions.RotateButton).isPressed()) {
 				currentState = new RotatingNodeState();
 			}
@@ -93,11 +100,13 @@ public class EditorLibgdxApplicationListener extends Game {
 			}
 
 			if (inputMonitor.getButton(Actions.LeftMouseButton).isReleased()) {
-				Node newNode = new NodeImpl();
+				Node newNode = new NodeImpl(selectedNode.getId() + MathUtils.random(111, 999));
 				newNode.setParent(selectedNode);
 				newNode.setPosition(x, y);
 				selectedNode = newNode;
 				nodes.add(newNode);
+				
+				treeObserver.update(root);
 			}
 
 		}
@@ -123,9 +132,9 @@ public class EditorLibgdxApplicationListener extends Game {
 		}
 
 	}
-	
+
 	class RotatingNodeState implements EditorState {
-		
+
 		private int currentY;
 		float rotationSpeed = 1f;
 
@@ -142,11 +151,11 @@ public class EditorLibgdxApplicationListener extends Game {
 				currentState = new NormalEditorState();
 				return;
 			}
-			
+
 			float currentAngle = selectedNode.getAngle();
 			float rotation = (float) (currentY - y) * rotationSpeed;
 			selectedNode.setAngle(currentAngle + rotation);
-			
+
 			currentY = y;
 		}
 
@@ -160,7 +169,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		Gdx.graphics.getGL10().glClearColor(0f, 0f, 0f, 1f);
 
-		root = new NodeImpl();
+		root = new NodeImpl("root");
 		root.setPosition(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f);
 
 		selectedNode = root;
@@ -179,10 +188,12 @@ public class EditorLibgdxApplicationListener extends Game {
 				monitorMouseLeftButton(Actions.LeftMouseButton);
 				monitorMouseRightButton(Actions.RightMouseButton);
 				monitorKeys(Actions.DeleteNodeButton, Keys.DEL, Keys.BACKSPACE);
-				
+
 				monitorKey(Actions.RotateButton, Keys.CONTROL_LEFT);
 			}
 		};
+		
+		treeObserver.update(root);
 
 	}
 

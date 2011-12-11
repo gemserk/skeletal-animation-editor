@@ -5,12 +5,24 @@ import java.util.ArrayList;
 import com.badlogic.gdx.math.Vector2;
 
 public class NodeRootImpl implements Node {
+	
+	String id = "";
 
 	Vector2 position = new Vector2(0f, 0f);
 	Vector2 tmp = new Vector2(0f, 0f);
 	float angle = 0f;
 
 	ArrayList<Node> children = new ArrayList<Node>();
+	
+	@Override
+	public String getId() {
+		return id;
+	}
+	
+	@Override
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	@Override
 	public float getX() {

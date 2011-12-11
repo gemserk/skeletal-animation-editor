@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import com.badlogic.gdx.math.Vector2;
 
 public class NodeImpl implements Node {
+	
+	String id;
 
 	/**
 	 * Local position to parent or absolute if no parent.
@@ -17,6 +19,24 @@ public class NodeImpl implements Node {
 
 	Node parent = new NodeRootImpl();
 	ArrayList<Node> children = new ArrayList<Node>();
+	
+	public NodeImpl(String id) {
+		setId(id);
+	}
+	
+	public NodeImpl() {
+		this("");
+	}
+
+	@Override
+	public String getId() {
+		return id;
+	}
+	
+	@Override
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	@Override
 	public float getX() {
@@ -39,13 +59,13 @@ public class NodeImpl implements Node {
 	public void setPosition(float x, float y) {
 		float localX = parent.getLocalX(x, y);
 		float localY = parent.getLocalY(x, y);
-		
-		System.out.println("local.x = " + localX);
-		System.out.println("local.y = " + localY);
 
-		System.out.println("parent.x = " + parent.getX());
-		System.out.println("parent.y = " + parent.getY());
-		System.out.println("parent.angle  = " + parent.getAngle());
+		// System.out.println("local.x = " + localX);
+		// System.out.println("local.y = " + localY);
+		//
+		// System.out.println("parent.x = " + parent.getX());
+		// System.out.println("parent.y = " + parent.getY());
+		// System.out.println("parent.angle  = " + parent.getAngle());
 
 		localPosition.set(localX, localY);
 		// position.set(x - parent.getX(), y - parent.getY());
@@ -93,4 +113,8 @@ public class NodeImpl implements Node {
 		return tmp.y;
 	}
 
+	@Override
+	public String toString() {
+		return getId();
+	}
 }
