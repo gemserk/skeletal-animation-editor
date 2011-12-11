@@ -69,7 +69,7 @@ public class EditorLibgdxApplicationListener extends Game {
 			if (inputMonitor.getButton(Actions.RightMouseButton).isReleased()) {
 				selectedNode = nearNode;
 			}
-			
+
 			if (inputMonitor.getButton(Actions.DeleteNodeButton).isReleased()) {
 				if (selectedNode != root) {
 					Node parent = selectedNode.getParent();
@@ -149,6 +149,12 @@ public class EditorLibgdxApplicationListener extends Game {
 			}
 		};
 
+	}
+
+	@Override
+	public void resize(int width, int height) {
+		super.resize(width, height);
+		System.out.println("game.resize " + width + "x" + height);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package com.gemserk.tools.animationeditor.main;
 
+import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,11 +8,13 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ResourceBundle;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import org.slf4j.Logger;
@@ -71,7 +74,7 @@ public class EditorMainFrame extends JFrame {
 		
 		setJMenuBar(menuBar);
 
-		Canvas canvas = new Canvas() {
+		final Canvas canvas = new Canvas() {
 			
 			private LwjglApplication lwjglApplication;
 
@@ -87,12 +90,21 @@ public class EditorMainFrame extends JFrame {
 			
 		};
 		
+		canvas.setSize(800, 600);
 		canvas.setIgnoreRepaint(true);
 		
-		add(canvas);
-
-		setVisible(true);
+		setLayout(new BorderLayout());
 		
+		add(new JPanel() {{
+			add(new JButton("AA"));
+		}}, BorderLayout.WEST);
+		
+		add(new JPanel(true) {{
+			add(canvas);
+		}}, BorderLayout.CENTER);
+		
+		// add(canvas);
+
 		validate();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -103,6 +115,8 @@ public class EditorMainFrame extends JFrame {
 				Gdx.app.exit();
 			}
 		});
+		
+		setVisible(true);
 	}
 
 }
