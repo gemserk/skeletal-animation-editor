@@ -7,6 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 public class NodeRootImpl implements Node {
 
 	Vector2 position = new Vector2(0f, 0f);
+	float angle = 0f;
+	
 	ArrayList<Node> children = new ArrayList<Node>();
 
 	@Override
@@ -21,7 +23,7 @@ public class NodeRootImpl implements Node {
 
 	@Override
 	public float getAngle() {
-		return 0f;
+		return angle;
 	}
 
 	@Override
@@ -42,6 +44,11 @@ public class NodeRootImpl implements Node {
 	@Override
 	public ArrayList<Node> getChildren() {
 		return children;
+	}
+
+	@Override
+	public void setAngle(float angle) {
+		this.angle = angle;
 	}
 
 }

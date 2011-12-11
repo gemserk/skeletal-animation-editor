@@ -10,11 +10,13 @@ public interface Node {
 	
 	float getAngle();
 	
+	Node getParent();
+	
 	void setPosition(float x, float y);
 	
-	void setParent(Node node);
+	void setAngle(float angle);
 	
-	Node getParent();
+	void setParent(Node node);
 	
 	ArrayList<Node> getChildren();
 
