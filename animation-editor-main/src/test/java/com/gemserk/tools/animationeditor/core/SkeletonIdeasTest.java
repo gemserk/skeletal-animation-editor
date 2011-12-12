@@ -111,14 +111,14 @@ public class SkeletonIdeasTest {
 		leaf1.setParent(root);
 		leaf2.setParent(root);
 
-		SkeletonKeyFrame frame1 = new SkeletonKeyFrame(root);
+		KeyFrame frame1 = new KeyFrame(0f, SkeletonKeyFrame.convert(root));
 
 		root.setPosition(-100f, -100f);
 		
-		SkeletonKeyFrame frame2 = new SkeletonKeyFrame(root);
+		KeyFrame frame2 = new KeyFrame(0f, SkeletonKeyFrame.convert(root));
 		
-		TransitionFloatArrayImpl transition = new TransitionFloatArrayImpl(frame1.values);
-		transition.set(frame2.values, 5f);
+		TransitionFloatArrayImpl transition = new TransitionFloatArrayImpl(frame1.getValue());
+		transition.set(frame2.getValue(), 5f);
 
 		float[] x = transition.get();
 		for (int i = 0; i < x.length; i++) {
