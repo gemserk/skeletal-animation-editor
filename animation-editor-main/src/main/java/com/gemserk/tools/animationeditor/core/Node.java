@@ -6,9 +6,9 @@ import java.util.ArrayList;
  * Concept of spatial node with location and angle.
  */
 public interface Node {
-	
+
 	String getId();
-	
+
 	void setId(String id);
 
 	/**
@@ -26,11 +26,11 @@ public interface Node {
 	Node getParent();
 
 	void setPosition(float x, float y);
-	
+
 	void setLocalPosition(float x, float y);
 
 	void setAngle(float angle);
-	
+
 	void setLocalAngle(float angle);
 
 	void setParent(Node node);
@@ -40,13 +40,17 @@ public interface Node {
 	/**
 	 * Returns the x coordinate of the specified position in local to the Node coordinates.
 	 */
-	float getLocalX(float x, float y);
+	float projectX(float x, float y);
 
 	/**
 	 * Returns the y coordinate of the specified position in local to the Node coordinates.
 	 */
-	float getLocalY(float x, float y);
-	
-	float getLocalAngle(float angle);
-	
+	float projectY(float x, float y);
+
+	float getLocalX();
+
+	float getLocalY();
+
+	float getLocalAngle();
+
 }

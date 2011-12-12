@@ -70,8 +70,8 @@ public class NodeImpl implements Node {
 
 	@Override
 	public void setPosition(float x, float y) {
-		float localX = parent.getLocalX(x, y);
-		float localY = parent.getLocalY(x, y);
+		float localX = parent.projectX(x, y);
+		float localY = parent.projectY(x, y);
 
 		// System.out.println("local.x = " + localX);
 		// System.out.println("local.y = " + localY);
@@ -132,27 +132,37 @@ public class NodeImpl implements Node {
 	}
 
 	@Override
-	public float getLocalX(float x, float y) {
+	public float projectX(float x, float y) {
 		tmp.set(x - getX(), y - getY());
 		tmp.rotate(-getAngle());
 		return tmp.x;
 	}
 
 	@Override
-	public float getLocalY(float x, float y) {
+	public float projectY(float x, float y) {
 		tmp.set(x - getX(), y - getY());
 		tmp.rotate(-getAngle());
 		return tmp.y;
 	}
 
 	@Override
-	public float getLocalAngle(float angle) {
-		return angle - getAngle();
+	public float getLocalAngle() {
+		return angle;
 	}
 
 	@Override
 	public String toString() {
 		return getId();
+	}
+
+	@Override
+	public float getLocalX() {
+		return localPosition.x;
+	}
+
+	@Override
+	public float getLocalY() {
+		return localPosition.y;
 	}
 
 }

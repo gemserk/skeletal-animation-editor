@@ -14,7 +14,7 @@ import com.gemserk.tools.animationeditor.core.SkeletonKeyFrame;
 
 public class AnimatedTreeExampleApplicationListener extends Game {
 
-	private NodeImpl root;
+	private Node root;
 
 	float nodeSize = 2f;
 

@@ -68,6 +68,9 @@ public class TreeEditorWithJtreeInterceptorImpl implements TreeEditor {
 
 	@Override
 	public void remove(Node node) {
+		if (node == null)
+			throw new IllegalArgumentException("Cant remove a null node");
+
 		treeEditor.remove(node);
 
 		Node parent = node.getParent();
@@ -75,7 +78,9 @@ public class TreeEditorWithJtreeInterceptorImpl implements TreeEditor {
 		if (parentTreeNode == null)
 			throw new IllegalArgumentException("Node should be on the JTree to call remove");
 		TreeNodeEditorImpl treeNode = treeNodes.get(node.getId());
-		parentTreeNode.remove(treeNode);
+		if (parentTreeNode.isNodeChild(treeNode))
+			parentTreeNode.remove(treeNode);
+
 		model.reload();
 	}
 

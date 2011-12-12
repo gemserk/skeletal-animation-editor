@@ -64,23 +64,33 @@ public class NodeNullImpl implements Node {
 	}
 
 	@Override
-	public float getLocalX(float x, float y) {
+	public float projectX(float x, float y) {
 		return x;
 	}
 
 	@Override
-	public float getLocalY(float x, float y) {
+	public float projectY(float x, float y) {
 		return y;
 	}
 
 	@Override
-	public float getLocalAngle(float angle) {
+	public float getLocalAngle() {
 		return 0;
 	}
 
 	@Override
 	public void setLocalAngle(float angle) {
 		
+	}
+
+	@Override
+	public float getLocalX() {
+		return 0;
+	}
+
+	@Override
+	public float getLocalY() {
+		return 0;
 	}
 
 }

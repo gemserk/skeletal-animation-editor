@@ -81,9 +81,8 @@ public class NodeImplTest {
 		assertThat(absoluteY, IsEqual.equalTo(250f));
 		assertThat(absoluteAngle, IsEqual.equalTo(80f));
 
-		assertThat(childNode.getLocalAngle(absoluteAngle), IsEqual.equalTo(0f));
-		assertThat(childNode.getLocalX(absoluteX, absoluteY), IsEqual.equalTo(0f));
-		assertThat(childNode.getLocalY(absoluteX, absoluteY), IsEqual.equalTo(0f));
+		assertThat(childNode.projectX(absoluteX, absoluteY), IsEqual.equalTo(0f));
+		assertThat(childNode.projectY(absoluteX, absoluteY), IsEqual.equalTo(0f));
 		
 		// assertThat(childNode.getLocalAngle(0f), IsEqual.equalTo(-80f));
 		// assertThat(childNode.getLocalX(0f, 0f), IsEqual.equalTo(-150f));
