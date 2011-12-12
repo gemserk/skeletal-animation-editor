@@ -11,7 +11,7 @@ import com.gemserk.animation4j.transitions.TransitionFloatArrayImpl;
 import com.gemserk.commons.gdx.graphics.ImmediateModeRendererUtils;
 import com.gemserk.tools.animationeditor.core.Node;
 import com.gemserk.tools.animationeditor.core.NodeImpl;
-import com.gemserk.tools.animationeditor.core.SkeletonKeyFrame;
+import com.gemserk.tools.animationeditor.core.TreeConverter;
 
 public class AnimatedTreeExampleApplicationListener extends Game {
 
@@ -64,12 +64,12 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 		node1.setParent(root);
 		node2.setParent(node1);
 
-		keyFrame0 = new KeyFrame(0f, SkeletonKeyFrame.convert(root));
+		keyFrame0 = new KeyFrame(0f, TreeConverter.convert(root));
 
 		root.setAngle(180f);
 		node1.setAngle(90f);
 
-		keyFrame1 = new KeyFrame(1f, SkeletonKeyFrame.convert(root));
+		keyFrame1 = new KeyFrame(1f, TreeConverter.convert(root));
 		
 		nodes = getArrayList(root);
 
@@ -102,20 +102,22 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 		}
 
 		float[] x = transition.get();
+		
+		TreeConverter.copyToObject(root, x);
 
-		int j = 0;
-		for (int i = 0; i < x.length; i += 3) {
-			Node node = nodes.get(j);
-
-			float localX = x[i + 0];
-			float localY = x[i + 1];
-			float localAngle = x[i + 2];
-			
-			node.setLocalPosition(localX, localY);
-			node.setLocalAngle(localAngle);
-
-			j++;
-		}
+		// int j = 0;
+		// for (int i = 0; i < x.length; i += 3) {
+		// Node node = nodes.get(j);
+		//
+		// float localX = x[i + 0];
+		// float localY = x[i + 1];
+		// float localAngle = x[i + 2];
+		//
+		// node.setLocalPosition(localX, localY);
+		// node.setLocalAngle(localAngle);
+		//
+		// j++;
+		// }
 		
 	}
 

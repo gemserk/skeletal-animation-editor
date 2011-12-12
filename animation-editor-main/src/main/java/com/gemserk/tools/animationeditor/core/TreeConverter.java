@@ -2,7 +2,7 @@ package com.gemserk.tools.animationeditor.core;
 
 import java.util.ArrayList;
 
-public class SkeletonKeyFrame {
+public class TreeConverter {
 
 	private static ArrayList<Node> getArrayList(Node node) {
 		ArrayList<Node> nodes = new ArrayList<Node>();
@@ -35,4 +35,17 @@ public class SkeletonKeyFrame {
 		return values;
 	}
 
+	public static void copyToObject(Node root, float[] values){ 
+		ArrayList<Node> nodes = getArrayList(root);
+		int nodeIndex = 0;
+		for (int i = 0; i < values.length; i += 3) {
+			Node node = nodes.get(nodeIndex);
+			float localX = values[i + 0];
+			float localY = values[i + 1];
+			float localAngle = values[i + 2];
+			node.setLocalPosition(localX, localY);
+			node.setLocalAngle(localAngle);
+			nodeIndex++;
+		}
+	}
 }
