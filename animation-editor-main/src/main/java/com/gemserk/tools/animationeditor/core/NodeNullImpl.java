@@ -2,15 +2,9 @@ package com.gemserk.tools.animationeditor.core;
 
 import java.util.ArrayList;
 
-import com.badlogic.gdx.math.Vector2;
-
-public class NodeRootImpl implements Node {
+public class NodeNullImpl implements Node {
 	
-	String id = "";
-
-	Vector2 position = new Vector2(0f, 0f);
-	Vector2 tmp = new Vector2(0f, 0f);
-	float angle = 0f;
+	final String id = "";
 
 	ArrayList<Node> children = new ArrayList<Node>();
 	
@@ -21,27 +15,27 @@ public class NodeRootImpl implements Node {
 	
 	@Override
 	public void setId(String id) {
-		this.id = id;
+
 	}
 
 	@Override
 	public float getX() {
-		return position.x;
+		return 0f;
 	}
 
 	@Override
 	public float getY() {
-		return position.y;
+		return 0f;
 	}
 
 	@Override
 	public float getAngle() {
-		return angle;
+		return 0f;
 	}
 
 	@Override
 	public void setPosition(float x, float y) {
-		position.set(x, y);
+		
 	}
 
 	@Override
@@ -61,21 +55,17 @@ public class NodeRootImpl implements Node {
 
 	@Override
 	public void setAngle(float angle) {
-		this.angle = angle;
+		
 	}
 
 	@Override
 	public float getLocalX(float x, float y) {
-		tmp.set(x - position.x, y - position.y);
-		tmp.rotate(-angle);
-		return tmp.x;
+		return x;
 	}
 
 	@Override
 	public float getLocalY(float x, float y) {
-		tmp.set(x - position.x, y - position.y);
-		tmp.rotate(-angle);
-		return tmp.y;
+		return y;
 	}
 
 }

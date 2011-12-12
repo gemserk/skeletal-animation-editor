@@ -17,7 +17,7 @@ public class NodeImpl implements Node {
 
 	float angle = 0f;
 
-	Node parent = new NodeRootImpl();
+	Node parent = new NodeNullImpl();
 	ArrayList<Node> children = new ArrayList<Node>();
 	
 	public NodeImpl() {
