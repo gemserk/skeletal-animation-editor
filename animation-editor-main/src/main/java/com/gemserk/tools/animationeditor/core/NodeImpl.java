@@ -33,6 +33,13 @@ public class NodeImpl implements Node {
 		setPosition(x, y);
 		setAngle(angle);
 	}
+	
+	public NodeImpl(Node node) {
+		this.parent = node.getParent();
+		setId(node.getId());
+		setPosition(node.getX(), node.getY());
+		setAngle(node.getAngle());
+	}
 
 	@Override
 	public String getId() {
@@ -89,10 +96,19 @@ public class NodeImpl implements Node {
 
 	@Override
 	public void setParent(Node parent) {
-		// should convert coordinates to this other parent?
+		if (this.parent == parent)
+			return;
+		
+		float x = getX();
+		float y = getY();
+		float angle = getAngle();
+		
 		this.parent.getChildren().remove(this);
 		this.parent = parent;
 		this.parent.getChildren().add(this);
+		
+		setPosition(x, y);
+		setAngle(angle);
 	}
 
 	@Override
