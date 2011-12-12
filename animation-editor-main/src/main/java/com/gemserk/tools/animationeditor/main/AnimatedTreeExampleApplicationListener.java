@@ -69,12 +69,12 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 		root.setAngle(180f);
 		node1.setAngle(90f);
 
-		keyFrame1 = new KeyFrame(0f, SkeletonKeyFrame.convert(root));
+		keyFrame1 = new KeyFrame(1f, SkeletonKeyFrame.convert(root));
 		
 		nodes = getArrayList(root);
 
 		transition = new TransitionFloatArrayImpl(keyFrame0.getValue());
-		transition.set(keyFrame1.getValue(), 2f);
+		transition.set(keyFrame1.getValue(), keyFrame1.getTime() - keyFrame0.getTime());
 
 	}
 
@@ -93,8 +93,13 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 	private void realUpdate() {
 		transition.update(Gdx.graphics.getDeltaTime());
 		
-		if (transition.isFinished())
+		if (transition.isFinished()) {
+			if (Gdx.input.justTouched()) {
+				transition.set(keyFrame0.getValue());
+				transition.set(keyFrame1.getValue(), keyFrame1.getTime() - keyFrame0.getTime());
+			}
 			return;
+		}
 
 		float[] x = transition.get();
 

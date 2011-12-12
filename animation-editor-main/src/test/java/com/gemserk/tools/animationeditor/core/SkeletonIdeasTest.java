@@ -8,19 +8,21 @@ import java.util.Map;
 import org.hamcrest.core.IsEqual;
 import org.junit.Test;
 
+import com.gemserk.animation4j.timeline.KeyFrame;
 import com.gemserk.animation4j.transitions.TransitionFloatArrayImpl;
 
 public class SkeletonIdeasTest {
 
 	public static class SkeletonAnimation {
 
-		ArrayList<SkeletonKeyFrame> keyFrames;
+		ArrayList<KeyFrame> keyFrames;
 		
 		public SkeletonAnimation() {
-			keyFrames = new ArrayList<SkeletonKeyFrame>();
+			keyFrames = new ArrayList<KeyFrame>();
 		}
 		
-		public void addKeyFrame(SkeletonKeyFrame keyFrame) {
+		public void addKeyFrame(KeyFrame keyFrame) {
+			this.keyFrames.add(keyFrame);
 		}
 
 	}
