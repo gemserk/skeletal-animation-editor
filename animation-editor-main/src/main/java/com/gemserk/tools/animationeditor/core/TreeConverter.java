@@ -2,7 +2,11 @@ package com.gemserk.tools.animationeditor.core;
 
 import java.util.ArrayList;
 
-public class TreeConverter {
+import com.gemserk.animation4j.converters.TypeConverter;
+
+public class TreeConverter implements TypeConverter<Node> {
+
+	public static TreeConverter instance = new TreeConverter();
 
 	private static ArrayList<Node> getArrayList(Node node) {
 		ArrayList<Node> nodes = new ArrayList<Node>();
@@ -17,35 +21,41 @@ public class TreeConverter {
 		}
 	}
 
-	public static float[] convert(Node root) {
-		ArrayList<Node> nodes = getArrayList(root);
+	@Override
+	public int variables() {
+		throw new UnsupportedOperationException("cant return the number of variables of a variable tree");
+	}
 
-		float[] values = new float[nodes.size() * 3];
+	public Node copyToObject(Node node, float[] x) {
+		ArrayList<Node> nodes = getArrayList(node);
+		int nodeIndex = 0;
+		for (int i = 0; i < x.length; i += 3) {
+			Node n = nodes.get(nodeIndex);
+			float localX = x[i + 0];
+			float localY = x[i + 1];
+			float localAngle = x[i + 2];
+			n.setLocalPosition(localX, localY);
+			n.setLocalAngle(localAngle);
+			nodeIndex++;
+		}
+		return node;
+	}
+
+	@Override
+	public float[] copyFromObject(Node node, float[] x) {
+		ArrayList<Node> nodes = getArrayList(node);
+		if (x == null)
+			x = new float[nodes.size() * 3];
 		int j = 0;
 		for (int i = 0; i < nodes.size(); i++) {
-			Node node = nodes.get(i);
+			Node n = nodes.get(i);
 
-			values[j] = node.getLocalX();
-			values[j + 1] = node.getLocalY();
-			values[j + 2] = node.getLocalAngle();
+			x[j] = n.getLocalX();
+			x[j + 1] = n.getLocalY();
+			x[j + 2] = n.getLocalAngle();
 
 			j += 3;
 		}
-
-		return values;
-	}
-
-	public static void copyToObject(Node root, float[] values){ 
-		ArrayList<Node> nodes = getArrayList(root);
-		int nodeIndex = 0;
-		for (int i = 0; i < values.length; i += 3) {
-			Node node = nodes.get(nodeIndex);
-			float localX = values[i + 0];
-			float localY = values[i + 1];
-			float localAngle = values[i + 2];
-			node.setLocalPosition(localX, localY);
-			node.setLocalAngle(localAngle);
-			nodeIndex++;
-		}
+		return x;
 	}
 }

@@ -24,7 +24,6 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 	private TransitionFloatArrayImpl transition;
 
 	private KeyFrame keyFrame0;
-
 	private KeyFrame keyFrame1;
 
 	private static class Colors {
@@ -64,13 +63,13 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 		node1.setParent(root);
 		node2.setParent(node1);
 
-		keyFrame0 = new KeyFrame(0f, TreeConverter.convert(root));
+		keyFrame0 = new KeyFrame(0f, TreeConverter.instance.copyFromObject(root, null));
 
 		root.setAngle(180f);
 		node1.setAngle(90f);
 
-		keyFrame1 = new KeyFrame(1f, TreeConverter.convert(root));
-		
+		keyFrame1 = new KeyFrame(1f, TreeConverter.instance.copyFromObject(root, null));
+
 		nodes = getArrayList(root);
 
 		transition = new TransitionFloatArrayImpl(keyFrame0.getValue());
@@ -92,7 +91,7 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 
 	private void realUpdate() {
 		transition.update(Gdx.graphics.getDeltaTime());
-		
+
 		if (transition.isFinished()) {
 			if (Gdx.input.justTouched()) {
 				transition.set(keyFrame0.getValue());
@@ -102,23 +101,8 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 		}
 
 		float[] x = transition.get();
-		
-		TreeConverter.copyToObject(root, x);
 
-		// int j = 0;
-		// for (int i = 0; i < x.length; i += 3) {
-		// Node node = nodes.get(j);
-		//
-		// float localX = x[i + 0];
-		// float localY = x[i + 1];
-		// float localAngle = x[i + 2];
-		//
-		// node.setLocalPosition(localX, localY);
-		// node.setLocalAngle(localAngle);
-		//
-		// j++;
-		// }
-		
+		TreeConverter.instance.copyToObject(root, x);
 	}
 
 	private void realRender() {
