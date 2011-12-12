@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.swing.JTree;
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
@@ -17,6 +19,16 @@ import com.gemserk.tools.animationeditor.main.TreeNodeEditorImpl;
  */
 public class TreeEditorWithJtreeInterceptorImpl implements TreeEditor {
 
+	class UpdateEditorTreeSelectionListener implements TreeSelectionListener {
+		public void valueChanged(TreeSelectionEvent e) {
+			Object treeNode = e.getPath().getLastPathComponent();
+			if (treeNode instanceof TreeNodeEditorImpl) {
+				Node editorNode = ((TreeNodeEditorImpl) treeNode).getNode();
+				treeEditor.select(editorNode);
+			}
+		}
+	}
+
 	JTree tree;
 	DefaultTreeModel model;
 
@@ -27,6 +39,7 @@ public class TreeEditorWithJtreeInterceptorImpl implements TreeEditor {
 		this.treeEditor = treeEditor;
 		this.tree = tree;
 		this.model = (DefaultTreeModel) tree.getModel();
+		tree.addTreeSelectionListener(new UpdateEditorTreeSelectionListener());
 	}
 
 	private void createTreeNodeForChild(Node node, DefaultMutableTreeNode parentTreeNode) {

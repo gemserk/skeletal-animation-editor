@@ -21,14 +21,11 @@ import javax.swing.JToggleButton;
 import javax.swing.JTree;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.gemserk.tools.animationeditor.core.Node;
 import com.gemserk.tools.animationeditor.core.tree.TreeEditor;
 import com.gemserk.tools.animationeditor.core.tree.TreeEditorImpl;
 import com.gemserk.tools.animationeditor.main.tree.TreeEditorWithJtreeInterceptorImpl;
@@ -211,27 +208,13 @@ public class EditorWindow {
 		tree.setExpandsSelectedPaths(true);
 
 		tree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("root")));
-
-		final TreeEditor treeEditor = new TreeEditorWithJtreeInterceptorImpl( //
-				new TreeEditorImpl(), tree);
-
-		tree.addTreeSelectionListener(new TreeSelectionListener() {
-			public void valueChanged(TreeSelectionEvent e) {
-				Object treeNode = e.getPath().getLastPathComponent();
-				if (treeNode instanceof TreeNodeEditorImpl) {
-					Node editorNode = ((TreeNodeEditorImpl) treeNode).getNode();
-					// recursive?
-					treeEditor.select(editorNode);
-					// editorApplication.selectedNode = editorNode;
-				}
-			}
-		});
-
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 
 		panel_2.add(tree);
 		tree.setBackground(Color.LIGHT_GRAY);
 
+		final TreeEditor treeEditor = new TreeEditorWithJtreeInterceptorImpl( //
+				new TreeEditorImpl(), tree);
 		editorApplication.setTreeEditor(treeEditor);
 
 		JPanel panel_3 = new JPanel();
