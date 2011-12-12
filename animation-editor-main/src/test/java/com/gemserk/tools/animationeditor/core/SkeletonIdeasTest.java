@@ -12,7 +12,7 @@ import com.gemserk.animation4j.transitions.TransitionFloatArrayImpl;
 
 public class SkeletonIdeasTest {
 
-	class SkeletonKeyFrame {
+	static class SkeletonKeyFrame {
 
 		float[] values;
 
@@ -31,6 +31,19 @@ public class SkeletonIdeasTest {
 				j += 3;
 			}
 		}
+		
+		ArrayList<Node> getArrayList(Node node) {
+			ArrayList<Node> nodes = new ArrayList<Node>();
+			add(nodes, node);
+			return nodes;
+		}
+
+		void add(ArrayList<Node> nodes, Node node) {
+			nodes.add(node);
+			for (int i = 0; i < node.getChildren().size(); i++) {
+				add(nodes, node.getChildren().get(i));
+			}
+		}
 
 	}
 
@@ -46,7 +59,7 @@ public class SkeletonIdeasTest {
 
 	}
 
-	private ArrayList<Node> getArrayList(Node node) {
+	public ArrayList<Node> getArrayList(Node node) {
 		ArrayList<Node> nodes = new ArrayList<Node>();
 		add(nodes, node);
 		return nodes;
