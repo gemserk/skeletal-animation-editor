@@ -15,6 +15,7 @@ import com.gemserk.componentsengine.input.InputDevicesMonitorImpl;
 import com.gemserk.componentsengine.input.LibgdxInputMappingBuilder;
 import com.gemserk.tools.animationeditor.core.Node;
 import com.gemserk.tools.animationeditor.core.NodeImpl;
+import com.gemserk.tools.animationeditor.core.tree.TreeObserver;
 
 public class EditorLibgdxApplicationListener extends Game {
 
@@ -76,17 +77,22 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			if (inputMonitor.getButton(Actions.RightMouseButton).isReleased()) {
 				selectedNode = nearNode;
-				treeObserver.nodeSelected(selectedNode);
+				treeObserver.select(selectedNode);
 			}
 
 			if (inputMonitor.getButton(Actions.DeleteNodeButton).isReleased()) {
 				if (selectedNode != root) {
+					
+					treeObserver.remove(selectedNode);
+					
 					Node parent = selectedNode.getParent();
 					parent.getChildren().remove(selectedNode);
 					nodes.remove(selectedNode);
 					selectedNode = parent;
-					treeObserver.update(root);
-					treeObserver.nodeSelected(selectedNode);
+					// treeObserver.update(root);
+					
+					treeObserver.select(parent);
+
 				}
 			}
 
@@ -97,7 +103,7 @@ public class EditorLibgdxApplicationListener extends Game {
 			if (inputMonitor.getButton(Actions.LeftMouseButton).isPressed()) {
 				if (position.dst(x, y) < selectDistance) {
 					selectedNode = nearNode;
-					treeObserver.nodeSelected(selectedNode);
+					treeObserver.select(selectedNode);
 					currentState = new DraggingNodeState();
 					return;
 				}
@@ -109,9 +115,10 @@ public class EditorLibgdxApplicationListener extends Game {
 				newNode.setPosition(x, y);
 				selectedNode = newNode;
 				nodes.add(newNode);
-				
-				treeObserver.update(root);
-				treeObserver.nodeSelected(selectedNode);
+
+				// treeObserver.update(root);
+				treeObserver.add(selectedNode);
+				treeObserver.select(selectedNode);
 			}
 
 		}
@@ -197,8 +204,9 @@ public class EditorLibgdxApplicationListener extends Game {
 				monitorKey(Actions.RotateButton, Keys.CONTROL_LEFT);
 			}
 		};
-		
-		treeObserver.update(root);
+
+//		treeObserver.update(root);
+		treeObserver.add(root);
 
 	}
 
