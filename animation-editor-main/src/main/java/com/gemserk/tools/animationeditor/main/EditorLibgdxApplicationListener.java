@@ -15,9 +15,10 @@ import com.gemserk.componentsengine.input.InputDevicesMonitorImpl;
 import com.gemserk.componentsengine.input.LibgdxInputMappingBuilder;
 import com.gemserk.tools.animationeditor.core.Node;
 import com.gemserk.tools.animationeditor.core.NodeImpl;
+import com.gemserk.tools.animationeditor.core.tree.Editor;
 import com.gemserk.tools.animationeditor.core.tree.TreeEditor;
 
-public class EditorLibgdxApplicationListener extends Game {
+public class EditorLibgdxApplicationListener extends Game implements Editor {
 
 	private static class Colors {
 
@@ -284,6 +285,18 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		ImmediateModeRendererUtils.fillRectangle(node.getX() - nodeSize, node.getY() - nodeSize, node.getX() + nodeSize, node.getY() + nodeSize, //
 				Colors.nodeColor);
+	}
+
+	@Override
+	public void playAnimation() {
+		// TODO Auto-generated function stub
+		
+	}
+
+	@Override
+	public void pauseAnimation() {
+		// TODO Auto-generated function stub
+		
 	}
 
 	// private Color getColor(Node node) {

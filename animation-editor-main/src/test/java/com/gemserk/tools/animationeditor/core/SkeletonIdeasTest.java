@@ -12,9 +12,16 @@ import com.gemserk.animation4j.transitions.TransitionFloatArrayImpl;
 
 public class SkeletonIdeasTest {
 
-	class SkeletonAnimation {
+	public static class SkeletonAnimation {
 
 		ArrayList<SkeletonKeyFrame> keyFrames;
+		
+		public SkeletonAnimation() {
+			keyFrames = new ArrayList<SkeletonKeyFrame>();
+		}
+		
+		public void addKeyFrame(SkeletonKeyFrame keyFrame) {
+		}
 
 	}
 

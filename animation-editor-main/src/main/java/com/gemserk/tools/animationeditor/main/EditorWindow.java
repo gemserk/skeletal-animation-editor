@@ -6,6 +6,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -177,8 +179,18 @@ public class EditorWindow {
 		panel.add(panelTimeline, BorderLayout.SOUTH);
 		panelTimeline.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		JToggleButton tglbtnNewToggleButton = new JToggleButton("Play");
+		final JToggleButton tglbtnNewToggleButton = new JToggleButton("Play");
 		panelTimeline.add(tglbtnNewToggleButton);
+		
+		tglbtnNewToggleButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (tglbtnNewToggleButton.isSelected())
+					editorApplication.playAnimation();
+				else
+					editorApplication.pauseAnimation();
+			}
+		});
 
 		JButton btnNewButton = new JButton("Stop");
 		panelTimeline.add(btnNewButton);
@@ -224,5 +236,4 @@ public class EditorWindow {
 		JLabel lblNewLabel_2 = new JLabel("Properties");
 		panel_3.add(lblNewLabel_2, BorderLayout.NORTH);
 	}
-
 }

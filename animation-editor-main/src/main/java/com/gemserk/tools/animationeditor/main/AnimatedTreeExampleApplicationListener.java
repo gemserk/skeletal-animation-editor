@@ -6,6 +6,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
+import com.gemserk.animation4j.timeline.KeyFrame;
 import com.gemserk.animation4j.transitions.TransitionFloatArrayImpl;
 import com.gemserk.commons.gdx.graphics.ImmediateModeRendererUtils;
 import com.gemserk.tools.animationeditor.core.Node;
@@ -22,9 +23,9 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 
 	private TransitionFloatArrayImpl transition;
 
-	private SkeletonKeyFrame frame0;
+	private KeyFrame keyFrame0;
 
-	private SkeletonKeyFrame frame1;
+	private KeyFrame keyFrame1;
 
 	private static class Colors {
 
@@ -63,17 +64,17 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 		node1.setParent(root);
 		node2.setParent(node1);
 
-		frame0 = new SkeletonKeyFrame(root);
+		keyFrame0 = new KeyFrame(0f, SkeletonKeyFrame.convert(root));
 
 		root.setAngle(180f);
 		node1.setAngle(90f);
 
-		frame1 = new SkeletonKeyFrame(root);
+		keyFrame1 = new KeyFrame(0f, SkeletonKeyFrame.convert(root));
 		
 		nodes = getArrayList(root);
 
-		transition = new TransitionFloatArrayImpl(frame0.values);
-		transition.set(frame1.values, 2f);
+		transition = new TransitionFloatArrayImpl(keyFrame0.getValue());
+		transition.set(keyFrame1.getValue(), 2f);
 
 	}
 
@@ -105,20 +106,11 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 			float localY = x[i + 1];
 			float localAngle = x[i + 2];
 			
-			System.out.println("(" + localX + "," + localY + "," + localAngle + ")");
-
-			// node.setPosition(localX, x[i+1]);
-			// node.setAngle(x[i+2]);
-
 			node.setLocalPosition(localX, localY);
 			node.setLocalAngle(localAngle);
 
 			j++;
 		}
-		
-//		for (int i = 0; i < x.length; i++) {
-//			System.out.print("" + x[i] + ",");
-//		}
 		
 	}
 
