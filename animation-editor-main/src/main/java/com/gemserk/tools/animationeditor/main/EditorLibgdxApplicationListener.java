@@ -85,6 +85,7 @@ public class EditorLibgdxApplicationListener extends Game {
 					parent.getChildren().remove(selectedNode);
 					nodes.remove(selectedNode);
 					selectedNode = parent;
+					treeObserver.update(root);
 					treeObserver.nodeSelected(selectedNode);
 				}
 			}
