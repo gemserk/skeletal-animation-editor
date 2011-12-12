@@ -14,17 +14,13 @@ public class SkeletonIdeasTest {
 
 	class SkeletonKeyFrame {
 
-		ArrayList<Node> nodes;
 		float[] values;
-		Node root;
 
 		public SkeletonKeyFrame(Node root) {
-			this.root = cloneTree(root);
-			update(getArrayList(this.root));
+			update(getArrayList(root));
 		}
 
 		private void update(ArrayList<Node> nodes) {
-			this.nodes = nodes;
 			values = new float[nodes.size() * 3];
 			int j = 0;
 			for (int i = 0; i < nodes.size(); i++) {
