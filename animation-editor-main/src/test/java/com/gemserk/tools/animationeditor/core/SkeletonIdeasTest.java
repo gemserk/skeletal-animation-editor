@@ -16,8 +16,14 @@ public class SkeletonIdeasTest {
 
 		ArrayList<Node> nodes;
 		float[] values;
+		Node root;
 
-		public SkeletonKeyFrame(ArrayList<Node> nodes) {
+		public SkeletonKeyFrame(Node root) {
+			this.root = cloneTree(root);
+			update(getArrayList(this.root));
+		}
+
+		private void update(ArrayList<Node> nodes) {
 			this.nodes = nodes;
 			values = new float[nodes.size() * 3];
 			int j = 0;
@@ -29,7 +35,7 @@ public class SkeletonIdeasTest {
 				j += 3;
 			}
 		}
-		
+
 	}
 
 	class SkeletonAnimation {
@@ -115,33 +121,31 @@ public class SkeletonIdeasTest {
 	@Test
 	public void transitionTest() {
 
-		Node root = new NodeImpl("AAA", 50f, 100f, 45f);
-		Node leaf1 = new NodeImpl("BBB", 25f, 25f, 20f);
-		Node leaf2 = new NodeImpl("CCC", -25f, -35f, -40f);
-
-		Node leaf11 = new NodeImpl("BBB.1", 75f, 75f, 70f);
+		Node root = new NodeImpl("AAA", 0f, 0f, 0f);
+		Node leaf1 = new NodeImpl("BBB", 30f, 30f, 30f);
+		Node leaf2 = new NodeImpl("CCC", 60f, 60f, 60f);
 
 		leaf1.setParent(root);
 		leaf2.setParent(root);
 
-		leaf11.setParent(leaf1);
-		
-		Node clonedRoot = cloneTree(root);
+		SkeletonKeyFrame frame1 = new SkeletonKeyFrame(root);
 
-		ArrayList<Node> nodes = getArrayList(root);
-		ArrayList<Node> nodes2 = getArrayList(clonedRoot);
+		leaf2.setPosition(-100f, -100f);
 		
-		nodes2.get(2).setPosition(700f, 600f);
+		SkeletonKeyFrame frame2 = new SkeletonKeyFrame(root);
 		
-		SkeletonKeyFrame frame1 = new SkeletonKeyFrame(nodes);
-		SkeletonKeyFrame frame2 = new SkeletonKeyFrame(nodes2);
-
-		TransitionFloatArrayImpl transition = new TransitionFloatArrayImpl(nodes.size() * 3);
-		transition.set(frame1.values);
-		
+		TransitionFloatArrayImpl transition = new TransitionFloatArrayImpl(frame1.values);
 		transition.set(frame2.values, 5f);
-		
+
 		float[] x = transition.get();
+		for (int i = 0; i < x.length; i++) {
+			System.out.print("" + x[i] + ",");
+		}
+		System.out.println();
+
+		transition.update(2.5f);
+
+		x = transition.get();
 		for (int i = 0; i < x.length; i++) {
 			System.out.print("" + x[i] + ",");
 		}
