@@ -39,6 +39,11 @@ public class NodeNullImpl implements Node {
 	}
 
 	@Override
+	public void setLocalPosition(float x, float y) {
+		
+	}
+
+	@Override
 	public void setParent(Node node) {
 
 	}
@@ -66,6 +71,16 @@ public class NodeNullImpl implements Node {
 	@Override
 	public float getLocalY(float x, float y) {
 		return y;
+	}
+
+	@Override
+	public float getLocalAngle(float angle) {
+		return 0;
+	}
+
+	@Override
+	public void setLocalAngle(float angle) {
+		
 	}
 
 }

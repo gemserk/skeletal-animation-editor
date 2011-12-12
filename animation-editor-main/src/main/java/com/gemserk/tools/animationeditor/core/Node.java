@@ -26,8 +26,12 @@ public interface Node {
 	Node getParent();
 
 	void setPosition(float x, float y);
+	
+	void setLocalPosition(float x, float y);
 
 	void setAngle(float angle);
+	
+	void setLocalAngle(float angle);
 
 	void setParent(Node node);
 
@@ -42,5 +46,7 @@ public interface Node {
 	 * Returns the y coordinate of the specified position in local to the Node coordinates.
 	 */
 	float getLocalY(float x, float y);
+	
+	float getLocalAngle(float angle);
 	
 }

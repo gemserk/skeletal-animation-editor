@@ -197,7 +197,6 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		// treeObserver.update(root);
 		treeEditor.add(root);
-
 	}
 
 	@Override

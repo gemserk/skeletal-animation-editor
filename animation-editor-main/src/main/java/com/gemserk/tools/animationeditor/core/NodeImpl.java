@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.math.Vector2;
 
 public class NodeImpl implements Node {
-	
+
 	String id;
 
 	/**
@@ -19,11 +19,11 @@ public class NodeImpl implements Node {
 
 	Node parent = new NodeNullImpl();
 	ArrayList<Node> children = new ArrayList<Node>();
-	
+
 	public NodeImpl() {
 		this("");
 	}
-	
+
 	public NodeImpl(String id) {
 		this(id, 0f, 0f, 0f);
 	}
@@ -33,7 +33,7 @@ public class NodeImpl implements Node {
 		setPosition(x, y);
 		setAngle(angle);
 	}
-	
+
 	public NodeImpl(Node node) {
 		this.parent = node.getParent();
 		setId(node.getId());
@@ -45,7 +45,7 @@ public class NodeImpl implements Node {
 	public String getId() {
 		return id;
 	}
-	
+
 	@Override
 	public void setId(String id) {
 		this.id = id;
@@ -85,6 +85,11 @@ public class NodeImpl implements Node {
 	}
 
 	@Override
+	public void setLocalPosition(float x, float y) {
+		localPosition.set(x, y);
+	}
+
+	@Override
 	public float getAngle() {
 		return angle + parent.getAngle();
 	}
@@ -95,20 +100,25 @@ public class NodeImpl implements Node {
 	}
 
 	@Override
+	public void setLocalAngle(float angle) {
+		this.angle = angle;
+	}
+
+	@Override
 	public void setParent(Node parent) {
 		if (this.parent == parent)
 			return;
-		
+
 		float x = getX();
 		float y = getY();
 		float angle = getAngle();
-		
+
 		this.parent.getChildren().remove(this);
 		this.parent = parent;
 		this.parent.getChildren().add(this);
-		
-		setPosition(x, y);
+
 		setAngle(angle);
+		setPosition(x, y);
 	}
 
 	@Override
@@ -136,7 +146,13 @@ public class NodeImpl implements Node {
 	}
 
 	@Override
+	public float getLocalAngle(float angle) {
+		return angle - getAngle();
+	}
+
+	@Override
 	public String toString() {
 		return getId();
 	}
+
 }

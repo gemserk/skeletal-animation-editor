@@ -12,41 +12,6 @@ import com.gemserk.animation4j.transitions.TransitionFloatArrayImpl;
 
 public class SkeletonIdeasTest {
 
-	static class SkeletonKeyFrame {
-
-		float[] values;
-
-		public SkeletonKeyFrame(Node root) {
-			update(getArrayList(root));
-		}
-
-		private void update(ArrayList<Node> nodes) {
-			values = new float[nodes.size() * 3];
-			int j = 0;
-			for (int i = 0; i < nodes.size(); i++) {
-				Node node = nodes.get(i);
-				values[j] = node.getX();
-				values[j + 1] = node.getY();
-				values[j + 2] = node.getAngle();
-				j += 3;
-			}
-		}
-		
-		ArrayList<Node> getArrayList(Node node) {
-			ArrayList<Node> nodes = new ArrayList<Node>();
-			add(nodes, node);
-			return nodes;
-		}
-
-		void add(ArrayList<Node> nodes, Node node) {
-			nodes.add(node);
-			for (int i = 0; i < node.getChildren().size(); i++) {
-				add(nodes, node.getChildren().get(i));
-			}
-		}
-
-	}
-
 	class SkeletonAnimation {
 
 		ArrayList<SkeletonKeyFrame> keyFrames;
@@ -130,16 +95,16 @@ public class SkeletonIdeasTest {
 	@Test
 	public void transitionTest() {
 
-		Node root = new NodeImpl("AAA", 0f, 0f, 0f);
-		Node leaf1 = new NodeImpl("BBB", 30f, 30f, 30f);
-		Node leaf2 = new NodeImpl("CCC", 60f, 60f, 60f);
+		NodeImpl root = new NodeImpl("AAA", 0f, 0f, 0f);
+		NodeImpl leaf1 = new NodeImpl("BBB", 30f, 30f, 30f);
+		NodeImpl leaf2 = new NodeImpl("CCC", 60f, 60f, 60f);
 
 		leaf1.setParent(root);
 		leaf2.setParent(root);
 
 		SkeletonKeyFrame frame1 = new SkeletonKeyFrame(root);
 
-		leaf2.setPosition(-100f, -100f);
+		root.setPosition(-100f, -100f);
 		
 		SkeletonKeyFrame frame2 = new SkeletonKeyFrame(root);
 		
