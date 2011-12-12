@@ -15,7 +15,7 @@ import com.gemserk.componentsengine.input.InputDevicesMonitorImpl;
 import com.gemserk.componentsengine.input.LibgdxInputMappingBuilder;
 import com.gemserk.tools.animationeditor.core.Node;
 import com.gemserk.tools.animationeditor.core.NodeImpl;
-import com.gemserk.tools.animationeditor.core.tree.TreeObserver;
+import com.gemserk.tools.animationeditor.core.tree.TreeEditor;
 
 public class EditorLibgdxApplicationListener extends Game {
 
@@ -39,11 +39,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	SpriteBatch spriteBatch;
 
-	Node root;
-	Node selectedNode;
 	Node nearNode;
-
-	ArrayList<Node> nodes;
 
 	float nodeSize = 2f;
 	float backgroundNodeSize = 4f;
@@ -52,12 +48,12 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	Vector2 position = new Vector2();
 
-	TreeObserver treeObserver;
+	TreeEditor treeEditor;
 
 	private InputDevicesMonitorImpl<String> inputMonitor;
 
-	public void setTreeObserver(TreeObserver treeObserver) {
-		this.treeObserver = treeObserver;
+	public void setTreeEditor(TreeEditor treeEditor) {
+		this.treeEditor = treeEditor;
 	}
 
 	interface EditorState {
@@ -75,24 +71,13 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			position.set(nearNode.getX(), nearNode.getY());
 
-			if (inputMonitor.getButton(Actions.RightMouseButton).isReleased()) {
-				selectedNode = nearNode;
-				treeObserver.select(selectedNode);
-			}
+			if (inputMonitor.getButton(Actions.RightMouseButton).isReleased()) 
+				treeEditor.select(nearNode);
 
 			if (inputMonitor.getButton(Actions.DeleteNodeButton).isReleased()) {
-				if (selectedNode != root) {
-					
-					treeObserver.remove(selectedNode);
-					
-					Node parent = selectedNode.getParent();
-					parent.getChildren().remove(selectedNode);
-					nodes.remove(selectedNode);
-					selectedNode = parent;
-					// treeObserver.update(root);
-					
-					treeObserver.select(parent);
-
+				if (!treeEditor.isSelectedNode(treeEditor.getRoot())) {
+					if (treeEditor.getSelectedNode() != null)
+						treeEditor.remove(treeEditor.getSelectedNode());
 				}
 			}
 
@@ -102,23 +87,18 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			if (inputMonitor.getButton(Actions.LeftMouseButton).isPressed()) {
 				if (position.dst(x, y) < selectDistance) {
-					selectedNode = nearNode;
-					treeObserver.select(selectedNode);
+					treeEditor.select(nearNode);
 					currentState = new DraggingNodeState();
 					return;
 				}
 			}
 
 			if (inputMonitor.getButton(Actions.LeftMouseButton).isReleased()) {
-				Node newNode = new NodeImpl(selectedNode.getId() + MathUtils.random(111, 999));
-				newNode.setParent(selectedNode);
+				Node newNode = new NodeImpl("node-" + MathUtils.random(111, 999));
+				treeEditor.add(newNode);
 				newNode.setPosition(x, y);
-				selectedNode = newNode;
-				nodes.add(newNode);
-
-				// treeObserver.update(root);
-				treeObserver.add(selectedNode);
-				treeObserver.select(selectedNode);
+				
+				treeEditor.select(newNode.getParent());
 			}
 
 		}
@@ -127,20 +107,28 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	class DraggingNodeState implements EditorState {
 
+		private int x0;
+		private int y0;
+
+		public DraggingNodeState() {
+			x0 = Gdx.input.getX();
+			y0 = Gdx.graphics.getHeight() - Gdx.input.getY();
+		}
+
 		@Override
 		public void update() {
-
-			int x = Gdx.input.getX();
-			int y = Gdx.graphics.getHeight() - Gdx.input.getY();
-
-			if (inputMonitor.getButton(Actions.LeftMouseButton).isHolded()) {
-				selectedNode.setPosition(x, y);
-			}
+			int x1 = Gdx.input.getX();
+			int y1 = Gdx.graphics.getHeight() - Gdx.input.getY();
 
 			if (inputMonitor.getButton(Actions.LeftMouseButton).isReleased()) {
 				currentState = new NormalEditorState();
+				return;
 			}
 
+			treeEditor.moveSelected(x1 - x0, y1 - y0);
+
+			x0 = x1;
+			y0 = y1;
 		}
 
 	}
@@ -164,9 +152,11 @@ public class EditorLibgdxApplicationListener extends Game {
 				return;
 			}
 
-			float currentAngle = selectedNode.getAngle();
 			float rotation = (float) (currentY - y) * rotationSpeed;
-			selectedNode.setAngle(currentAngle + rotation);
+			treeEditor.rotateSelected(rotation);
+
+			// float currentAngle = selectedNode.getAngle();
+			// selectedNode.setAngle(currentAngle + rotation);
 
 			currentY = y;
 		}
@@ -181,15 +171,15 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		Gdx.graphics.getGL10().glClearColor(0f, 0f, 0f, 1f);
 
-		root = new NodeImpl("root");
+		Node root = new NodeImpl("root");
 		root.setPosition(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f);
 
-		selectedNode = root;
+		// selectedNode = root;
 
 		currentState = new NormalEditorState();
 
-		nodes = new ArrayList<Node>();
-		nodes.add(root);
+		// nodes = new ArrayList<Node>();
+		// nodes.add(root);
 
 		spriteBatch = new SpriteBatch();
 
@@ -205,8 +195,8 @@ public class EditorLibgdxApplicationListener extends Game {
 			}
 		};
 
-//		treeObserver.update(root);
-		treeObserver.add(root);
+		// treeObserver.update(root);
+		treeEditor.add(root);
 
 	}
 
@@ -240,28 +230,29 @@ public class EditorLibgdxApplicationListener extends Game {
 		spriteBatch.begin();
 		spriteBatch.end();
 
-		renderNodeTree(root);
+		renderNodeTree(treeEditor.getRoot());
 	}
 
 	private Node updateNearNode(int x, int y) {
+		return treeEditor.getNearestNode(x, y);
 
-		Node nearNode = root;
-
-		position.set(nearNode.getX(), nearNode.getY());
-
-		float minDistance = position.dst(x, y);
-
-		for (int i = 0; i < nodes.size(); i++) {
-			Node node = nodes.get(i);
-			position.set(node.getX(), node.getY());
-
-			if (position.dst(x, y) < minDistance) {
-				minDistance = position.dst(x, y);
-				nearNode = node;
-			}
-		}
-
-		return nearNode;
+		// Node nearNode = root;
+		//
+		// position.set(nearNode.getX(), nearNode.getY());
+		//
+		// float minDistance = position.dst(x, y);
+		//
+		// for (int i = 0; i < nodes.size(); i++) {
+		// Node node = nodes.get(i);
+		// position.set(node.getX(), node.getY());
+		//
+		// if (position.dst(x, y) < minDistance) {
+		// minDistance = position.dst(x, y);
+		// nearNode = node;
+		// }
+		// }
+		//
+		// return nearNode;
 	}
 
 	private void renderNodeTree(Node node) {
@@ -283,7 +274,7 @@ public class EditorLibgdxApplicationListener extends Game {
 					Colors.nearNodeColor);
 		}
 
-		if (node == selectedNode) {
+		if (treeEditor.isSelectedNode(node)) {
 			float backgroundNodeSize = 4f;
 			ImmediateModeRendererUtils.fillRectangle(node.getX() - backgroundNodeSize, //
 					node.getY() - backgroundNodeSize, //
@@ -296,12 +287,12 @@ public class EditorLibgdxApplicationListener extends Game {
 				Colors.nodeColor);
 	}
 
-	private Color getColor(Node node) {
-		if (node == selectedNode)
-			return Colors.selectedNodeColor;
-		// if (node == nearNode)
-		// return Colors.nearNodeColor;
-		return Colors.nodeColor;
-	}
+	// private Color getColor(Node node) {
+	// if (treeEditor.isSelectedNode(node))
+	// return Colors.selectedNodeColor;
+	// // if (node == nearNode)
+	// // return Colors.nearNodeColor;
+	// return Colors.nodeColor;
+	// }
 
 }

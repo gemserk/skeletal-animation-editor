@@ -29,7 +29,9 @@ import javax.swing.tree.TreeSelectionModel;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.gemserk.tools.animationeditor.core.Node;
-import com.gemserk.tools.animationeditor.main.tree.TreeObserverForJtree;
+import com.gemserk.tools.animationeditor.core.tree.TreeEditor;
+import com.gemserk.tools.animationeditor.core.tree.TreeEditorImpl;
+import com.gemserk.tools.animationeditor.main.tree.TreeEditorWithJtreeInterceptorImpl;
 
 public class EditorWindow {
 
@@ -78,13 +80,14 @@ public class EditorWindow {
 				lwjglApplication.stop();
 				super.removeNotify();
 			}
-			
+
 			{
 				addMouseListener(new MouseAdapter() {
 					@Override
 					public void mouseEntered(MouseEvent e) {
 						requestFocus();
 					}
+
 					@Override
 					public void mouseExited(MouseEvent e) {
 						getParent().requestFocus();
@@ -209,12 +212,17 @@ public class EditorWindow {
 
 		tree.setModel(new DefaultTreeModel(new DefaultMutableTreeNode("root")));
 
+		final TreeEditor treeEditor = new TreeEditorWithJtreeInterceptorImpl( //
+				new TreeEditorImpl(), tree);
+
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e) {
 				Object treeNode = e.getPath().getLastPathComponent();
 				if (treeNode instanceof TreeNodeEditorImpl) {
 					Node editorNode = ((TreeNodeEditorImpl) treeNode).getNode();
-					editorApplication.selectedNode = editorNode;
+					// recursive?
+					treeEditor.select(editorNode);
+					// editorApplication.selectedNode = editorNode;
 				}
 			}
 		});
@@ -224,7 +232,7 @@ public class EditorWindow {
 		panel_2.add(tree);
 		tree.setBackground(Color.LIGHT_GRAY);
 
-		editorApplication.setTreeObserver(new TreeObserverForJtree(tree));
+		editorApplication.setTreeEditor(treeEditor);
 
 		JPanel panel_3 = new JPanel();
 		splitPane_1.setRightComponent(panel_3);

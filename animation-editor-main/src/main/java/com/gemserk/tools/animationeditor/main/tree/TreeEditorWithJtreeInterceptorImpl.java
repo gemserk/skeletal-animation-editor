@@ -9,20 +9,22 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
 import com.gemserk.tools.animationeditor.core.Node;
-import com.gemserk.tools.animationeditor.core.tree.TreeObserver;
+import com.gemserk.tools.animationeditor.core.tree.TreeEditor;
 import com.gemserk.tools.animationeditor.main.TreeNodeEditorImpl;
 
 /**
  * Updates the TreeModel based on changes made over the Nodes of the current skeleton.
  */
-public class TreeObserverForJtree implements TreeObserver {
+public class TreeEditorWithJtreeInterceptorImpl implements TreeEditor {
 
 	JTree tree;
 	DefaultTreeModel model;
 
 	Map<String, TreeNodeEditorImpl> treeNodes = new HashMap<String, TreeNodeEditorImpl>();
+	TreeEditor treeEditor;
 
-	public TreeObserverForJtree(JTree tree) {
+	public TreeEditorWithJtreeInterceptorImpl(TreeEditor treeEditor, JTree tree) {
+		this.treeEditor = treeEditor;
 		this.tree = tree;
 		this.model = (DefaultTreeModel) tree.getModel();
 	}
@@ -39,6 +41,8 @@ public class TreeObserverForJtree implements TreeObserver {
 
 	@Override
 	public void select(Node node) {
+		treeEditor.select(node);
+
 		TreeNodeEditorImpl treeNode = treeNodes.get(node.getId());
 		// model.nodeChanged(treeNodeEditorImpl);
 		if (treeNode == null) {
@@ -51,12 +55,15 @@ public class TreeObserverForJtree implements TreeObserver {
 
 	@Override
 	public void remove(Node node) {
+		treeEditor.remove(node);
+
 		Node parent = node.getParent();
 		TreeNodeEditorImpl parentTreeNode = treeNodes.get(parent.getId());
 		if (parentTreeNode == null)
 			throw new IllegalArgumentException("Node should be on the JTree to call remove");
-		parentTreeNode.removeAllChildren();
-		model.reload(parentTreeNode);
+		TreeNodeEditorImpl treeNode = treeNodes.get(node.getId());
+		parentTreeNode.remove(treeNode);
+		model.reload();
 	}
 
 	private void focusOnTreeNode(TreeNodeEditorImpl parentTreeNode) {
@@ -67,6 +74,8 @@ public class TreeObserverForJtree implements TreeObserver {
 
 	@Override
 	public void add(Node node) {
+		treeEditor.add(node);
+
 		Node parent = node.getParent();
 		TreeNodeEditorImpl parentTreeNode = treeNodes.get(parent.getId());
 		if (parentTreeNode == null) {
@@ -78,6 +87,36 @@ public class TreeObserverForJtree implements TreeObserver {
 			return;
 		}
 		createTreeNodeForChild(node, parentTreeNode);
-		focusOnTreeNode(parentTreeNode);
+		model.reload();
+		// focusOnTreeNode(parentTreeNode);
 	}
+
+	@Override
+	public Node getNearestNode(float x, float y) {
+		return treeEditor.getNearestNode(x, y);
+	}
+
+	@Override
+	public Node getRoot() {
+		return treeEditor.getRoot();
+	}
+
+	@Override
+	public boolean isSelectedNode(Node node) {
+		return treeEditor.isSelectedNode(node);
+	}
+
+	public void moveSelected(float dx, float dy) {
+		treeEditor.moveSelected(dx, dy);
+	}
+
+	public void rotateSelected(float angle) {
+		treeEditor.rotateSelected(angle);
+	}
+
+	@Override
+	public Node getSelectedNode() {
+		return treeEditor.getSelectedNode();
+	}
+
 }

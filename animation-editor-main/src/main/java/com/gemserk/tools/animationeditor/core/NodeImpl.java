@@ -20,12 +20,18 @@ public class NodeImpl implements Node {
 	Node parent = new NodeRootImpl();
 	ArrayList<Node> children = new ArrayList<Node>();
 	
-	public NodeImpl(String id) {
-		setId(id);
-	}
-	
 	public NodeImpl() {
 		this("");
+	}
+	
+	public NodeImpl(String id) {
+		this(id, 0f, 0f, 0f);
+	}
+
+	public NodeImpl(String id, float x, float y, float angle) {
+		setId(id);
+		setPosition(x, y);
+		setAngle(angle);
 	}
 
 	@Override
