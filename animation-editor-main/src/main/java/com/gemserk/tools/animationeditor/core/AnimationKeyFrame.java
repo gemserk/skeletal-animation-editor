@@ -3,6 +3,7 @@ package com.gemserk.tools.animationeditor.core;
 public class AnimationKeyFrame {
 	
 	String name;
+	Node root;
 	
 	public String getName() {
 		return name;
@@ -12,8 +13,9 @@ public class AnimationKeyFrame {
 		this.name = name;
 	}
 
-	public AnimationKeyFrame(String name) {
+	public AnimationKeyFrame(String name, Node root) {
 		this.name = name;
+		this.root = root;
 	}
 	
 }

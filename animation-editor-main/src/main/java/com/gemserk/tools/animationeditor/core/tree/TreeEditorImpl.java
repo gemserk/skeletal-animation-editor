@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.gemserk.tools.animationeditor.core.Animation;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Node;
+import com.gemserk.tools.animationeditor.core.NodeUtils;
 
 public class TreeEditorImpl implements TreeEditor {
 
@@ -90,18 +91,19 @@ public class TreeEditorImpl implements TreeEditor {
 		float currentAngle = selectedNode.getAngle();
 		selectedNode.setAngle(currentAngle + angle);
 	}
-	
-	/// KeyFrames
-	
+
+	// / KeyFrames
+
 	int index = 0;
-	
+
 	Animation currentAnimation = new Animation();
-	
+
 	AnimationKeyFrame selectedKeyFrame;
 
 	@Override
 	public AnimationKeyFrame addKeyFrame() {
-		AnimationKeyFrame keyFrame = new AnimationKeyFrame("keyFrame" + index++);
+		String name = "keyFrame" + index++;
+		AnimationKeyFrame keyFrame = new AnimationKeyFrame(name, NodeUtils.cloneTree(root));
 		currentAnimation.getKeyFrames().add(keyFrame);
 		return keyFrame;
 	}
@@ -121,5 +123,5 @@ public class TreeEditorImpl implements TreeEditor {
 	public Animation getCurrentAnimation() {
 		return currentAnimation;
 	}
-	
+
 }

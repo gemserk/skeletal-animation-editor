@@ -8,26 +8,13 @@ public class TreeConverter implements TypeConverter<Node> {
 
 	public static TreeConverter instance = new TreeConverter();
 
-	private static ArrayList<Node> getArrayList(Node node) {
-		ArrayList<Node> nodes = new ArrayList<Node>();
-		add(nodes, node);
-		return nodes;
-	}
-
-	private static void add(ArrayList<Node> nodes, Node node) {
-		nodes.add(node);
-		for (int i = 0; i < node.getChildren().size(); i++) {
-			add(nodes, node.getChildren().get(i));
-		}
-	}
-
 	@Override
 	public int variables() {
 		throw new UnsupportedOperationException("cant return the number of variables of a variable tree");
 	}
 
 	public Node copyToObject(Node node, float[] x) {
-		ArrayList<Node> nodes = getArrayList(node);
+		ArrayList<Node> nodes = NodeUtils.getArrayList(node);
 		int nodeIndex = 0;
 		for (int i = 0; i < x.length; i += 3) {
 			Node n = nodes.get(nodeIndex);
@@ -43,7 +30,7 @@ public class TreeConverter implements TypeConverter<Node> {
 
 	@Override
 	public float[] copyFromObject(Node node, float[] x) {
-		ArrayList<Node> nodes = getArrayList(node);
+		ArrayList<Node> nodes = NodeUtils.getArrayList(node);
 		if (x == null)
 			x = new float[nodes.size() * 3];
 		int j = 0;
