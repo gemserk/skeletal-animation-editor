@@ -10,10 +10,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
+import javax.swing.AbstractListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -21,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 import javax.swing.JTree;
+import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -34,7 +38,34 @@ import com.gemserk.tools.animationeditor.main.tree.TreeEditorWithJtreeIntercepto
 
 public class EditorWindow {
 
+	class KeyFramesListModel extends AbstractListModel {
+
+		private static final long serialVersionUID = 7156920082037501961L;
+
+		public ArrayList<String> values;
+
+		public KeyFramesListModel(String... values) {
+			this.values = new ArrayList<String>();
+			for (int i = 0; i < values.length; i++)
+				this.values.add(values[i]);
+		}
+
+		public KeyFramesListModel(ArrayList<String> values) {
+			this.values = new ArrayList<String>(values);
+		}
+
+		public int getSize() {
+			return values.size();
+		}
+
+		public Object getElementAt(int index) {
+			return values.get(index);
+		}
+
+	}
+
 	private JFrame frmGemserksAnimationEditor;
+	private JList keyFramesList;
 
 	/**
 	 * Launch the application.
@@ -181,7 +212,7 @@ public class EditorWindow {
 
 		final JToggleButton tglbtnNewToggleButton = new JToggleButton("Play");
 		panelTimeline.add(tglbtnNewToggleButton);
-		
+
 		tglbtnNewToggleButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -194,6 +225,16 @@ public class EditorWindow {
 
 		JButton btnNewButton = new JButton("Stop");
 		panelTimeline.add(btnNewButton);
+
+		JButton btnAddKeyframe = new JButton("Add keyframe");
+		btnAddKeyframe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				KeyFramesListModel model = (KeyFramesListModel) keyFramesList.getModel();
+				model.values.add("keyFrame1");
+				keyFramesList.setModel(new KeyFramesListModel(model.values));
+			}
+		});
+		panelTimeline.add(btnAddKeyframe);
 
 		JPanel panelStructure = new JPanel();
 		panelStructure.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -235,5 +276,11 @@ public class EditorWindow {
 
 		JLabel lblNewLabel_2 = new JLabel("Properties");
 		panel_3.add(lblNewLabel_2, BorderLayout.NORTH);
+
+		keyFramesList = new JList();
+		keyFramesList.setModel(new KeyFramesListModel("keyFrame0"));
+		keyFramesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		keyFramesList.setBackground(Color.LIGHT_GRAY);
+		panel_3.add(keyFramesList, BorderLayout.CENTER);
 	}
 }

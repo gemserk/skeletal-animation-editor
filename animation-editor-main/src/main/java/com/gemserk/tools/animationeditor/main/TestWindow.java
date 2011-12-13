@@ -6,6 +6,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.AbstractListModel;
 import javax.swing.JButton;
@@ -146,6 +148,14 @@ public class TestWindow {
 		
 		JButton btnNewButton = new JButton("Stop");
 		panelTimeline.add(btnNewButton);
+		
+		JButton btnAddKeyframe = new JButton("Add keyframe");
+		btnAddKeyframe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		panelTimeline.add(btnAddKeyframe);
 		
 		JPanel panelStructure = new JPanel();
 		panelStructure.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
