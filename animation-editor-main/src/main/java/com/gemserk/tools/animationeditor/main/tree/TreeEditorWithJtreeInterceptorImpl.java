@@ -1,5 +1,6 @@
 package com.gemserk.tools.animationeditor.main.tree;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,8 +29,10 @@ public class TreeEditorWithJtreeInterceptorImpl implements TreeEditor {
 		@Override
 		public void valueChanged(ListSelectionEvent e) {
 			AnimationKeyFrameListModel model = (AnimationKeyFrameListModel) keyFramesList.getModel();
+			if (keyFramesList.getSelectedIndex() == -1)
+				return;
 			AnimationKeyFrame keyFrame = model.values.get(keyFramesList.getSelectedIndex());
-			selectKeyFrame(keyFrame);
+			treeEditor.selectKeyFrame(keyFrame);
 		}
 	}
 
@@ -157,7 +160,9 @@ public class TreeEditorWithJtreeInterceptorImpl implements TreeEditor {
 	@Override
 	public AnimationKeyFrame addKeyFrame() {
 		AnimationKeyFrame newKeyFrame = treeEditor.addKeyFrame();
-		keyFramesList.setModel(new AnimationKeyFrameListModel(getCurrentAnimation().getKeyFrames()));
+		ArrayList<AnimationKeyFrame> keyFrames = getCurrentAnimation().getKeyFrames();
+		keyFramesList.setModel(new AnimationKeyFrameListModel(keyFrames));
+		keyFramesList.setSelectedIndex(keyFrames.indexOf(newKeyFrame));
 		return newKeyFrame;
 	}
 
