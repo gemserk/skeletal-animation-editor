@@ -12,6 +12,10 @@ public class AnimationKeyFrame {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public Node getRoot() {
+		return root;
+	}
 
 	public AnimationKeyFrame(String name, Node root) {
 		this.name = name;

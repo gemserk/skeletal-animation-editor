@@ -217,7 +217,7 @@ public class EditorLibgdxApplicationListener extends Game {
 		int x = Gdx.input.getX();
 		int y = Gdx.graphics.getHeight() - Gdx.input.getY();
 
-		nearNode = updateNearNode(x, y);
+		nearNode = treeEditor.getNearestNode(x, y);
 
 		currentState.update();
 
@@ -230,28 +230,6 @@ public class EditorLibgdxApplicationListener extends Game {
 		spriteBatch.end();
 
 		renderNodeTree(treeEditor.getRoot());
-	}
-
-	private Node updateNearNode(int x, int y) {
-		return treeEditor.getNearestNode(x, y);
-
-		// Node nearNode = root;
-		//
-		// position.set(nearNode.getX(), nearNode.getY());
-		//
-		// float minDistance = position.dst(x, y);
-		//
-		// for (int i = 0; i < nodes.size(); i++) {
-		// Node node = nodes.get(i);
-		// position.set(node.getX(), node.getY());
-		//
-		// if (position.dst(x, y) < minDistance) {
-		// minDistance = position.dst(x, y);
-		// nearNode = node;
-		// }
-		// }
-		//
-		// return nearNode;
 	}
 
 	private void renderNodeTree(Node node) {

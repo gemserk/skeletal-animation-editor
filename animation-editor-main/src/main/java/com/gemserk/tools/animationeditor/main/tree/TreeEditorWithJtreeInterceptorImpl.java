@@ -17,13 +17,15 @@ import javax.swing.tree.TreePath;
 import com.gemserk.tools.animationeditor.core.Animation;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Node;
+import com.gemserk.tools.animationeditor.core.tree.AnimationEditor;
+import com.gemserk.tools.animationeditor.core.tree.AnimationEditorImpl;
 import com.gemserk.tools.animationeditor.core.tree.TreeEditor;
 import com.gemserk.tools.animationeditor.main.list.AnimationKeyFrameListModel;
 
 /**
  * Updates the TreeModel based on changes made over the Nodes of the current skeleton.
  */
-public class TreeEditorWithJtreeInterceptorImpl implements TreeEditor {
+public class TreeEditorWithJtreeInterceptorImpl implements TreeEditor, AnimationEditor {
 
 	class UpdateCurrentAnimationFromJList implements ListSelectionListener {
 		@Override
@@ -32,7 +34,7 @@ public class TreeEditorWithJtreeInterceptorImpl implements TreeEditor {
 			if (keyFramesList.getSelectedIndex() == -1)
 				return;
 			AnimationKeyFrame keyFrame = model.values.get(keyFramesList.getSelectedIndex());
-			treeEditor.selectKeyFrame(keyFrame);
+			animationEditor.selectKeyFrame(keyFrame);
 		}
 	}
 
@@ -50,7 +52,10 @@ public class TreeEditorWithJtreeInterceptorImpl implements TreeEditor {
 	DefaultTreeModel model;
 
 	Map<String, TreeNodeEditorImpl> treeNodes = new HashMap<String, TreeNodeEditorImpl>();
+	
 	TreeEditor treeEditor;
+	AnimationEditor animationEditor;
+	
 	JList keyFramesList;
 
 	public TreeEditorWithJtreeInterceptorImpl(TreeEditor treeEditor, JTree tree, JList keyFramesList) {
@@ -60,6 +65,8 @@ public class TreeEditorWithJtreeInterceptorImpl implements TreeEditor {
 		this.model = (DefaultTreeModel) tree.getModel();
 		tree.addTreeSelectionListener(new UpdateEditorTreeSelectionListener());
 		keyFramesList.addListSelectionListener(new UpdateCurrentAnimationFromJList());
+		
+		animationEditor = new AnimationEditorImpl(this);
 	}
 
 	private void createTreeNodeForChild(Node node, DefaultMutableTreeNode parentTreeNode) {
@@ -159,7 +166,7 @@ public class TreeEditorWithJtreeInterceptorImpl implements TreeEditor {
 
 	@Override
 	public AnimationKeyFrame addKeyFrame() {
-		AnimationKeyFrame newKeyFrame = treeEditor.addKeyFrame();
+		AnimationKeyFrame newKeyFrame = animationEditor.addKeyFrame();
 		ArrayList<AnimationKeyFrame> keyFrames = getCurrentAnimation().getKeyFrames();
 		keyFramesList.setModel(new AnimationKeyFrameListModel(keyFrames));
 		keyFramesList.setSelectedIndex(keyFrames.indexOf(newKeyFrame));
@@ -168,22 +175,30 @@ public class TreeEditorWithJtreeInterceptorImpl implements TreeEditor {
 
 	@Override
 	public void selectKeyFrame(AnimationKeyFrame keyFrame) {
-		treeEditor.selectKeyFrame(keyFrame);
+		animationEditor.selectKeyFrame(keyFrame);
 		keyFramesList.setSelectedValue(keyFrame, true);
 	}
 
 	@Override
 	public void removeKeyFrame() {
-		treeEditor.removeKeyFrame();
-		Animation currentAnimation = treeEditor.getCurrentAnimation();
+		animationEditor.removeKeyFrame();
+		Animation currentAnimation = animationEditor.getCurrentAnimation();
 		keyFramesList.setModel(new AnimationKeyFrameListModel(currentAnimation.getKeyFrames()));
 		keyFramesList.setSelectedIndex(0);
 	}
 
 	@Override
 	public Animation getCurrentAnimation() {
-		return treeEditor.getCurrentAnimation();
+		return animationEditor.getCurrentAnimation();
+	}
 
+	@Override
+	public void setRoot(Node root) {
+		DefaultMutableTreeNode treeRoot = (DefaultMutableTreeNode) model.getRoot();
+		treeRoot.removeAllChildren();
+		createTreeNodeForChild(root, treeRoot);
+		model.reload();
+		treeEditor.setRoot(root);
 	}
 
 }

@@ -2,6 +2,7 @@ package com.gemserk.tools.animationeditor.core.tree;
 
 import com.gemserk.tools.animationeditor.core.Animation;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
+import com.gemserk.tools.animationeditor.core.Node;
 import com.gemserk.tools.animationeditor.core.NodeUtils;
 
 public class AnimationEditorImpl implements AnimationEditor {
@@ -28,6 +29,11 @@ public class AnimationEditorImpl implements AnimationEditor {
 	@Override
 	public void selectKeyFrame(AnimationKeyFrame keyFrame) {
 		selectedKeyFrame = keyFrame;
+		
+		Node root = keyFrame.getRoot();
+		
+		treeEditor.setRoot(root);
+		treeEditor.select(root);
 	}
 
 	@Override

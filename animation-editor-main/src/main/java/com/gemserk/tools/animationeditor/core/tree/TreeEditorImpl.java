@@ -3,8 +3,6 @@ package com.gemserk.tools.animationeditor.core.tree;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Vector2;
-import com.gemserk.tools.animationeditor.core.Animation;
-import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Node;
 import com.gemserk.tools.animationeditor.core.NodeUtils;
 
@@ -92,36 +90,13 @@ public class TreeEditorImpl implements TreeEditor {
 		selectedNode.setAngle(currentAngle + angle);
 	}
 
-	// / KeyFrames
-
-	int index = 0;
-
-	Animation currentAnimation = new Animation();
-
-	AnimationKeyFrame selectedKeyFrame;
-
 	@Override
-	public AnimationKeyFrame addKeyFrame() {
-		String name = "keyFrame" + index++;
-		AnimationKeyFrame keyFrame = new AnimationKeyFrame(name, NodeUtils.cloneTree(root));
-		currentAnimation.getKeyFrames().add(keyFrame);
-		return keyFrame;
-	}
-
-	@Override
-	public void selectKeyFrame(AnimationKeyFrame keyFrame) {
-		selectedKeyFrame = keyFrame;
-	}
-
-	@Override
-	public void removeKeyFrame() {
-		if (selectedKeyFrame != null)
-			currentAnimation.getKeyFrames().remove(selectedKeyFrame);
-	}
-
-	@Override
-	public Animation getCurrentAnimation() {
-		return currentAnimation;
+	public void setRoot(Node root) {
+		this.root = root;
+		selectedNode = root;
+		
+		nodes.clear();
+		nodes.addAll(NodeUtils.getArrayList(root));
 	}
 
 }
