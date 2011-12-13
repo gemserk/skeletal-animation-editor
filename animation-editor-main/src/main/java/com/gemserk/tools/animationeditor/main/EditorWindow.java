@@ -10,9 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
-import javax.swing.AbstractListModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,10 +19,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -34,38 +34,14 @@ import javax.swing.tree.TreeSelectionModel;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.gemserk.tools.animationeditor.core.tree.TreeEditor;
 import com.gemserk.tools.animationeditor.core.tree.TreeEditorImpl;
+import com.gemserk.tools.animationeditor.main.list.AnimationKeyFrameListModel;
 import com.gemserk.tools.animationeditor.main.tree.TreeEditorWithJtreeInterceptorImpl;
 
 public class EditorWindow {
 
-	class KeyFramesListModel extends AbstractListModel {
-
-		private static final long serialVersionUID = 7156920082037501961L;
-
-		public ArrayList<String> values;
-
-		public KeyFramesListModel(String... values) {
-			this.values = new ArrayList<String>();
-			for (int i = 0; i < values.length; i++)
-				this.values.add(values[i]);
-		}
-
-		public KeyFramesListModel(ArrayList<String> values) {
-			this.values = new ArrayList<String>(values);
-		}
-
-		public int getSize() {
-			return values.size();
-		}
-
-		public Object getElementAt(int index) {
-			return values.get(index);
-		}
-
-	}
-
 	private JFrame frmGemserksAnimationEditor;
 	private JList keyFramesList;
+	private TreeEditor treeEditor;
 
 	/**
 	 * Launch the application.
@@ -216,10 +192,10 @@ public class EditorWindow {
 		tglbtnNewToggleButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (tglbtnNewToggleButton.isSelected())
-					editorApplication.playAnimation();
-				else
-					editorApplication.pauseAnimation();
+				// if (tglbtnNewToggleButton.isSelected())
+				// editorApplication.playAnimation();
+				// else
+				// editorApplication.pauseAnimation();
 			}
 		});
 
@@ -229,9 +205,10 @@ public class EditorWindow {
 		JButton btnAddKeyframe = new JButton("Add keyframe");
 		btnAddKeyframe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				KeyFramesListModel model = (KeyFramesListModel) keyFramesList.getModel();
-				model.values.add("keyFrame1");
-				keyFramesList.setModel(new KeyFramesListModel(model.values));
+				// KeyFramesListModel model = (KeyFramesListModel) keyFramesList.getModel();
+				// model.values.add("keyFrame1");
+				// keyFramesList.setModel(new KeyFramesListModel(model.values));
+				treeEditor.addKeyFrame();
 			}
 		});
 		panelTimeline.add(btnAddKeyframe);
@@ -265,22 +242,31 @@ public class EditorWindow {
 
 		panel_2.add(tree);
 		tree.setBackground(Color.LIGHT_GRAY);
+		
+		keyFramesList = new JList();
+		keyFramesList.setModel(new AnimationKeyFrameListModel());
+		keyFramesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		keyFramesList.setBackground(Color.LIGHT_GRAY);
 
-		final TreeEditor treeEditor = new TreeEditorWithJtreeInterceptorImpl( //
-				new TreeEditorImpl(), tree);
+		treeEditor = new TreeEditorWithJtreeInterceptorImpl( //
+				new TreeEditorImpl(), tree, keyFramesList);
 		editorApplication.setTreeEditor(treeEditor);
 
 		JPanel panel_3 = new JPanel();
 		splitPane_1.setRightComponent(panel_3);
 		panel_3.setLayout(new BorderLayout(0, 0));
 
-		JLabel lblNewLabel_2 = new JLabel("Properties");
-		panel_3.add(lblNewLabel_2, BorderLayout.NORTH);
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		panel_3.add(scrollPane_1, BorderLayout.CENTER);
 
-		keyFramesList = new JList();
-		keyFramesList.setModel(new KeyFramesListModel("keyFrame0"));
-		keyFramesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		keyFramesList.setBackground(Color.LIGHT_GRAY);
-		panel_3.add(keyFramesList, BorderLayout.CENTER);
+		JPanel panel_6 = new JPanel();
+		scrollPane_1.setViewportView(panel_6);
+		panel_6.setLayout(new BorderLayout(0, 0));
+
+		panel_6.add(keyFramesList, BorderLayout.CENTER);
+
+		JLabel lblNewLabel_2 = new JLabel("KeyFrames");
+		scrollPane_1.setColumnHeaderView(lblNewLabel_2);
 	}
 }

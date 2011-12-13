@@ -18,10 +18,12 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JToggleButton;
 import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
 import javax.swing.event.TreeSelectionEvent;
@@ -173,10 +175,19 @@ public class TestWindow {
 		splitPane_1.setLeftComponent(panel_2);
 		panel_2.setLayout(new BorderLayout(0, 0));
 		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		panel_2.add(scrollPane, BorderLayout.CENTER);
+		
+		JPanel panel_5 = new JPanel();
+		scrollPane.setViewportView(panel_5);
+		panel_5.setLayout(new BorderLayout(0, 0));
+		
 		JLabel labelPanelStructureTitle = new JLabel("Structure");
-		panel_2.add(labelPanelStructureTitle, BorderLayout.NORTH);
+		panel_5.add(labelPanelStructureTitle, BorderLayout.NORTH);
 		
 		JTree tree = new JTree();
+		panel_5.add(tree);
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent e) {
 				System.out.println(e.getPath().getLastPathComponent());
@@ -187,8 +198,53 @@ public class TestWindow {
 			new DefaultMutableTreeNode("root") {
 				{
 					DefaultMutableTreeNode node_1;
+					DefaultMutableTreeNode node_2;
+					DefaultMutableTreeNode node_3;
+					DefaultMutableTreeNode node_4;
 					node_1 = new DefaultMutableTreeNode("leftArm");
+						node_2 = new DefaultMutableTreeNode("hand");
+							node_3 = new DefaultMutableTreeNode("hand");
+								node_4 = new DefaultMutableTreeNode("hand");
+									node_4.add(new DefaultMutableTreeNode("hand\t\t"));
+								node_3.add(node_4);
+							node_2.add(node_3);
+						node_1.add(node_2);
+					add(node_1);
+					node_1 = new DefaultMutableTreeNode("rightArm");
 						node_1.add(new DefaultMutableTreeNode("hand"));
+					add(node_1);
+					node_1 = new DefaultMutableTreeNode("leftLeg");
+						node_1.add(new DefaultMutableTreeNode("foot"));
+					add(node_1);
+					node_1 = new DefaultMutableTreeNode("rightLeg");
+						node_1.add(new DefaultMutableTreeNode("foot"));
+					add(node_1);
+					node_1 = new DefaultMutableTreeNode("leftArm");
+						node_2 = new DefaultMutableTreeNode("hand");
+							node_3 = new DefaultMutableTreeNode("hand");
+								node_4 = new DefaultMutableTreeNode("hand");
+									node_4.add(new DefaultMutableTreeNode("hand\t\t"));
+								node_3.add(node_4);
+							node_2.add(node_3);
+						node_1.add(node_2);
+					add(node_1);
+					node_1 = new DefaultMutableTreeNode("rightArm");
+						node_1.add(new DefaultMutableTreeNode("hand"));
+					add(node_1);
+					node_1 = new DefaultMutableTreeNode("leftLeg");
+						node_1.add(new DefaultMutableTreeNode("foot"));
+					add(node_1);
+					node_1 = new DefaultMutableTreeNode("rightLeg");
+						node_1.add(new DefaultMutableTreeNode("foot"));
+					add(node_1);
+					node_1 = new DefaultMutableTreeNode("leftArm");
+						node_2 = new DefaultMutableTreeNode("hand");
+							node_3 = new DefaultMutableTreeNode("hand");
+								node_4 = new DefaultMutableTreeNode("hand");
+									node_4.add(new DefaultMutableTreeNode("hand\t\t"));
+								node_3.add(node_4);
+							node_2.add(node_3);
+						node_1.add(node_2);
 					add(node_1);
 					node_1 = new DefaultMutableTreeNode("rightArm");
 						node_1.add(new DefaultMutableTreeNode("hand"));
@@ -202,19 +258,24 @@ public class TestWindow {
 				}
 			}
 		));
-		panel_2.add(tree);
 		tree.setBackground(Color.LIGHT_GRAY);
 		
 		JPanel panel_3 = new JPanel();
 		splitPane_1.setRightComponent(panel_3);
 		panel_3.setLayout(new BorderLayout(0, 0));
 		
-		JLabel lblNewLabel_2 = new JLabel("Keyframes");
-		panel_3.add(lblNewLabel_2, BorderLayout.NORTH);
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		panel_3.add(scrollPane_1, BorderLayout.CENTER);
+		
+		JPanel panel_6 = new JPanel();
+		scrollPane_1.setViewportView(panel_6);
+		panel_6.setLayout(new BorderLayout(0, 0));
 		
 		JList list = new JList();
+		panel_6.add(list);
 		list.setModel(new AbstractListModel() {
-			String[] values = new String[] {"pepe", "loco", "toto"};
+			String[] values = new String[] {"pepe", "loco", "toto", "toto", "toto", "toto", "toto", "toto"};
 			public int getSize() {
 				return values.length;
 			}
@@ -222,8 +283,12 @@ public class TestWindow {
 				return values[index];
 			}
 		});
+		
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		panel_3.add(list, BorderLayout.CENTER);
+		
+		JLabel lblNewLabel_2 = new JLabel("KeyFrames");
+		scrollPane_1.setColumnHeaderView(lblNewLabel_2);
+
 	}
 
 }

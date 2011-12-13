@@ -3,6 +3,7 @@ package com.gemserk.tools.animationeditor.core.tree;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Vector2;
+import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Node;
 
 public class TreeEditorImpl implements TreeEditor {
@@ -87,6 +88,15 @@ public class TreeEditorImpl implements TreeEditor {
 	public void rotateSelected(float angle) {
 		float currentAngle = selectedNode.getAngle();
 		selectedNode.setAngle(currentAngle + angle);
+	}
+	
+	/// KeyFrames
+	
+	int index = 0;
+
+	@Override
+	public AnimationKeyFrame addKeyFrame() {
+		return new AnimationKeyFrame("keyFrame" + index++);
 	}
 
 }

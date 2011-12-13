@@ -1,4 +1,4 @@
-package com.gemserk.tools.animationeditor.main;
+package com.gemserk.tools.animationeditor.main.tree;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 

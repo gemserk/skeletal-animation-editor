@@ -3,6 +3,7 @@ package com.gemserk.tools.animationeditor.main.tree;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JList;
 import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
@@ -10,9 +11,10 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Node;
 import com.gemserk.tools.animationeditor.core.tree.TreeEditor;
-import com.gemserk.tools.animationeditor.main.TreeNodeEditorImpl;
+import com.gemserk.tools.animationeditor.main.list.AnimationKeyFrameListModel;
 
 /**
  * Updates the TreeModel based on changes made over the Nodes of the current skeleton.
@@ -34,10 +36,12 @@ public class TreeEditorWithJtreeInterceptorImpl implements TreeEditor {
 
 	Map<String, TreeNodeEditorImpl> treeNodes = new HashMap<String, TreeNodeEditorImpl>();
 	TreeEditor treeEditor;
+	JList keyFramesList;
 
-	public TreeEditorWithJtreeInterceptorImpl(TreeEditor treeEditor, JTree tree) {
+	public TreeEditorWithJtreeInterceptorImpl(TreeEditor treeEditor, JTree tree, JList keyFramesList) {
 		this.treeEditor = treeEditor;
 		this.tree = tree;
+		this.keyFramesList = keyFramesList;
 		this.model = (DefaultTreeModel) tree.getModel();
 		tree.addTreeSelectionListener(new UpdateEditorTreeSelectionListener());
 	}
@@ -135,6 +139,18 @@ public class TreeEditorWithJtreeInterceptorImpl implements TreeEditor {
 	@Override
 	public Node getSelectedNode() {
 		return treeEditor.getSelectedNode();
+	}
+
+	@Override
+	public AnimationKeyFrame addKeyFrame() {
+		AnimationKeyFrame newKeyFrame = treeEditor.addKeyFrame();
+
+		AnimationKeyFrameListModel listModel = (AnimationKeyFrameListModel) keyFramesList.getModel();
+		listModel.values.add(newKeyFrame);
+
+		keyFramesList.setModel(new AnimationKeyFrameListModel(listModel.values));
+
+		return newKeyFrame;
 	}
 
 }

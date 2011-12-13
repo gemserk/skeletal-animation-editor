@@ -1,5 +1,6 @@
 package com.gemserk.tools.animationeditor.core.tree;
 
+import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Node;
 
 public interface TreeEditor {
@@ -21,5 +22,7 @@ public interface TreeEditor {
 	void moveSelected(float dx, float dy);
 	
 	void rotateSelected(float angle);
+	
+	AnimationKeyFrame addKeyFrame();
 	
 }
