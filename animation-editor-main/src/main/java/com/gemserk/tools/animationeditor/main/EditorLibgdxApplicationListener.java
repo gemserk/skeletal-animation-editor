@@ -10,11 +10,16 @@ import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.gemserk.animation4j.timeline.TimelineAnimation;
 import com.gemserk.commons.gdx.graphics.ImmediateModeRendererUtils;
 import com.gemserk.componentsengine.input.InputDevicesMonitorImpl;
 import com.gemserk.componentsengine.input.LibgdxInputMappingBuilder;
+import com.gemserk.tools.animationeditor.core.Animation;
+import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Node;
 import com.gemserk.tools.animationeditor.core.NodeImpl;
+import com.gemserk.tools.animationeditor.core.NodeUtils;
+import com.gemserk.tools.animationeditor.core.tree.AnimationEditor;
 import com.gemserk.tools.animationeditor.core.tree.TreeEditor;
 
 public class EditorLibgdxApplicationListener extends Game {
@@ -49,6 +54,7 @@ public class EditorLibgdxApplicationListener extends Game {
 	Vector2 position = new Vector2();
 
 	TreeEditor treeEditor;
+	AnimationEditor animationEditor;
 
 	private InputDevicesMonitorImpl<String> inputMonitor;
 
@@ -56,9 +62,52 @@ public class EditorLibgdxApplicationListener extends Game {
 		this.treeEditor = treeEditor;
 	}
 
+	public void setAnimationEditor(AnimationEditor animationEditor) {
+		this.animationEditor = animationEditor;
+	}
+
 	interface EditorState {
 
 		void update();
+		
+		void render();
+
+	}
+
+	class PlayingAnimationState implements EditorState {
+
+		private Node root;
+		private TimelineAnimation timelineAnimation;
+
+		public PlayingAnimationState() {
+			Animation currentAnimation = animationEditor.getCurrentAnimation();
+			
+			ArrayList<AnimationKeyFrame> keyFrames = currentAnimation.getKeyFrames();
+			
+			root = NodeUtils.cloneTree(treeEditor.getRoot());
+			
+			timelineAnimation = new TimelineAnimation(NodeUtils.getTimeline(root, keyFrames), (float)keyFrames.size() - 1);
+			timelineAnimation.setSpeed(1f);
+			timelineAnimation.setDelay(0f);
+			timelineAnimation.start(0);
+		}
+
+		@Override
+		public void update() {
+
+			timelineAnimation.update(Gdx.graphics.getDeltaTime());
+			
+			if (!animationEditor.isPlayingAnimation()) {
+				currentState = new NormalEditorState();
+				return;
+			}
+
+		}
+
+		@Override
+		public void render() {
+			renderNodeTree(root);
+		}
 
 	}
 
@@ -71,7 +120,12 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			position.set(nearNode.getX(), nearNode.getY());
 
-			if (inputMonitor.getButton(Actions.RightMouseButton).isReleased()) 
+			if (animationEditor.isPlayingAnimation()) {
+				currentState = new PlayingAnimationState();
+				return;
+			}
+
+			if (inputMonitor.getButton(Actions.RightMouseButton).isReleased())
 				treeEditor.select(nearNode);
 
 			if (inputMonitor.getButton(Actions.DeleteNodeButton).isReleased()) {
@@ -97,10 +151,15 @@ public class EditorLibgdxApplicationListener extends Game {
 				Node newNode = new NodeImpl("node-" + MathUtils.random(111, 999));
 				treeEditor.add(newNode);
 				newNode.setPosition(x, y);
-				
+
 				treeEditor.select(newNode.getParent());
 			}
 
+		}
+
+		@Override
+		public void render() {
+			renderNodeTree(treeEditor.getRoot());
 		}
 
 	}
@@ -131,6 +190,11 @@ public class EditorLibgdxApplicationListener extends Game {
 			y0 = y1;
 		}
 
+		@Override
+		public void render() {
+			renderNodeTree(treeEditor.getRoot());
+		}
+
 	}
 
 	class RotatingNodeState implements EditorState {
@@ -159,6 +223,11 @@ public class EditorLibgdxApplicationListener extends Game {
 			// selectedNode.setAngle(currentAngle + rotation);
 
 			currentY = y;
+		}
+
+		@Override
+		public void render() {
+			renderNodeTree(treeEditor.getRoot());
 		}
 
 	}
@@ -220,16 +289,14 @@ public class EditorLibgdxApplicationListener extends Game {
 		nearNode = treeEditor.getNearestNode(x, y);
 
 		currentState.update();
-
 	}
 
 	private void realRender() {
 		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-		spriteBatch.begin();
-		spriteBatch.end();
-
-		renderNodeTree(treeEditor.getRoot());
+//		renderNodeTree(treeEditor.getRoot());
+		
+		currentState.render();
 	}
 
 	private void renderNodeTree(Node node) {

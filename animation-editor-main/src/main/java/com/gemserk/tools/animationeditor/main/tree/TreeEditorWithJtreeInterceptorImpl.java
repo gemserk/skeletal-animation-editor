@@ -201,4 +201,16 @@ public class TreeEditorWithJtreeInterceptorImpl implements TreeEditor, Animation
 		treeEditor.setRoot(root);
 	}
 
+	public boolean isPlayingAnimation() {
+		return animationEditor.isPlayingAnimation();
+	}
+
+	public void playAnimation() {
+		animationEditor.playAnimation();
+	}
+
+	public void stopAnimation() {
+		animationEditor.stopAnimation();
+	}
+
 }

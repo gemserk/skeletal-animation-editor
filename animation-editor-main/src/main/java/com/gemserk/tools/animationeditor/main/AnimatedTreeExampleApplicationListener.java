@@ -8,13 +8,12 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.gemserk.animation4j.timeline.KeyFrame;
 import com.gemserk.animation4j.timeline.Timeline;
-import com.gemserk.animation4j.timeline.TimelineValue;
-import com.gemserk.animation4j.timeline.TimelineValueMutableObjectImpl;
 import com.gemserk.animation4j.transitions.TimeTransition;
 import com.gemserk.animation4j.transitions.TransitionFloatArrayImpl;
 import com.gemserk.commons.gdx.graphics.ImmediateModeRendererUtils;
+import com.gemserk.tools.animationeditor.core.Animation;
+import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Node;
-import com.gemserk.tools.animationeditor.core.NodeConverter;
 import com.gemserk.tools.animationeditor.core.NodeImpl;
 import com.gemserk.tools.animationeditor.core.NodeUtils;
 
@@ -57,32 +56,32 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 		}
 	}
 
-	Timeline getTimeline(Node root, Node... states) {
-		ArrayList<Node> nodes = NodeUtils.getArrayList(root);
-
-		ArrayList<TimelineValue> timelineValues = new ArrayList<TimelineValue>();
-
-		for (int j = 0; j < nodes.size(); j++) {
-			Node node = nodes.get(j);
-
-			TimelineValue timelineValue = new TimelineValueMutableObjectImpl<Node>(node, NodeConverter.instance);
-
-			float time = 0f;
-			
-			for (int i = 0; i < states.length; i++) {
-				Node treeState = states[i];
-				Node nodeState = treeState.getChild(node.getId());
-
-				timelineValue.addKeyFrame(new KeyFrame(time, NodeConverter.instance.copyFromObject(nodeState, null)));
-				time += 1f;
-				
-				timelineValues.add(timelineValue);
-			}
-
-		}
-
-		return new Timeline(timelineValues);
-	}
+//	Timeline getTimeline(Node root, Node... states) {
+//		ArrayList<Node> nodes = NodeUtils.getArrayList(root);
+//
+//		ArrayList<TimelineValue> timelineValues = new ArrayList<TimelineValue>();
+//
+//		for (int j = 0; j < nodes.size(); j++) {
+//			Node node = nodes.get(j);
+//
+//			TimelineValue timelineValue = new TimelineValueMutableObjectImpl<Node>(node, NodeConverter.instance);
+//
+//			float time = 0f;
+//			
+//			for (int i = 0; i < states.length; i++) {
+//				Node treeState = states[i];
+//				Node nodeState = treeState.getChild(node.getId());
+//
+//				timelineValue.addKeyFrame(new KeyFrame(time, NodeConverter.instance.copyFromObject(nodeState, null)));
+//				time += 1f;
+//				
+//				timelineValues.add(timelineValue);
+//			}
+//
+//		}
+//
+//		return new Timeline(timelineValues);
+//	}
 
 	@Override
 	public void create() {
@@ -116,8 +115,13 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 		//
 		// transition = new TransitionFloatArrayImpl(keyFrame0.getValue());
 		// transition.set(keyFrame1.getValue(), keyFrame1.getTime() - keyFrame0.getTime());
+		
+		Animation animation = new Animation();
+		
+		animation.getKeyFrames().add(new AnimationKeyFrame("keyframe0", state0, 0f));
+		animation.getKeyFrames().add(new AnimationKeyFrame("keyframe1", state1, 1f));
 
-		timeline = getTimeline(root, state0, state1);
+		timeline = NodeUtils.getTimeline(root, animation.getKeyFrames());
 
 		// TimelineValueMutableObjectImpl<Node> timelineValue1 = new TimelineValueMutableObjectImpl<Node>(root, NodeConverter.instance);
 		// TimelineValueMutableObjectImpl<Node> timelineValue2 = new TimelineValueMutableObjectImpl<Node>(node1, NodeConverter.instance);

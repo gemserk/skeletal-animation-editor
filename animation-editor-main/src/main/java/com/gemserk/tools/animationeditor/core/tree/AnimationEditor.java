@@ -13,4 +13,10 @@ public interface AnimationEditor {
 	
 	void removeKeyFrame();
 	
+	boolean isPlayingAnimation();
+	
+	void playAnimation();
+	
+	void stopAnimation();
+	
 }

@@ -12,6 +12,8 @@ public class AnimationEditorImpl implements AnimationEditor {
 	int index = 0;
 	Animation currentAnimation = new Animation();
 	AnimationKeyFrame selectedKeyFrame;
+	
+	float duration = 0f;
 
 	public AnimationEditorImpl(TreeEditor treeEditor) {
 		this.treeEditor = treeEditor;
@@ -21,8 +23,9 @@ public class AnimationEditorImpl implements AnimationEditor {
 	public AnimationKeyFrame addKeyFrame() {
 		String name = "keyFrame" + index++;
 		AnimationKeyFrame keyFrame = new AnimationKeyFrame(name, 
-				NodeUtils.cloneTree(treeEditor.getRoot()));
+				NodeUtils.cloneTree(treeEditor.getRoot()), duration);
 		currentAnimation.getKeyFrames().add(keyFrame);
+		duration += 1f;
 		return keyFrame;
 	}
 
@@ -46,5 +49,23 @@ public class AnimationEditorImpl implements AnimationEditor {
 	public Animation getCurrentAnimation() {
 		return currentAnimation;
 	}
+	
+	boolean playing = false;
+
+	@Override
+	public boolean isPlayingAnimation() {
+		return playing;
+	}
+
+	@Override
+	public void playAnimation() {
+		playing = true;
+	}
+	
+	@Override
+	public void stopAnimation() {
+		playing = false;
+	}
+
 	
 }

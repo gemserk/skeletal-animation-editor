@@ -31,4 +31,10 @@ public class AnimationKeyFrame {
 		this.root = root;
 	}
 	
+	public AnimationKeyFrame(String name, Node root, float time) {
+		this.name = name;
+		this.root = root;
+		this.time = time;
+	}
+	
 }

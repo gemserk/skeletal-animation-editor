@@ -192,10 +192,10 @@ public class EditorWindow {
 		tglbtnNewToggleButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// if (tglbtnNewToggleButton.isSelected())
-				// editorApplication.playAnimation();
-				// else
-				// editorApplication.pauseAnimation();
+				if (tglbtnNewToggleButton.isSelected())
+					treeEditor.playAnimation();
+				else
+					treeEditor.stopAnimation();
 			}
 		});
 
@@ -210,7 +210,7 @@ public class EditorWindow {
 			}
 		});
 		panelTimeline.add(btnAddKeyframe);
-		
+
 		JButton btnRemoveKeyframe = new JButton("Remove");
 		btnRemoveKeyframe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -248,7 +248,7 @@ public class EditorWindow {
 
 		panel_2.add(tree);
 		tree.setBackground(Color.LIGHT_GRAY);
-		
+
 		keyFramesList = new JList();
 		keyFramesList.setModel(new AnimationKeyFrameListModel());
 		keyFramesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -256,7 +256,9 @@ public class EditorWindow {
 
 		treeEditor = new TreeEditorWithJtreeInterceptorImpl( //
 				new TreeEditorImpl(), tree, keyFramesList);
+
 		editorApplication.setTreeEditor(treeEditor);
+		editorApplication.setAnimationEditor(treeEditor);
 
 		JPanel panel_3 = new JPanel();
 		splitPane_1.setRightComponent(panel_3);

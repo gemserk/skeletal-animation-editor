@@ -44,8 +44,6 @@ public class NodeUtils {
 			Node node = nodes.get(j);
 
 			TimelineValue timelineValue = new TimelineValueMutableObjectImpl<Node>(node, NodeConverter.instance);
-
-			float time = 0f;
 			
 			for (int i = 0; i < frames.size(); i++) {
 				AnimationKeyFrame animationKeyFrame = frames.get(i);
@@ -53,8 +51,6 @@ public class NodeUtils {
 				Node nodeState = treeState.getChild(node.getId());
 
 				timelineValue.addKeyFrame(new KeyFrame(animationKeyFrame.getTime(), NodeConverter.instance.copyFromObject(nodeState, null)));
-				time += 1f;
-				
 				timelineValues.add(timelineValue);
 			}
 
