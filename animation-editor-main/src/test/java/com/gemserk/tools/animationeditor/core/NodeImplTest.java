@@ -62,7 +62,7 @@ public class NodeImplTest {
 		assertThat(childNode.getY(), IsEqual.equalTo(50f));
 		assertThat(childNode.getAngle(), IsEqual.equalTo(20f));
 		assertThat(childNode.getParent(), IsSame.sameInstance(parentNode2));
-		
+
 		assertThat(childNode.localPosition.x, IsEqual.equalTo(20f));
 	}
 
@@ -83,7 +83,7 @@ public class NodeImplTest {
 
 		assertThat(childNode.projectX(absoluteX, absoluteY), IsEqual.equalTo(0f));
 		assertThat(childNode.projectY(absoluteX, absoluteY), IsEqual.equalTo(0f));
-		
+
 		// assertThat(childNode.getLocalAngle(0f), IsEqual.equalTo(-80f));
 		// assertThat(childNode.getLocalX(0f, 0f), IsEqual.equalTo(-150f));
 		// assertThat(childNode.getLocalY(0f, 0f), IsEqual.equalTo(-250f));
@@ -91,7 +91,7 @@ public class NodeImplTest {
 		// assertThat(absoluteAngle, IsEqual.equalTo(0f));
 
 	}
-	
+
 	@Test
 	public void testGetXWhenRotateParent() {
 		Node parentNode1 = new NodeImpl("AAA", 0f, 0f, 0f);
@@ -101,7 +101,7 @@ public class NodeImplTest {
 		parentNode1.setAngle(180f);
 		assertThat(childNode.getX(), IsEqual.equalTo(-100f));
 	}
-	
+
 	@Test
 	public void testGetYWhenRotateParent() {
 		Node parentNode1 = new NodeImpl("AAA", 0f, 0f, 0f);
@@ -111,7 +111,7 @@ public class NodeImplTest {
 		parentNode1.setAngle(180f);
 		assertThat(childNode.getY(), IsEqual.equalTo(-100f));
 	}
-	
+
 	@Test
 	public void testGetXYWhenRotateParentNotCentered() {
 		Node parentNode1 = new NodeImpl("AAA", 50f, 50f, 0f);
@@ -123,7 +123,7 @@ public class NodeImplTest {
 		assertEquals(0f, childNode.getX(), 0.001f);
 		assertEquals(0f, childNode.getY(), 0.001f);
 	}
-	
+
 	@Test
 	public void testGetXYWhenRotateParentNotCentered2() {
 		Node parentNode1 = new NodeImpl("AAA", 50f, 50f, 180f);
@@ -135,28 +135,109 @@ public class NodeImplTest {
 		assertEquals(0f, childNode.getX(), 0.001f);
 		assertEquals(0f, childNode.getY(), 0.001f);
 	}
+
+	@Test
+	public void testLocalTransformedWhenParentTransformed() {
+		Node parentNode1 = new NodeImpl("AAA", 200f, 200f, 0f);
+		Node parentNode2 = new NodeImpl("CCC", 100f, 100f, 0f);
+		NodeImpl childNode = new NodeImpl("BBB");
+
+		childNode.setParent(parentNode1);
+
+		childNode.setPosition(150f, 150f);
+		childNode.setAngle(0f);
+
+		assertThat(childNode.getLocalX(), IsEqual.equalTo(-50f));
+		assertThat(childNode.getLocalY(), IsEqual.equalTo(-50f));
+		assertThat(childNode.getLocalAngle(), IsEqual.equalTo(0f));
+
+		childNode.setParent(parentNode2);
+
+		assertThat(childNode.getLocalX(), IsEqual.equalTo(50f));
+		assertThat(childNode.getLocalY(), IsEqual.equalTo(50f));
+		assertThat(childNode.getLocalAngle(), IsEqual.equalTo(0f));
+	}
 	
-//	@Test
-//	public void testSetLocalValues() {
-//		Node parentNode1 = new NodeImpl("AAA", 100f, 200f, 45f);
-//		Node childNode = new NodeImpl("BBB", 150, 250, 80f);
-//
-//		childNode.setParent(parentNode1);
-//
-//		float localX = childNode.getLocalX(0f, 0f);
-//		float localY = childNode.getLocalY(0f, 0f);
-//		float localAngle = childNode.getLocalAngle(0f);
-//
-//		childNode.setLocalPosition(localX, localY);
-//		childNode.setLocalAngle(localAngle);
-//
-//		float absoluteX = childNode.getX();
-//		float absoluteY = childNode.getY();
-//		float absoluteAngle = childNode.getAngle();
-//
-//		assertThat(absoluteX, IsEqual.equalTo(150f));
-//		assertThat(absoluteY, IsEqual.equalTo(250f));
-//		assertThat(absoluteAngle, IsEqual.equalTo(80f));
-//	}
+	@Test
+	public void testLocalTransformedWhenParentTransformed2() {
+		Node parentNode1 = new NodeImpl("AAA", 200f, 200f, 0f);
+		Node parentNode2 = new NodeImpl("CCC", 100f, 100f, 180f);
+		NodeImpl childNode = new NodeImpl("BBB");
+
+		childNode.setParent(parentNode1);
+
+		childNode.setPosition(150f, 125f);
+		childNode.setAngle(0f);
+
+		assertThat(childNode.getLocalX(), IsEqual.equalTo(-50f));
+		assertThat(childNode.getLocalY(), IsEqual.equalTo(-75f));
+		assertThat(childNode.getLocalAngle(), IsEqual.equalTo(0f));
+
+		childNode.setParent(parentNode2);
+
+		assertEquals(-50f, childNode.getLocalX(), 0.01f);
+		assertEquals(-25f, childNode.getLocalY(), 0.01f);
+		assertEquals(-180f, childNode.getLocalAngle(), 0.01f);
+	}
+
+	// @Test
+	// public void test() {
+	//
+	// Node root = new NodeImpl("root");
+	// root.setPosition(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f);
+	//
+	// Node node1 = new NodeImpl("nodo1", Gdx.graphics.getWidth() * 0.25f, Gdx.graphics.getHeight() * 0.75f, 0f);
+	// Node node2 = new NodeImpl("nodo2", Gdx.graphics.getWidth() * 0.25f, Gdx.graphics.getHeight() * 0.65f, 0f);
+	//
+	// node1.setParent(root);
+	// node2.setParent(node1);
+	//
+	// root.setAngle(180f);
+	// node1.setAngle(90f);
+	//
+	// TimelineValueMutableObjectImpl<Node> timelineValue1 = new TimelineValueMutableObjectImpl<Node>(root, NodeConverter.instance);
+	// TimelineValueMutableObjectImpl<Node> timelineValue2 = new TimelineValueMutableObjectImpl<Node>(node1, NodeConverter.instance);
+	// TimelineValueMutableObjectImpl<Node> timelineValue3 = new TimelineValueMutableObjectImpl<Node>(node2, NodeConverter.instance);
+	//
+	// timelineValue1.addKeyFrame(new KeyFrame(0f, new float[] { 400f, 300f, 0f }));
+	// timelineValue1.addKeyFrame(new KeyFrame(1f, new float[] { 400f, 300f, 360f }));
+	//
+	// timelineValue2.addKeyFrame(new KeyFrame(0f, new float[] { 200f, 200f, 0f }));
+	// timelineValue3.addKeyFrame(new KeyFrame(0f, new float[] { 200f, 250f, 0f }));
+	//
+	// ArrayList<TimelineValue> values = new ArrayList<TimelineValue>();
+	//
+	// values.add(timelineValue1);
+	// values.add(timelineValue2);
+	// values.add(timelineValue3);
+	//
+	// Timeline timeline = new Timeline(values);
+	//
+	//
+	//
+	// }
+
+	// @Test
+	// public void testSetLocalValues() {
+	// Node parentNode1 = new NodeImpl("AAA", 100f, 200f, 45f);
+	// Node childNode = new NodeImpl("BBB", 150, 250, 80f);
+	//
+	// childNode.setParent(parentNode1);
+	//
+	// float localX = childNode.getLocalX(0f, 0f);
+	// float localY = childNode.getLocalY(0f, 0f);
+	// float localAngle = childNode.getLocalAngle(0f);
+	//
+	// childNode.setLocalPosition(localX, localY);
+	// childNode.setLocalAngle(localAngle);
+	//
+	// float absoluteX = childNode.getX();
+	// float absoluteY = childNode.getY();
+	// float absoluteAngle = childNode.getAngle();
+	//
+	// assertThat(absoluteX, IsEqual.equalTo(150f));
+	// assertThat(absoluteY, IsEqual.equalTo(250f));
+	// assertThat(absoluteAngle, IsEqual.equalTo(80f));
+	// }
 
 }

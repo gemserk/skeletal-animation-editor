@@ -6,10 +6,15 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.math.MathUtils;
 import com.gemserk.animation4j.timeline.KeyFrame;
+import com.gemserk.animation4j.timeline.Timeline;
+import com.gemserk.animation4j.timeline.TimelineValue;
+import com.gemserk.animation4j.timeline.TimelineValueMutableObjectImpl;
 import com.gemserk.animation4j.transitions.TransitionFloatArrayImpl;
 import com.gemserk.commons.gdx.graphics.ImmediateModeRendererUtils;
 import com.gemserk.tools.animationeditor.core.Node;
+import com.gemserk.tools.animationeditor.core.NodeConverter;
 import com.gemserk.tools.animationeditor.core.NodeImpl;
 import com.gemserk.tools.animationeditor.core.TreeConverter;
 
@@ -25,6 +30,8 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 
 	private KeyFrame keyFrame0;
 	private KeyFrame keyFrame1;
+
+	private Timeline timeline;
 
 	private static class Colors {
 
@@ -75,6 +82,23 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 		transition = new TransitionFloatArrayImpl(keyFrame0.getValue());
 		transition.set(keyFrame1.getValue(), keyFrame1.getTime() - keyFrame0.getTime());
 
+		TimelineValueMutableObjectImpl<Node> timelineValue1 = new TimelineValueMutableObjectImpl<Node>(root, NodeConverter.instance);
+		TimelineValueMutableObjectImpl<Node> timelineValue2 = new TimelineValueMutableObjectImpl<Node>(node1, NodeConverter.instance);
+		TimelineValueMutableObjectImpl<Node> timelineValue3 = new TimelineValueMutableObjectImpl<Node>(node2, NodeConverter.instance);
+
+		timelineValue1.addKeyFrame(new KeyFrame(0f, new float[] { 400f, 300f, 0f }));
+		timelineValue1.addKeyFrame(new KeyFrame(1f, new float[] { 400f, 300f, 360f }));
+
+		timelineValue2.addKeyFrame(new KeyFrame(0f, new float[] { 20f, 20f, 0f }));
+		timelineValue3.addKeyFrame(new KeyFrame(0f, new float[] { 20f, 0f, 0f }));
+
+		ArrayList<TimelineValue> values = new ArrayList<TimelineValue>();
+
+		values.add(timelineValue1);
+		values.add(timelineValue2);
+		values.add(timelineValue3);
+
+		timeline = new Timeline(values);
 	}
 
 	@Override
@@ -90,19 +114,24 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 	}
 
 	private void realUpdate() {
-		transition.update(Gdx.graphics.getDeltaTime());
 
-		if (transition.isFinished()) {
-			if (Gdx.input.justTouched()) {
-				transition.set(keyFrame0.getValue());
-				transition.set(keyFrame1.getValue(), keyFrame1.getTime() - keyFrame0.getTime());
-			}
-			return;
+		if (Gdx.input.justTouched()) {
+			timeline.move(MathUtils.random(0f, 1f));
 		}
 
-		float[] x = transition.get();
+		// transition.update(Gdx.graphics.getDeltaTime());
+		//
+		// if (transition.isFinished()) {
+		// if (Gdx.input.justTouched()) {
+		// transition.set(keyFrame0.getValue());
+		// transition.set(keyFrame1.getValue(), keyFrame1.getTime() - keyFrame0.getTime());
+		// }
+		// return;
+		// }
+		//
+		// float[] x = transition.get();
 
-		TreeConverter.instance.copyToObject(root, x);
+		// TreeConverter.instance.copyToObject(root, x);
 	}
 
 	private void realRender() {

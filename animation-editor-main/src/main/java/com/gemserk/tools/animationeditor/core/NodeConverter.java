@@ -3,6 +3,8 @@ package com.gemserk.tools.animationeditor.core;
 import com.gemserk.animation4j.converters.TypeConverter;
 
 public class NodeConverter implements TypeConverter<Node> {
+	
+	public static final NodeConverter instance = new NodeConverter();
 
 	@Override
 	public int variables() {
