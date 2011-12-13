@@ -32,6 +32,7 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.tree.TreeEditor;
 import com.gemserk.tools.animationeditor.core.tree.TreeEditorImpl;
 import com.gemserk.tools.animationeditor.main.list.AnimationKeyFrameListModel;
@@ -202,16 +203,22 @@ public class EditorWindow {
 		JButton btnNewButton = new JButton("Stop");
 		panelTimeline.add(btnNewButton);
 
-		JButton btnAddKeyframe = new JButton("Add keyframe");
+		JButton btnAddKeyframe = new JButton("Add");
 		btnAddKeyframe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				// KeyFramesListModel model = (KeyFramesListModel) keyFramesList.getModel();
-				// model.values.add("keyFrame1");
-				// keyFramesList.setModel(new KeyFramesListModel(model.values));
-				treeEditor.addKeyFrame();
+				AnimationKeyFrame keyFrame = treeEditor.addKeyFrame();
+				treeEditor.selectKeyFrame(keyFrame);
 			}
 		});
 		panelTimeline.add(btnAddKeyframe);
+		
+		JButton btnRemoveKeyframe = new JButton("Remove");
+		btnRemoveKeyframe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				treeEditor.removeKeyFrame();
+			}
+		});
+		panelTimeline.add(btnRemoveKeyframe);
 
 		JPanel panelStructure = new JPanel();
 		panelStructure.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));

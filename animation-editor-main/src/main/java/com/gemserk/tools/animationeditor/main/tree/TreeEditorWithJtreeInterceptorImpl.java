@@ -5,12 +5,15 @@ import java.util.Map;
 
 import javax.swing.JList;
 import javax.swing.JTree;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+import com.gemserk.tools.animationeditor.core.Animation;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Node;
 import com.gemserk.tools.animationeditor.core.tree.TreeEditor;
@@ -20,6 +23,15 @@ import com.gemserk.tools.animationeditor.main.list.AnimationKeyFrameListModel;
  * Updates the TreeModel based on changes made over the Nodes of the current skeleton.
  */
 public class TreeEditorWithJtreeInterceptorImpl implements TreeEditor {
+
+	class UpdateCurrentAnimationFromJList implements ListSelectionListener {
+		@Override
+		public void valueChanged(ListSelectionEvent e) {
+			AnimationKeyFrameListModel model = (AnimationKeyFrameListModel) keyFramesList.getModel();
+			AnimationKeyFrame keyFrame = model.values.get(keyFramesList.getSelectedIndex());
+			selectKeyFrame(keyFrame);
+		}
+	}
 
 	class UpdateEditorTreeSelectionListener implements TreeSelectionListener {
 		public void valueChanged(TreeSelectionEvent e) {
@@ -44,6 +56,7 @@ public class TreeEditorWithJtreeInterceptorImpl implements TreeEditor {
 		this.keyFramesList = keyFramesList;
 		this.model = (DefaultTreeModel) tree.getModel();
 		tree.addTreeSelectionListener(new UpdateEditorTreeSelectionListener());
+		keyFramesList.addListSelectionListener(new UpdateCurrentAnimationFromJList());
 	}
 
 	private void createTreeNodeForChild(Node node, DefaultMutableTreeNode parentTreeNode) {
@@ -144,13 +157,28 @@ public class TreeEditorWithJtreeInterceptorImpl implements TreeEditor {
 	@Override
 	public AnimationKeyFrame addKeyFrame() {
 		AnimationKeyFrame newKeyFrame = treeEditor.addKeyFrame();
-
-		AnimationKeyFrameListModel listModel = (AnimationKeyFrameListModel) keyFramesList.getModel();
-		listModel.values.add(newKeyFrame);
-
-		keyFramesList.setModel(new AnimationKeyFrameListModel(listModel.values));
-
+		keyFramesList.setModel(new AnimationKeyFrameListModel(getCurrentAnimation().getKeyFrames()));
 		return newKeyFrame;
+	}
+
+	@Override
+	public void selectKeyFrame(AnimationKeyFrame keyFrame) {
+		treeEditor.selectKeyFrame(keyFrame);
+		keyFramesList.setSelectedValue(keyFrame, true);
+	}
+
+	@Override
+	public void removeKeyFrame() {
+		treeEditor.removeKeyFrame();
+		Animation currentAnimation = treeEditor.getCurrentAnimation();
+		keyFramesList.setModel(new AnimationKeyFrameListModel(currentAnimation.getKeyFrames()));
+		keyFramesList.setSelectedIndex(0);
+	}
+
+	@Override
+	public Animation getCurrentAnimation() {
+		return treeEditor.getCurrentAnimation();
+
 	}
 
 }

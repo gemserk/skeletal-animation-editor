@@ -1,5 +1,6 @@
 package com.gemserk.tools.animationeditor.core.tree;
 
+import com.gemserk.tools.animationeditor.core.Animation;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Node;
 
@@ -23,6 +24,14 @@ public interface TreeEditor {
 	
 	void rotateSelected(float angle);
 	
+	/// keyframes stuff
+	
+	Animation getCurrentAnimation();
+	
 	AnimationKeyFrame addKeyFrame();
+	
+	void selectKeyFrame(AnimationKeyFrame keyFrame);
+	
+	void removeKeyFrame();
 	
 }
