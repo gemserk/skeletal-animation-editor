@@ -12,5 +12,5 @@ public interface AnimationEditor {
 	void selectKeyFrame(AnimationKeyFrame keyFrame);
 	
 	void removeKeyFrame();
-
+	
 }

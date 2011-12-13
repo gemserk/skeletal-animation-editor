@@ -52,5 +52,7 @@ public interface Node {
 	float getLocalY();
 
 	float getLocalAngle();
+	
+	Node getChild(String id);
 
 }

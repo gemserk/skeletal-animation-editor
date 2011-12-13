@@ -93,4 +93,9 @@ public class NodeNullImpl implements Node {
 		return 0;
 	}
 
+	@Override
+	public Node getChild(String id) {
+		return null;
+	}
+
 }

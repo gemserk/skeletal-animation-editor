@@ -165,4 +165,19 @@ public class NodeImpl implements Node {
 		return localPosition.y;
 	}
 
+	@Override
+	public Node getChild(String id) {
+		if (getId().equals(id))
+			return this;
+		
+		for (int i = 0; i < children.size(); i++) {
+			Node child = children.get(i);
+			Node subChild = child.getChild(id);
+			if (subChild != null)
+				return subChild;
+		}
+		
+		return null;
+	}
+
 }

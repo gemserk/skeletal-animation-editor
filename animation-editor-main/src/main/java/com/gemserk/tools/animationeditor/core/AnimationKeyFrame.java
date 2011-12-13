@@ -5,6 +5,8 @@ public class AnimationKeyFrame {
 	String name;
 	Node root;
 	
+	float time;
+	
 	public String getName() {
 		return name;
 	}
@@ -15,6 +17,13 @@ public class AnimationKeyFrame {
 	
 	public Node getRoot() {
 		return root;
+	}
+	
+	public float getTime() {
+		return time;
+	}
+	public void setTime(float time) {
+		this.time = time;
 	}
 
 	public AnimationKeyFrame(String name, Node root) {
