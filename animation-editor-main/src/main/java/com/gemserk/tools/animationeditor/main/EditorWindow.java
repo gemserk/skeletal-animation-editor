@@ -199,9 +199,6 @@ public class EditorWindow {
 			}
 		});
 
-		JButton btnNewButton = new JButton("Stop");
-		panelTimeline.add(btnNewButton);
-
 		JButton btnAddKeyframe = new JButton("Add");
 		btnAddKeyframe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
