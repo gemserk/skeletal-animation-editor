@@ -16,6 +16,7 @@ import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.JointImpl;
 import com.gemserk.tools.animationeditor.core.JointUtils;
+import com.gemserk.tools.animationeditor.core.Skeleton;
 
 public class AnimatedTreeExampleApplicationListener extends Game {
 
@@ -118,8 +119,8 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 		
 		Animation animation = new Animation();
 		
-		animation.getKeyFrames().add(new AnimationKeyFrame("keyframe0", state0, 0f));
-		animation.getKeyFrames().add(new AnimationKeyFrame("keyframe1", state1, 1f));
+		animation.getKeyFrames().add(new AnimationKeyFrame("keyframe0", new Skeleton(state0), 0f));
+		animation.getKeyFrames().add(new AnimationKeyFrame("keyframe1", new Skeleton(state1), 1f));
 
 		timeline = JointUtils.getTimeline(root, animation.getKeyFrames());
 

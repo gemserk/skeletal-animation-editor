@@ -6,6 +6,7 @@ import com.gemserk.tools.animationeditor.core.Animation;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.JointUtils;
+import com.gemserk.tools.animationeditor.core.Skeleton;
 
 public class AnimationEditorImpl implements AnimationEditor {
 	
@@ -25,7 +26,7 @@ public class AnimationEditorImpl implements AnimationEditor {
 	public AnimationKeyFrame addKeyFrame() {
 		String name = "keyFrame" + index++;
 		AnimationKeyFrame keyFrame = new AnimationKeyFrame(name, 
-				JointUtils.cloneTree(skeletonEditor.getRoot()), duration);
+				new Skeleton(JointUtils.cloneTree(skeletonEditor.getRoot())), duration);
 		currentAnimation.getKeyFrames().add(keyFrame);
 		duration += 1f;
 		return keyFrame;
@@ -35,7 +36,7 @@ public class AnimationEditorImpl implements AnimationEditor {
 	public void selectKeyFrame(AnimationKeyFrame keyFrame) {
 		selectedKeyFrame = keyFrame;
 		
-		Joint keyFrameRoot = keyFrame.getRoot();
+		Joint keyFrameRoot = keyFrame.getSkeleton().getRoot();
 		
 		ArrayList<Joint> joints = JointUtils.getArrayList(keyFrameRoot);
 

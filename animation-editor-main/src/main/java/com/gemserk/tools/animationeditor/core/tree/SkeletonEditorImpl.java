@@ -4,10 +4,14 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Vector2;
 import com.gemserk.tools.animationeditor.core.Joint;
+import com.gemserk.tools.animationeditor.core.Skeleton;
 
 public class SkeletonEditorImpl implements SkeletonEditor {
 
 	private final Vector2 position = new Vector2();
+	
+	Skeleton skeleton;
+	
 
 	Joint root;
 	Joint selectedNode;
