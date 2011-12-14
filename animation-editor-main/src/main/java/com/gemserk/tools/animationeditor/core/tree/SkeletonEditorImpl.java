@@ -3,24 +3,32 @@ package com.gemserk.tools.animationeditor.core.tree;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Vector2;
+import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.Skeleton;
 
 public class SkeletonEditorImpl implements SkeletonEditor {
 
 	private final Vector2 position = new Vector2();
-	
-	Skeleton skeleton;
-	
 
-	Joint root;
+	AnimationKeyFrame currentKeyFrame;
+
 	Joint selectedNode;
 
 	ArrayList<Joint> joints = new ArrayList<Joint>();
 
+	public SkeletonEditorImpl() {
+		currentKeyFrame = new AnimationKeyFrame("none", new Skeleton());
+	}
+
 	@Override
 	public Joint getRoot() {
-		return root;
+		return currentKeyFrame.getSkeleton().getRoot();
+	}
+
+	@Override
+	public Skeleton getSkeleton() {
+		return currentKeyFrame.getSkeleton();
 	}
 
 	@Override
@@ -38,12 +46,13 @@ public class SkeletonEditorImpl implements SkeletonEditor {
 	}
 
 	@Override
+	public void setCurrentSkeleton(Skeleton skeleton) {
+		currentKeyFrame.setSkeleton(skeleton);
+		// currentKeyFrame = new AnimationKeyFrame("none", new Skeleton());
+	}
+
+	@Override
 	public void add(Joint joint) {
-		if (root == null) {
-			root = joint;
-			select(root);
-			return;
-		}
 		joint.setParent(selectedNode);
 		selectedNode = joint;
 		joints.add(joint);
@@ -51,7 +60,7 @@ public class SkeletonEditorImpl implements SkeletonEditor {
 
 	@Override
 	public Joint getNearestNode(float x, float y) {
-		Joint nearNode = root;
+		Joint nearNode = currentKeyFrame.getSkeleton().getRoot();
 
 		position.set(nearNode.getX(), nearNode.getY());
 

@@ -23,6 +23,10 @@ public class AnimationKeyFrame {
 	public Skeleton getSkeleton() {
 		return skeleton;
 	}
+	
+	public void setSkeleton(Skeleton skeleton) {
+		this.skeleton = skeleton;
+	}
 
 	public float getTime() {
 		return time;

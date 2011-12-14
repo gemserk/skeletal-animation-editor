@@ -17,6 +17,7 @@ import javax.swing.tree.TreePath;
 import com.gemserk.tools.animationeditor.core.Animation;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Joint;
+import com.gemserk.tools.animationeditor.core.Skeleton;
 import com.gemserk.tools.animationeditor.core.tree.AnimationEditor;
 import com.gemserk.tools.animationeditor.core.tree.AnimationEditorImpl;
 import com.gemserk.tools.animationeditor.core.tree.SkeletonEditor;
@@ -52,10 +53,10 @@ public class EditorInterceptorImpl implements SkeletonEditor, AnimationEditor {
 	DefaultTreeModel model;
 
 	Map<String, TreeNodeForJointImpl> treeNodes = new HashMap<String, TreeNodeForJointImpl>();
-	
+
 	SkeletonEditor skeletonEditor;
 	AnimationEditor animationEditor;
-	
+
 	JList keyFramesList;
 
 	public EditorInterceptorImpl(SkeletonEditor skeletonEditor, JTree tree, JList keyFramesList) {
@@ -65,7 +66,7 @@ public class EditorInterceptorImpl implements SkeletonEditor, AnimationEditor {
 		this.model = (DefaultTreeModel) tree.getModel();
 		tree.addTreeSelectionListener(new UpdateEditorTreeSelectionListener());
 		keyFramesList.addListSelectionListener(new UpdateCurrentAnimationFromJList());
-		
+
 		animationEditor = new AnimationEditorImpl(this);
 	}
 
@@ -115,6 +116,15 @@ public class EditorInterceptorImpl implements SkeletonEditor, AnimationEditor {
 		TreePath path = new TreePath(parentTreeNode.getPath());
 		tree.setSelectionPath(path);
 		tree.scrollPathToVisible(path);
+	}
+
+	@Override
+	public void setCurrentSkeleton(Skeleton skeleton) {
+		skeletonEditor.setCurrentSkeleton(skeleton);
+		DefaultMutableTreeNode treeRoot = (DefaultMutableTreeNode) model.getRoot();
+		treeRoot.removeAllChildren();
+		createTreeNodeForChild(skeletonEditor.getRoot(), treeRoot);
+		model.reload();
 	}
 
 	@Override
@@ -192,14 +202,14 @@ public class EditorInterceptorImpl implements SkeletonEditor, AnimationEditor {
 		return animationEditor.getCurrentAnimation();
 	}
 
-//	@Override
-//	public void setRoot(Joint root) {
-//		DefaultMutableTreeNode treeRoot = (DefaultMutableTreeNode) model.getRoot();
-//		treeRoot.removeAllChildren();
-//		createTreeNodeForChild(root, treeRoot);
-//		model.reload();
-//		skeletonEditor.setRoot(root);
-//	}
+	// @Override
+	// public void setRoot(Joint root) {
+	// DefaultMutableTreeNode treeRoot = (DefaultMutableTreeNode) model.getRoot();
+	// treeRoot.removeAllChildren();
+	// createTreeNodeForChild(root, treeRoot);
+	// model.reload();
+	// skeletonEditor.setRoot(root);
+	// }
 
 	public boolean isPlayingAnimation() {
 		return animationEditor.isPlayingAnimation();
@@ -211,6 +221,11 @@ public class EditorInterceptorImpl implements SkeletonEditor, AnimationEditor {
 
 	public void stopAnimation() {
 		animationEditor.stopAnimation();
+	}
+
+	@Override
+	public Skeleton getSkeleton() {
+		return skeletonEditor.getSkeleton();
 	}
 
 }

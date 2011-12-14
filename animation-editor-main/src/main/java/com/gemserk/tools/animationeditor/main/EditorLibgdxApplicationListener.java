@@ -19,6 +19,7 @@ import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.JointImpl;
 import com.gemserk.tools.animationeditor.core.JointUtils;
+import com.gemserk.tools.animationeditor.core.Skeleton;
 import com.gemserk.tools.animationeditor.core.tree.AnimationEditor;
 import com.gemserk.tools.animationeditor.core.tree.SkeletonEditor;
 
@@ -69,7 +70,7 @@ public class EditorLibgdxApplicationListener extends Game {
 	interface EditorState {
 
 		void update();
-		
+
 		void render();
 
 	}
@@ -81,12 +82,12 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		public PlayingAnimationState() {
 			Animation currentAnimation = animationEditor.getCurrentAnimation();
-			
+
 			ArrayList<AnimationKeyFrame> keyFrames = currentAnimation.getKeyFrames();
-			
+
 			root = JointUtils.cloneTree(skeletonEditor.getRoot());
-			
-			timelineAnimation = new TimelineAnimation(JointUtils.getTimeline(root, keyFrames), (float)keyFrames.size() - 1);
+
+			timelineAnimation = new TimelineAnimation(JointUtils.getTimeline(root, keyFrames), (float) keyFrames.size() - 1);
 			timelineAnimation.setSpeed(1f);
 			timelineAnimation.setDelay(0f);
 			timelineAnimation.start(0);
@@ -96,7 +97,7 @@ public class EditorLibgdxApplicationListener extends Game {
 		public void update() {
 
 			timelineAnimation.update(Gdx.graphics.getDeltaTime());
-			
+
 			if (!animationEditor.isPlayingAnimation()) {
 				currentState = new NormalEditorState();
 				return;
@@ -264,8 +265,11 @@ public class EditorLibgdxApplicationListener extends Game {
 			}
 		};
 
+		skeletonEditor.setCurrentSkeleton(new Skeleton(root));
+		skeletonEditor.select(root);
+
 		// treeObserver.update(root);
-		skeletonEditor.add(root);
+		// skeletonEditor.add(root);
 	}
 
 	@Override
@@ -294,8 +298,8 @@ public class EditorLibgdxApplicationListener extends Game {
 	private void realRender() {
 		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-//		renderNodeTree(treeEditor.getRoot());
-		
+		// renderNodeTree(treeEditor.getRoot());
+
 		currentState.render();
 	}
 

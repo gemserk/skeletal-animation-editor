@@ -8,6 +8,14 @@ public class Skeleton {
 	public Joint getRoot() {
 		return root;
 	}
+	
+	public void setRoot(Joint root) {
+		this.root = root;
+	}
+	
+	public Skeleton() {
+		this(new JointImpl());
+	}
 
 	public Skeleton(Joint root) {
 		this.root = root;

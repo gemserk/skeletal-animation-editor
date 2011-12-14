@@ -21,7 +21,11 @@ public class JointUtils {
 			addTreeToList(joints, joint.getChildren().get(i));
 		}
 	}
-	
+
+	public static Skeleton cloneSkeleton(Skeleton skeleton) {
+		return new Skeleton(cloneTree(skeleton.getRoot()));
+	}
+
 	public static Joint cloneTree(Joint joint) {
 		JointImpl clonedNode = new JointImpl(joint);
 
@@ -34,7 +38,7 @@ public class JointUtils {
 
 		return clonedNode;
 	}
-	
+
 	public static Timeline getTimeline(Joint root, ArrayList<AnimationKeyFrame> frames) {
 		ArrayList<Joint> joints = JointUtils.getArrayList(root);
 
@@ -44,7 +48,7 @@ public class JointUtils {
 			Joint joint = joints.get(j);
 
 			TimelineValue timelineValue = new TimelineValueMutableObjectImpl<Joint>(joint, JointConverter.instance);
-			
+
 			for (int i = 0; i < frames.size(); i++) {
 				AnimationKeyFrame animationKeyFrame = frames.get(i);
 				Joint treeState = animationKeyFrame.getSkeleton().getRoot();
@@ -58,5 +62,5 @@ public class JointUtils {
 
 		return new Timeline(timelineValues);
 	}
-	
+
 }
