@@ -157,13 +157,13 @@ public class JointImpl implements Joint {
 	}
 
 	@Override
-	public Joint getChild(String id) {
+	public Joint find(String id) {
 		if (getId().equals(id))
 			return this;
 		
 		for (int i = 0; i < children.size(); i++) {
 			Joint child = children.get(i);
-			Joint subChild = child.getChild(id);
+			Joint subChild = child.find(id);
 			if (subChild != null)
 				return subChild;
 		}

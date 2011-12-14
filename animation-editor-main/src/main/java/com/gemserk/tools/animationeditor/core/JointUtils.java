@@ -48,7 +48,7 @@ public class JointUtils {
 			for (int i = 0; i < frames.size(); i++) {
 				AnimationKeyFrame animationKeyFrame = frames.get(i);
 				Joint treeState = animationKeyFrame.getRoot();
-				Joint nodeState = treeState.getChild(joint.getId());
+				Joint nodeState = treeState.find(joint.getId());
 
 				timelineValue.addKeyFrame(new KeyFrame(animationKeyFrame.getTime(), JointConverter.instance.copyFromObject(nodeState, null)));
 				timelineValues.add(timelineValue);

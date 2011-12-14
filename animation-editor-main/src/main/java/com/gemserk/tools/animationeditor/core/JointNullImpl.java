@@ -94,7 +94,7 @@ class JointNullImpl implements Joint {
 	}
 
 	@Override
-	public Joint getChild(String id) {
+	public Joint find(String id) {
 		return null;
 	}
 

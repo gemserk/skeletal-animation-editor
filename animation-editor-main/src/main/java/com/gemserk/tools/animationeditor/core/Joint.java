@@ -53,6 +53,6 @@ public interface Joint {
 
 	float getLocalAngle();
 	
-	Joint getChild(String id);
+	Joint find(String id);
 
 }
