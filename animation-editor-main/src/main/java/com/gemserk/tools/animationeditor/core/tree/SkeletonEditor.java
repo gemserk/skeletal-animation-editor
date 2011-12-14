@@ -12,7 +12,7 @@ public interface SkeletonEditor {
 	
 	Joint getRoot();
 	
-	void setRoot(Joint root);
+//	void setRoot(Joint root);
 	
 	Joint getNearestNode(float x, float y);
 	

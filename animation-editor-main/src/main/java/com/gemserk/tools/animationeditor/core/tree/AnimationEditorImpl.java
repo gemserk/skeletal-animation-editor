@@ -1,5 +1,7 @@
 package com.gemserk.tools.animationeditor.core.tree;
 
+import java.util.ArrayList;
+
 import com.gemserk.tools.animationeditor.core.Animation;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Joint;
@@ -33,9 +35,22 @@ public class AnimationEditorImpl implements AnimationEditor {
 	public void selectKeyFrame(AnimationKeyFrame keyFrame) {
 		selectedKeyFrame = keyFrame;
 		
-		Joint root = keyFrame.getRoot();
+		Joint keyFrameRoot = keyFrame.getRoot();
 		
-		skeletonEditor.setRoot(root);
+		ArrayList<Joint> joints = JointUtils.getArrayList(keyFrameRoot);
+
+		Joint root = skeletonEditor.getRoot();
+		
+		for (int i = 0; i < joints.size(); i++) {
+			Joint keyFrameJoint = joints.get(i);
+			Joint skeletonJoint = root.find(keyFrameJoint.getId());
+			if (skeletonJoint == null)
+				continue;
+			skeletonJoint.setLocalPosition(keyFrameJoint.getLocalX(), keyFrameJoint.getLocalY());
+			skeletonJoint.setLocalAngle(keyFrameJoint.getLocalAngle());
+		}
+		
+		// skeletonEditor.setRoot(keyFrameRoot);
 		skeletonEditor.select(root);
 	}
 

@@ -192,14 +192,14 @@ public class EditorInterceptorImpl implements SkeletonEditor, AnimationEditor {
 		return animationEditor.getCurrentAnimation();
 	}
 
-	@Override
-	public void setRoot(Joint root) {
-		DefaultMutableTreeNode treeRoot = (DefaultMutableTreeNode) model.getRoot();
-		treeRoot.removeAllChildren();
-		createTreeNodeForChild(root, treeRoot);
-		model.reload();
-		skeletonEditor.setRoot(root);
-	}
+//	@Override
+//	public void setRoot(Joint root) {
+//		DefaultMutableTreeNode treeRoot = (DefaultMutableTreeNode) model.getRoot();
+//		treeRoot.removeAllChildren();
+//		createTreeNodeForChild(root, treeRoot);
+//		model.reload();
+//		skeletonEditor.setRoot(root);
+//	}
 
 	public boolean isPlayingAnimation() {
 		return animationEditor.isPlayingAnimation();

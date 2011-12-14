@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Vector2;
 import com.gemserk.tools.animationeditor.core.Joint;
-import com.gemserk.tools.animationeditor.core.JointUtils;
 
 public class SkeletonEditorImpl implements SkeletonEditor {
 
@@ -90,13 +89,13 @@ public class SkeletonEditorImpl implements SkeletonEditor {
 		selectedNode.setAngle(currentAngle + angle);
 	}
 
-	@Override
-	public void setRoot(Joint root) {
-		this.root = root;
-		selectedNode = root;
-		
-		joints.clear();
-		joints.addAll(JointUtils.getArrayList(root));
-	}
+	// @Override
+	// public void setRoot(Joint root) {
+	// this.root = root;
+	// selectedNode = root;
+	//
+	// joints.clear();
+	// joints.addAll(JointUtils.getArrayList(root));
+	// }
 
 }
