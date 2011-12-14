@@ -27,9 +27,17 @@ public class SkeletonEditorImpl implements SkeletonEditor {
 		return currentKeyFrame.getSkeleton().getRoot();
 	}
 
+
 	@Override
-	public Skeleton getSkeleton() {
-		return currentKeyFrame.getSkeleton();
+	public AnimationKeyFrame getCurrentKeyFrame() {
+		return currentKeyFrame;
+	}
+
+	@Override
+	public void setCurrentKeyFrame(AnimationKeyFrame animationKeyFrame) {
+		currentKeyFrame = animationKeyFrame;
+		joints.clear();
+		joints.addAll(JointUtils.getArrayList(currentKeyFrame.getSkeleton().getRoot()));
 	}
 
 	@Override
@@ -44,13 +52,6 @@ public class SkeletonEditorImpl implements SkeletonEditor {
 		joints.remove(joint);
 		if (isSelectedNode(joint))
 			selectedNode = parent;
-	}
-
-	@Override
-	public void setCurrentSkeleton(Skeleton skeleton) {
-		currentKeyFrame.setSkeleton(skeleton);
-		joints.clear();
-		joints.addAll(JointUtils.getArrayList(currentKeyFrame.getSkeleton().getRoot()));
 	}
 
 	@Override
@@ -103,14 +104,5 @@ public class SkeletonEditorImpl implements SkeletonEditor {
 		float currentAngle = selectedNode.getAngle();
 		selectedNode.setAngle(currentAngle + angle);
 	}
-
-	// @Override
-	// public void setRoot(Joint root) {
-	// this.root = root;
-	// selectedNode = root;
-	//
-	// joints.clear();
-	// joints.addAll(JointUtils.getArrayList(root));
-	// }
 
 }

@@ -17,7 +17,6 @@ import javax.swing.tree.TreePath;
 import com.gemserk.tools.animationeditor.core.Animation;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Joint;
-import com.gemserk.tools.animationeditor.core.Skeleton;
 import com.gemserk.tools.animationeditor.core.tree.AnimationEditor;
 import com.gemserk.tools.animationeditor.core.tree.AnimationEditorImpl;
 import com.gemserk.tools.animationeditor.core.tree.SkeletonEditor;
@@ -117,13 +116,14 @@ public class EditorInterceptorImpl implements SkeletonEditor, AnimationEditor {
 		tree.setSelectionPath(path);
 		tree.scrollPathToVisible(path);
 	}
+	
 
 	@Override
-	public void setCurrentSkeleton(Skeleton skeleton) {
-		skeletonEditor.setCurrentSkeleton(skeleton);
+	public void setCurrentKeyFrame(AnimationKeyFrame keyFrame) {
+		skeletonEditor.setCurrentKeyFrame(keyFrame);
 		DefaultMutableTreeNode treeRoot = (DefaultMutableTreeNode) model.getRoot();
 		treeRoot.removeAllChildren();
-		createTreeNodeForChild(skeletonEditor.getRoot(), treeRoot);
+		createTreeNodeForChild(keyFrame.getSkeleton().getRoot(), treeRoot);
 		model.reload();
 	}
 
@@ -224,8 +224,9 @@ public class EditorInterceptorImpl implements SkeletonEditor, AnimationEditor {
 	}
 
 	@Override
-	public Skeleton getSkeleton() {
-		return skeletonEditor.getSkeleton();
+	public AnimationKeyFrame getCurrentKeyFrame() {
+		return skeletonEditor.getCurrentKeyFrame();
 	}
+
 
 }

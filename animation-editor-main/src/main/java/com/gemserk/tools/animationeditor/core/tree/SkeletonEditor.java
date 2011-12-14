@@ -1,7 +1,7 @@
 package com.gemserk.tools.animationeditor.core.tree;
 
+import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Joint;
-import com.gemserk.tools.animationeditor.core.Skeleton;
 
 public interface SkeletonEditor {
 	
@@ -11,9 +11,9 @@ public interface SkeletonEditor {
 	
 	void add(Joint joint);
 	
-	Skeleton getSkeleton();
+	AnimationKeyFrame getCurrentKeyFrame();
 	
-	void setCurrentSkeleton(Skeleton skeleton);
+	void setCurrentKeyFrame(AnimationKeyFrame keyFrame);
 	
 	Joint getRoot();
 	

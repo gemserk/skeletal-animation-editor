@@ -265,7 +265,7 @@ public class EditorLibgdxApplicationListener extends Game {
 			}
 		};
 
-		skeletonEditor.setCurrentSkeleton(new Skeleton(root));
+		skeletonEditor.setCurrentKeyFrame(new AnimationKeyFrame("keyFrame0", new Skeleton(root), 0f));
 		skeletonEditor.select(root);
 
 		// treeObserver.update(root);
