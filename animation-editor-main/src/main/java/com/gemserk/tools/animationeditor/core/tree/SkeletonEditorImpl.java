@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.math.Vector2;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Joint;
+import com.gemserk.tools.animationeditor.core.JointUtils;
 import com.gemserk.tools.animationeditor.core.Skeleton;
 
 public class SkeletonEditorImpl implements SkeletonEditor {
@@ -48,7 +49,8 @@ public class SkeletonEditorImpl implements SkeletonEditor {
 	@Override
 	public void setCurrentSkeleton(Skeleton skeleton) {
 		currentKeyFrame.setSkeleton(skeleton);
-		// currentKeyFrame = new AnimationKeyFrame("none", new Skeleton());
+		joints.clear();
+		joints.addAll(JointUtils.getArrayList(currentKeyFrame.getSkeleton().getRoot()));
 	}
 
 	@Override

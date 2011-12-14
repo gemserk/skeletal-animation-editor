@@ -29,6 +29,9 @@ public class AnimationEditorImpl implements AnimationEditor {
 				new Skeleton(JointUtils.cloneTree(skeletonEditor.getRoot())), duration);
 		currentAnimation.getKeyFrames().add(keyFrame);
 		duration += 1f;
+		
+		skeletonEditor.setCurrentSkeleton(keyFrame.getSkeleton());
+		
 		return keyFrame;
 	}
 
