@@ -53,10 +53,14 @@ public class JointUtils {
 				AnimationKeyFrame animationKeyFrame = frames.get(i);
 				Joint treeState = animationKeyFrame.getSkeleton().getRoot();
 				Joint nodeState = treeState.find(joint.getId());
+				
+				if (nodeState == null)
+					continue;
 
 				timelineValue.addKeyFrame(new KeyFrame(animationKeyFrame.getTime(), JointConverter.instance.copyFromObject(nodeState, null)));
-				timelineValues.add(timelineValue);
 			}
+			
+			timelineValues.add(timelineValue);
 
 		}
 
