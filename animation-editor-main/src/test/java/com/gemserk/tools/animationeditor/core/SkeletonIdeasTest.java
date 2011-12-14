@@ -33,26 +33,26 @@ public class SkeletonIdeasTest {
 
 	}
 
-	public ArrayList<Node> getArrayList(Node node) {
-		ArrayList<Node> nodes = new ArrayList<Node>();
-		add(nodes, node);
-		return nodes;
+	public ArrayList<Joint> getArrayList(Joint joint) {
+		ArrayList<Joint> joints = new ArrayList<Joint>();
+		add(joints, joint);
+		return joints;
 	}
 
-	private void add(ArrayList<Node> nodes, Node node) {
-		nodes.add(node);
-		for (int i = 0; i < node.getChildren().size(); i++) {
-			add(nodes, node.getChildren().get(i));
+	private void add(ArrayList<Joint> joints, Joint joint) {
+		joints.add(joint);
+		for (int i = 0; i < joint.getChildren().size(); i++) {
+			add(joints, joint.getChildren().get(i));
 		}
 	}
 
-	private Node cloneTree(Node node) {
-		NodeImpl clonedNode = new NodeImpl(node);
+	private Joint cloneTree(Joint joint) {
+		JointImpl clonedNode = new JointImpl(joint);
 
-		ArrayList<Node> children = node.getChildren();
+		ArrayList<Joint> children = joint.getChildren();
 		for (int i = 0; i < children.size(); i++) {
-			Node child = children.get(i);
-			Node clonedChild = cloneTree(child);
+			Joint child = children.get(i);
+			Joint clonedChild = cloneTree(child);
 			clonedChild.setParent(clonedNode);
 		}
 
@@ -62,18 +62,18 @@ public class SkeletonIdeasTest {
 	@Test
 	public void someTest() {
 
-		Node root = new NodeImpl("AAA", 50f, 100f, 45f);
-		Node leaf1 = new NodeImpl("BBB", 25f, 25f, 20f);
-		Node leaf2 = new NodeImpl("CCC", -25f, -35f, -40f);
+		Joint root = new JointImpl("AAA", 50f, 100f, 45f);
+		Joint leaf1 = new JointImpl("BBB", 25f, 25f, 20f);
+		Joint leaf2 = new JointImpl("CCC", -25f, -35f, -40f);
 
-		Node leaf11 = new NodeImpl("BBB.1", 75f, 75f, 70f);
+		Joint leaf11 = new JointImpl("BBB.1", 75f, 75f, 70f);
 
 		leaf1.setParent(root);
 		leaf2.setParent(root);
 
 		leaf11.setParent(leaf1);
 
-		Node clonedRoot = cloneTree(root);
+		Joint clonedRoot = cloneTree(root);
 
 		assertThat(clonedRoot.getChildren().size(), IsEqual.equalTo(2));
 
@@ -82,21 +82,21 @@ public class SkeletonIdeasTest {
 	@Test
 	public void anotherTest() {
 
-		Node root = new NodeImpl("AAA", 50f, 100f, 45f);
-		Node leaf1 = new NodeImpl("BBB", 25f, 25f, 20f);
-		Node leaf2 = new NodeImpl("CCC", -25f, -35f, -40f);
+		Joint root = new JointImpl("AAA", 50f, 100f, 45f);
+		Joint leaf1 = new JointImpl("BBB", 25f, 25f, 20f);
+		Joint leaf2 = new JointImpl("CCC", -25f, -35f, -40f);
 
-		Node leaf11 = new NodeImpl("BBB.1", 75f, 75f, 70f);
+		Joint leaf11 = new JointImpl("BBB.1", 75f, 75f, 70f);
 
 		leaf1.setParent(root);
 		leaf2.setParent(root);
 
 		leaf11.setParent(leaf1);
 
-		ArrayList<Node> nodes = getArrayList(root);
+		ArrayList<Joint> joints = getArrayList(root);
 
-		for (int i = 0; i < nodes.size(); i++) {
-			System.out.println(nodes.get(i));
+		for (int i = 0; i < joints.size(); i++) {
+			System.out.println(joints.get(i));
 		}
 
 	}
@@ -104,9 +104,9 @@ public class SkeletonIdeasTest {
 	@Test
 	public void transitionTest() {
 
-		NodeImpl root = new NodeImpl("AAA", 0f, 0f, 0f);
-		NodeImpl leaf1 = new NodeImpl("BBB", 30f, 30f, 30f);
-		NodeImpl leaf2 = new NodeImpl("CCC", 60f, 60f, 60f);
+		JointImpl root = new JointImpl("AAA", 0f, 0f, 0f);
+		JointImpl leaf1 = new JointImpl("BBB", 30f, 30f, 30f);
+		JointImpl leaf2 = new JointImpl("CCC", 60f, 60f, 60f);
 
 		leaf1.setParent(root);
 		leaf2.setParent(root);

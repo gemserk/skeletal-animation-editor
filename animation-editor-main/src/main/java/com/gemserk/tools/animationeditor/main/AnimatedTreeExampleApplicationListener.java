@@ -13,17 +13,17 @@ import com.gemserk.animation4j.transitions.TransitionFloatArrayImpl;
 import com.gemserk.commons.gdx.graphics.ImmediateModeRendererUtils;
 import com.gemserk.tools.animationeditor.core.Animation;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
-import com.gemserk.tools.animationeditor.core.Node;
-import com.gemserk.tools.animationeditor.core.NodeImpl;
-import com.gemserk.tools.animationeditor.core.NodeUtils;
+import com.gemserk.tools.animationeditor.core.Joint;
+import com.gemserk.tools.animationeditor.core.JointImpl;
+import com.gemserk.tools.animationeditor.core.JointUtils;
 
 public class AnimatedTreeExampleApplicationListener extends Game {
 
-	private Node root;
+	private Joint root;
 
 	float nodeSize = 2f;
 
-	private ArrayList<Node> nodes;
+	private ArrayList<Joint> joints;
 
 	private TransitionFloatArrayImpl transition;
 
@@ -43,16 +43,16 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 
 	}
 
-	ArrayList<Node> getArrayList(Node node) {
-		ArrayList<Node> nodes = new ArrayList<Node>();
-		add(nodes, node);
-		return nodes;
+	ArrayList<Joint> getArrayList(Joint joint) {
+		ArrayList<Joint> joints = new ArrayList<Joint>();
+		add(joints, joint);
+		return joints;
 	}
 
-	void add(ArrayList<Node> nodes, Node node) {
-		nodes.add(node);
-		for (int i = 0; i < node.getChildren().size(); i++) {
-			add(nodes, node.getChildren().get(i));
+	void add(ArrayList<Joint> joints, Joint joint) {
+		joints.add(joint);
+		for (int i = 0; i < joint.getChildren().size(); i++) {
+			add(joints, joint.getChildren().get(i));
 		}
 	}
 
@@ -89,17 +89,17 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 
 		Gdx.graphics.getGL10().glClearColor(0f, 0f, 0f, 1f);
 
-		root = new NodeImpl("root");
+		root = new JointImpl("root");
 		root.setPosition(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f);
 
-		Node node1 = new NodeImpl("nodo1", Gdx.graphics.getWidth() * 0.25f, Gdx.graphics.getHeight() * 0.75f, 0f);
-		Node node2 = new NodeImpl("nodo2", Gdx.graphics.getWidth() * 0.25f, Gdx.graphics.getHeight() * 0.65f, 0f);
+		Joint node1 = new JointImpl("nodo1", Gdx.graphics.getWidth() * 0.25f, Gdx.graphics.getHeight() * 0.75f, 0f);
+		Joint node2 = new JointImpl("nodo2", Gdx.graphics.getWidth() * 0.25f, Gdx.graphics.getHeight() * 0.65f, 0f);
 
 		node1.setParent(root);
 		node2.setParent(node1);
 
-		Node state0 = NodeUtils.cloneTree(root);
-		Node state1 = NodeUtils.cloneTree(root);
+		Joint state0 = JointUtils.cloneTree(root);
+		Joint state1 = JointUtils.cloneTree(root);
 
 		state1.setAngle(45f);
 		state1.getChildren().get(0).setAngle(180f);
@@ -121,7 +121,7 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 		animation.getKeyFrames().add(new AnimationKeyFrame("keyframe0", state0, 0f));
 		animation.getKeyFrames().add(new AnimationKeyFrame("keyframe1", state1, 1f));
 
-		timeline = NodeUtils.getTimeline(root, animation.getKeyFrames());
+		timeline = JointUtils.getTimeline(root, animation.getKeyFrames());
 
 		// TimelineValueMutableObjectImpl<Node> timelineValue1 = new TimelineValueMutableObjectImpl<Node>(root, NodeConverter.instance);
 		// TimelineValueMutableObjectImpl<Node> timelineValue2 = new TimelineValueMutableObjectImpl<Node>(node1, NodeConverter.instance);
@@ -187,18 +187,18 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 		renderNodeTree(root);
 	}
 
-	private void renderNodeTree(Node node) {
-		renderNodeOnly(node);
-		ArrayList<Node> children = node.getChildren();
+	private void renderNodeTree(Joint joint) {
+		renderNodeOnly(joint);
+		ArrayList<Joint> children = joint.getChildren();
 		for (int i = 0; i < children.size(); i++) {
-			Node child = children.get(i);
-			ImmediateModeRendererUtils.drawLine(node.getX(), node.getY(), child.getX(), child.getY(), Colors.lineColor);
+			Joint child = children.get(i);
+			ImmediateModeRendererUtils.drawLine(joint.getX(), joint.getY(), child.getX(), child.getY(), Colors.lineColor);
 			renderNodeTree(child);
 		}
 	}
 
-	private void renderNodeOnly(Node node) {
-		ImmediateModeRendererUtils.fillRectangle(node.getX() - nodeSize, node.getY() - nodeSize, node.getX() + nodeSize, node.getY() + nodeSize, //
+	private void renderNodeOnly(Joint joint) {
+		ImmediateModeRendererUtils.fillRectangle(joint.getX() - nodeSize, joint.getY() - nodeSize, joint.getX() + nodeSize, joint.getY() + nodeSize, //
 				Colors.nodeColor);
 	}
 

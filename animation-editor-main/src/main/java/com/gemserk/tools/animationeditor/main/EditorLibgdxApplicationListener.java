@@ -16,11 +16,11 @@ import com.gemserk.componentsengine.input.InputDevicesMonitorImpl;
 import com.gemserk.componentsengine.input.LibgdxInputMappingBuilder;
 import com.gemserk.tools.animationeditor.core.Animation;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
-import com.gemserk.tools.animationeditor.core.Node;
-import com.gemserk.tools.animationeditor.core.NodeImpl;
-import com.gemserk.tools.animationeditor.core.NodeUtils;
+import com.gemserk.tools.animationeditor.core.Joint;
+import com.gemserk.tools.animationeditor.core.JointImpl;
+import com.gemserk.tools.animationeditor.core.JointUtils;
 import com.gemserk.tools.animationeditor.core.tree.AnimationEditor;
-import com.gemserk.tools.animationeditor.core.tree.TreeEditor;
+import com.gemserk.tools.animationeditor.core.tree.SkeletonEditor;
 
 public class EditorLibgdxApplicationListener extends Game {
 
@@ -44,7 +44,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	SpriteBatch spriteBatch;
 
-	Node nearNode;
+	Joint nearNode;
 
 	float nodeSize = 2f;
 	float backgroundNodeSize = 4f;
@@ -53,13 +53,13 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	Vector2 position = new Vector2();
 
-	TreeEditor treeEditor;
+	SkeletonEditor skeletonEditor;
 	AnimationEditor animationEditor;
 
 	private InputDevicesMonitorImpl<String> inputMonitor;
 
-	public void setTreeEditor(TreeEditor treeEditor) {
-		this.treeEditor = treeEditor;
+	public void setTreeEditor(SkeletonEditor skeletonEditor) {
+		this.skeletonEditor = skeletonEditor;
 	}
 
 	public void setAnimationEditor(AnimationEditor animationEditor) {
@@ -76,7 +76,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	class PlayingAnimationState implements EditorState {
 
-		private Node root;
+		private Joint root;
 		private TimelineAnimation timelineAnimation;
 
 		public PlayingAnimationState() {
@@ -84,9 +84,9 @@ public class EditorLibgdxApplicationListener extends Game {
 			
 			ArrayList<AnimationKeyFrame> keyFrames = currentAnimation.getKeyFrames();
 			
-			root = NodeUtils.cloneTree(treeEditor.getRoot());
+			root = JointUtils.cloneTree(skeletonEditor.getRoot());
 			
-			timelineAnimation = new TimelineAnimation(NodeUtils.getTimeline(root, keyFrames), (float)keyFrames.size() - 1);
+			timelineAnimation = new TimelineAnimation(JointUtils.getTimeline(root, keyFrames), (float)keyFrames.size() - 1);
 			timelineAnimation.setSpeed(1f);
 			timelineAnimation.setDelay(0f);
 			timelineAnimation.start(0);
@@ -126,12 +126,12 @@ public class EditorLibgdxApplicationListener extends Game {
 			}
 
 			if (inputMonitor.getButton(Actions.RightMouseButton).isReleased())
-				treeEditor.select(nearNode);
+				skeletonEditor.select(nearNode);
 
 			if (inputMonitor.getButton(Actions.DeleteNodeButton).isReleased()) {
-				if (!treeEditor.isSelectedNode(treeEditor.getRoot())) {
-					if (treeEditor.getSelectedNode() != null)
-						treeEditor.remove(treeEditor.getSelectedNode());
+				if (!skeletonEditor.isSelectedNode(skeletonEditor.getRoot())) {
+					if (skeletonEditor.getSelectedNode() != null)
+						skeletonEditor.remove(skeletonEditor.getSelectedNode());
 				}
 			}
 
@@ -141,25 +141,25 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			if (inputMonitor.getButton(Actions.LeftMouseButton).isPressed()) {
 				if (position.dst(x, y) < selectDistance) {
-					treeEditor.select(nearNode);
+					skeletonEditor.select(nearNode);
 					currentState = new DraggingNodeState();
 					return;
 				}
 			}
 
 			if (inputMonitor.getButton(Actions.LeftMouseButton).isReleased()) {
-				Node newNode = new NodeImpl("node-" + MathUtils.random(111, 999));
-				treeEditor.add(newNode);
+				Joint newNode = new JointImpl("node-" + MathUtils.random(111, 999));
+				skeletonEditor.add(newNode);
 				newNode.setPosition(x, y);
 
-				treeEditor.select(newNode.getParent());
+				skeletonEditor.select(newNode.getParent());
 			}
 
 		}
 
 		@Override
 		public void render() {
-			renderNodeTree(treeEditor.getRoot());
+			renderNodeTree(skeletonEditor.getRoot());
 		}
 
 	}
@@ -184,7 +184,7 @@ public class EditorLibgdxApplicationListener extends Game {
 				return;
 			}
 
-			treeEditor.moveSelected(x1 - x0, y1 - y0);
+			skeletonEditor.moveSelected(x1 - x0, y1 - y0);
 
 			x0 = x1;
 			y0 = y1;
@@ -192,7 +192,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		@Override
 		public void render() {
-			renderNodeTree(treeEditor.getRoot());
+			renderNodeTree(skeletonEditor.getRoot());
 		}
 
 	}
@@ -217,7 +217,7 @@ public class EditorLibgdxApplicationListener extends Game {
 			}
 
 			float rotation = (float) (currentY - y) * rotationSpeed;
-			treeEditor.rotateSelected(rotation);
+			skeletonEditor.rotateSelected(rotation);
 
 			// float currentAngle = selectedNode.getAngle();
 			// selectedNode.setAngle(currentAngle + rotation);
@@ -227,7 +227,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		@Override
 		public void render() {
-			renderNodeTree(treeEditor.getRoot());
+			renderNodeTree(skeletonEditor.getRoot());
 		}
 
 	}
@@ -240,7 +240,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		Gdx.graphics.getGL10().glClearColor(0f, 0f, 0f, 1f);
 
-		Node root = new NodeImpl("root");
+		Joint root = new JointImpl("root");
 		root.setPosition(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f);
 
 		// selectedNode = root;
@@ -265,7 +265,7 @@ public class EditorLibgdxApplicationListener extends Game {
 		};
 
 		// treeObserver.update(root);
-		treeEditor.add(root);
+		skeletonEditor.add(root);
 	}
 
 	@Override
@@ -286,7 +286,7 @@ public class EditorLibgdxApplicationListener extends Game {
 		int x = Gdx.input.getX();
 		int y = Gdx.graphics.getHeight() - Gdx.input.getY();
 
-		nearNode = treeEditor.getNearestNode(x, y);
+		nearNode = skeletonEditor.getNearestNode(x, y);
 
 		currentState.update();
 	}
@@ -299,35 +299,35 @@ public class EditorLibgdxApplicationListener extends Game {
 		currentState.render();
 	}
 
-	private void renderNodeTree(Node node) {
-		renderNodeOnly(node);
-		ArrayList<Node> children = node.getChildren();
+	private void renderNodeTree(Joint joint) {
+		renderNodeOnly(joint);
+		ArrayList<Joint> children = joint.getChildren();
 		for (int i = 0; i < children.size(); i++) {
-			Node child = children.get(i);
-			ImmediateModeRendererUtils.drawLine(node.getX(), node.getY(), child.getX(), child.getY(), Colors.lineColor);
+			Joint child = children.get(i);
+			ImmediateModeRendererUtils.drawLine(joint.getX(), joint.getY(), child.getX(), child.getY(), Colors.lineColor);
 			renderNodeTree(child);
 		}
 	}
 
-	private void renderNodeOnly(Node node) {
-		if (node == nearNode) {
-			ImmediateModeRendererUtils.fillRectangle(node.getX() - backgroundNodeSize, //
-					node.getY() - backgroundNodeSize, //
-					node.getX() + backgroundNodeSize, //
-					node.getY() + backgroundNodeSize, //
+	private void renderNodeOnly(Joint joint) {
+		if (joint == nearNode) {
+			ImmediateModeRendererUtils.fillRectangle(joint.getX() - backgroundNodeSize, //
+					joint.getY() - backgroundNodeSize, //
+					joint.getX() + backgroundNodeSize, //
+					joint.getY() + backgroundNodeSize, //
 					Colors.nearNodeColor);
 		}
 
-		if (treeEditor.isSelectedNode(node)) {
+		if (skeletonEditor.isSelectedNode(joint)) {
 			float backgroundNodeSize = 4f;
-			ImmediateModeRendererUtils.fillRectangle(node.getX() - backgroundNodeSize, //
-					node.getY() - backgroundNodeSize, //
-					node.getX() + backgroundNodeSize, //
-					node.getY() + backgroundNodeSize, //
+			ImmediateModeRendererUtils.fillRectangle(joint.getX() - backgroundNodeSize, //
+					joint.getY() - backgroundNodeSize, //
+					joint.getX() + backgroundNodeSize, //
+					joint.getY() + backgroundNodeSize, //
 					Colors.selectedNodeColor);
 		}
 
-		ImmediateModeRendererUtils.fillRectangle(node.getX() - nodeSize, node.getY() - nodeSize, node.getX() + nodeSize, node.getY() + nodeSize, //
+		ImmediateModeRendererUtils.fillRectangle(joint.getX() - nodeSize, joint.getY() - nodeSize, joint.getX() + nodeSize, joint.getY() + nodeSize, //
 				Colors.nodeColor);
 	}
 

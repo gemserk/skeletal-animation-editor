@@ -2,28 +2,28 @@ package com.gemserk.tools.animationeditor.main.tree;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import com.gemserk.tools.animationeditor.core.Node;
+import com.gemserk.tools.animationeditor.core.Joint;
 
-public class TreeNodeEditorImpl extends DefaultMutableTreeNode {
+public class TreeNodeForJointImpl extends DefaultMutableTreeNode {
 	
 	private static final long serialVersionUID = -5346981181496467679L;
 	
-	Node node;
+	Joint joint;
 	
-	public Node getNode() {
-		return node;
+	public Joint getNode() {
+		return joint;
 	}
 
-	public TreeNodeEditorImpl(Node node) {
-		super(node);
-		this.node = node;
+	public TreeNodeForJointImpl(Joint joint) {
+		super(joint);
+		this.joint = joint;
 	}
 	
 	@Override
 	public void setUserObject(Object userObject) {
 		super.setUserObject(userObject);
 		if (userObject instanceof String) 
-			node.setId((String) userObject);
+			joint.setId((String) userObject);
 	}
 	
 	@Override

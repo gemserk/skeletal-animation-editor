@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.gemserk.animation4j.converters.TypeConverter;
 
-public class TreeConverter implements TypeConverter<Node> {
+public class TreeConverter implements TypeConverter<Joint> {
 
 	public static TreeConverter instance = new TreeConverter();
 
@@ -13,11 +13,11 @@ public class TreeConverter implements TypeConverter<Node> {
 		throw new UnsupportedOperationException("cant return the number of variables of a variable tree");
 	}
 
-	public Node copyToObject(Node node, float[] x) {
-		ArrayList<Node> nodes = NodeUtils.getArrayList(node);
+	public Joint copyToObject(Joint joint, float[] x) {
+		ArrayList<Joint> joints = JointUtils.getArrayList(joint);
 		int nodeIndex = 0;
 		for (int i = 0; i < x.length; i += 3) {
-			Node n = nodes.get(nodeIndex);
+			Joint n = joints.get(nodeIndex);
 			float localX = x[i + 0];
 			float localY = x[i + 1];
 			float localAngle = x[i + 2];
@@ -25,17 +25,17 @@ public class TreeConverter implements TypeConverter<Node> {
 			n.setLocalAngle(localAngle);
 			nodeIndex++;
 		}
-		return node;
+		return joint;
 	}
 
 	@Override
-	public float[] copyFromObject(Node node, float[] x) {
-		ArrayList<Node> nodes = NodeUtils.getArrayList(node);
+	public float[] copyFromObject(Joint joint, float[] x) {
+		ArrayList<Joint> joints = JointUtils.getArrayList(joint);
 		if (x == null)
-			x = new float[nodes.size() * 3];
+			x = new float[joints.size() * 3];
 		int j = 0;
-		for (int i = 0; i < nodes.size(); i++) {
-			Node n = nodes.get(i);
+		for (int i = 0; i < joints.size(); i++) {
+			Joint n = joints.get(i);
 
 			x[j] = n.getLocalX();
 			x[j + 1] = n.getLocalY();

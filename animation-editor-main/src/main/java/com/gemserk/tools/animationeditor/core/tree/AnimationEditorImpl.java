@@ -2,12 +2,12 @@ package com.gemserk.tools.animationeditor.core.tree;
 
 import com.gemserk.tools.animationeditor.core.Animation;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
-import com.gemserk.tools.animationeditor.core.Node;
-import com.gemserk.tools.animationeditor.core.NodeUtils;
+import com.gemserk.tools.animationeditor.core.Joint;
+import com.gemserk.tools.animationeditor.core.JointUtils;
 
 public class AnimationEditorImpl implements AnimationEditor {
 	
-	protected TreeEditor treeEditor;
+	protected SkeletonEditor skeletonEditor;
 	
 	int index = 0;
 	Animation currentAnimation = new Animation();
@@ -15,15 +15,15 @@ public class AnimationEditorImpl implements AnimationEditor {
 	
 	float duration = 0f;
 
-	public AnimationEditorImpl(TreeEditor treeEditor) {
-		this.treeEditor = treeEditor;
+	public AnimationEditorImpl(SkeletonEditor skeletonEditor) {
+		this.skeletonEditor = skeletonEditor;
 	}
 
 	@Override
 	public AnimationKeyFrame addKeyFrame() {
 		String name = "keyFrame" + index++;
 		AnimationKeyFrame keyFrame = new AnimationKeyFrame(name, 
-				NodeUtils.cloneTree(treeEditor.getRoot()), duration);
+				JointUtils.cloneTree(skeletonEditor.getRoot()), duration);
 		currentAnimation.getKeyFrames().add(keyFrame);
 		duration += 1f;
 		return keyFrame;
@@ -33,10 +33,10 @@ public class AnimationEditorImpl implements AnimationEditor {
 	public void selectKeyFrame(AnimationKeyFrame keyFrame) {
 		selectedKeyFrame = keyFrame;
 		
-		Node root = keyFrame.getRoot();
+		Joint root = keyFrame.getRoot();
 		
-		treeEditor.setRoot(root);
-		treeEditor.select(root);
+		skeletonEditor.setRoot(root);
+		skeletonEditor.select(root);
 	}
 
 	@Override

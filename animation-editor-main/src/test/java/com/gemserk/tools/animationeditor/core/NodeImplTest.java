@@ -12,15 +12,15 @@ public class NodeImplTest {
 	@Test
 	public void cloneTest() {
 
-		Node parentNode = new NodeImpl("AAA", 100f, 200f, 45f);
-		Node childNode = new NodeImpl("BBB");
+		Joint parentNode = new JointImpl("AAA", 100f, 200f, 45f);
+		Joint childNode = new JointImpl("BBB");
 
 		childNode.setParent(parentNode);
 
 		childNode.setPosition(70f, 50f);
 		childNode.setAngle(20f);
 
-		Node clonedNode = new NodeImpl(childNode);
+		Joint clonedNode = new JointImpl(childNode);
 
 		assertThat(clonedNode.getX(), IsEqual.equalTo(childNode.getX()));
 		assertThat(clonedNode.getY(), IsEqual.equalTo(childNode.getY()));
@@ -31,8 +31,8 @@ public class NodeImplTest {
 
 	@Test
 	public void testGetPositionAndAngle() {
-		Node parentNode = new NodeImpl("AAA", 100f, 200f, 45f);
-		Node childNode = new NodeImpl("BBB");
+		Joint parentNode = new JointImpl("AAA", 100f, 200f, 45f);
+		Joint childNode = new JointImpl("BBB");
 
 		childNode.setParent(parentNode);
 
@@ -47,9 +47,9 @@ public class NodeImplTest {
 
 	@Test
 	public void shouldConverToLocalToParentOnParentChanged() {
-		Node parentNode1 = new NodeImpl("AAA", 100f, 200f, 45f);
-		Node parentNode2 = new NodeImpl("CCC", 50f, 25f, 0f);
-		NodeImpl childNode = new NodeImpl("BBB");
+		Joint parentNode1 = new JointImpl("AAA", 100f, 200f, 45f);
+		Joint parentNode2 = new JointImpl("CCC", 50f, 25f, 0f);
+		JointImpl childNode = new JointImpl("BBB");
 
 		childNode.setParent(parentNode1);
 
@@ -68,8 +68,8 @@ public class NodeImplTest {
 
 	@Test
 	public void testGetLocalValues() {
-		Node parentNode1 = new NodeImpl("AAA", 100f, 200f, 45f);
-		Node childNode = new NodeImpl("BBB", 150, 250, 80f);
+		Joint parentNode1 = new JointImpl("AAA", 100f, 200f, 45f);
+		Joint childNode = new JointImpl("BBB", 150, 250, 80f);
 
 		childNode.setParent(parentNode1);
 
@@ -94,8 +94,8 @@ public class NodeImplTest {
 
 	@Test
 	public void testGetXWhenRotateParent() {
-		Node parentNode1 = new NodeImpl("AAA", 0f, 0f, 0f);
-		Node childNode = new NodeImpl("BBB", 100, 0, 0f);
+		Joint parentNode1 = new JointImpl("AAA", 0f, 0f, 0f);
+		Joint childNode = new JointImpl("BBB", 100, 0, 0f);
 		childNode.setParent(parentNode1);
 		assertThat(childNode.getX(), IsEqual.equalTo(100f));
 		parentNode1.setAngle(180f);
@@ -104,8 +104,8 @@ public class NodeImplTest {
 
 	@Test
 	public void testGetYWhenRotateParent() {
-		Node parentNode1 = new NodeImpl("AAA", 0f, 0f, 0f);
-		Node childNode = new NodeImpl("BBB", 0, 100f, 0f);
+		Joint parentNode1 = new JointImpl("AAA", 0f, 0f, 0f);
+		Joint childNode = new JointImpl("BBB", 0, 100f, 0f);
 		childNode.setParent(parentNode1);
 		assertThat(childNode.getY(), IsEqual.equalTo(100f));
 		parentNode1.setAngle(180f);
@@ -114,8 +114,8 @@ public class NodeImplTest {
 
 	@Test
 	public void testGetXYWhenRotateParentNotCentered() {
-		Node parentNode1 = new NodeImpl("AAA", 50f, 50f, 0f);
-		Node childNode = new NodeImpl("BBB", 100f, 100f, 0f);
+		Joint parentNode1 = new JointImpl("AAA", 50f, 50f, 0f);
+		Joint childNode = new JointImpl("BBB", 100f, 100f, 0f);
 		childNode.setParent(parentNode1);
 		assertThat(childNode.getX(), IsEqual.equalTo(100f));
 		assertThat(childNode.getY(), IsEqual.equalTo(100f));
@@ -126,8 +126,8 @@ public class NodeImplTest {
 
 	@Test
 	public void testGetXYWhenRotateParentNotCentered2() {
-		Node parentNode1 = new NodeImpl("AAA", 50f, 50f, 180f);
-		Node childNode = new NodeImpl("BBB", 100f, 100f, 0f);
+		Joint parentNode1 = new JointImpl("AAA", 50f, 50f, 180f);
+		Joint childNode = new JointImpl("BBB", 100f, 100f, 0f);
 		childNode.setParent(parentNode1);
 		assertThat(childNode.getX(), IsEqual.equalTo(100f));
 		assertThat(childNode.getY(), IsEqual.equalTo(100f));
@@ -138,9 +138,9 @@ public class NodeImplTest {
 
 	@Test
 	public void testLocalTransformedWhenParentTransformed() {
-		Node parentNode1 = new NodeImpl("AAA", 200f, 200f, 0f);
-		Node parentNode2 = new NodeImpl("CCC", 100f, 100f, 0f);
-		NodeImpl childNode = new NodeImpl("BBB");
+		Joint parentNode1 = new JointImpl("AAA", 200f, 200f, 0f);
+		Joint parentNode2 = new JointImpl("CCC", 100f, 100f, 0f);
+		JointImpl childNode = new JointImpl("BBB");
 
 		childNode.setParent(parentNode1);
 
@@ -160,9 +160,9 @@ public class NodeImplTest {
 	
 	@Test
 	public void testLocalTransformedWhenParentTransformed2() {
-		Node parentNode1 = new NodeImpl("AAA", 200f, 200f, 0f);
-		Node parentNode2 = new NodeImpl("CCC", 100f, 100f, 180f);
-		NodeImpl childNode = new NodeImpl("BBB");
+		Joint parentNode1 = new JointImpl("AAA", 200f, 200f, 0f);
+		Joint parentNode2 = new JointImpl("CCC", 100f, 100f, 180f);
+		JointImpl childNode = new JointImpl("BBB");
 
 		childNode.setParent(parentNode1);
 

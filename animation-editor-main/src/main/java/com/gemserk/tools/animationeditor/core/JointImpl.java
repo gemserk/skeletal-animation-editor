@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class NodeImpl implements Node {
+public class JointImpl implements Joint {
 
 	String id;
 
@@ -17,28 +17,28 @@ public class NodeImpl implements Node {
 
 	float angle = 0f;
 
-	Node parent = new NodeNullImpl();
-	ArrayList<Node> children = new ArrayList<Node>();
+	Joint parent = new JointNullImpl();
+	ArrayList<Joint> children = new ArrayList<Joint>();
 
-	public NodeImpl() {
+	public JointImpl() {
 		this("");
 	}
 
-	public NodeImpl(String id) {
+	public JointImpl(String id) {
 		this(id, 0f, 0f, 0f);
 	}
 
-	public NodeImpl(String id, float x, float y, float angle) {
+	public JointImpl(String id, float x, float y, float angle) {
 		setId(id);
 		setPosition(x, y);
 		setAngle(angle);
 	}
 
-	public NodeImpl(Node node) {
-		this.parent = node.getParent();
-		setId(node.getId());
-		setPosition(node.getX(), node.getY());
-		setAngle(node.getAngle());
+	public JointImpl(Joint joint) {
+		this.parent = joint.getParent();
+		setId(joint.getId());
+		setPosition(joint.getX(), joint.getY());
+		setAngle(joint.getAngle());
 	}
 
 	@Override
@@ -72,16 +72,7 @@ public class NodeImpl implements Node {
 	public void setPosition(float x, float y) {
 		float localX = parent.projectX(x, y);
 		float localY = parent.projectY(x, y);
-
-		// System.out.println("local.x = " + localX);
-		// System.out.println("local.y = " + localY);
-		//
-		// System.out.println("parent.x = " + parent.getX());
-		// System.out.println("parent.y = " + parent.getY());
-		// System.out.println("parent.angle  = " + parent.getAngle());
-
 		localPosition.set(localX, localY);
-		// position.set(x - parent.getX(), y - parent.getY());
 	}
 
 	@Override
@@ -105,7 +96,7 @@ public class NodeImpl implements Node {
 	}
 
 	@Override
-	public void setParent(Node parent) {
+	public void setParent(Joint parent) {
 		if (this.parent == parent)
 			return;
 
@@ -122,12 +113,12 @@ public class NodeImpl implements Node {
 	}
 
 	@Override
-	public Node getParent() {
+	public Joint getParent() {
 		return parent;
 	}
 
 	@Override
-	public ArrayList<Node> getChildren() {
+	public ArrayList<Joint> getChildren() {
 		return children;
 	}
 
@@ -166,13 +157,13 @@ public class NodeImpl implements Node {
 	}
 
 	@Override
-	public Node getChild(String id) {
+	public Joint getChild(String id) {
 		if (getId().equals(id))
 			return this;
 		
 		for (int i = 0; i < children.size(); i++) {
-			Node child = children.get(i);
-			Node subChild = child.getChild(id);
+			Joint child = children.get(i);
+			Joint subChild = child.getChild(id);
 			if (subChild != null)
 				return subChild;
 		}

@@ -33,15 +33,15 @@ import javax.swing.tree.TreeSelectionModel;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
-import com.gemserk.tools.animationeditor.core.tree.TreeEditorImpl;
+import com.gemserk.tools.animationeditor.core.tree.SkeletonEditorImpl;
 import com.gemserk.tools.animationeditor.main.list.AnimationKeyFrameListModel;
-import com.gemserk.tools.animationeditor.main.tree.TreeEditorWithJtreeInterceptorImpl;
+import com.gemserk.tools.animationeditor.main.tree.EditorInterceptorImpl;
 
 public class EditorWindow {
 
 	private JFrame frmGemserksAnimationEditor;
 	private JList keyFramesList;
-	private TreeEditorWithJtreeInterceptorImpl treeEditor;
+	private EditorInterceptorImpl treeEditor;
 
 	/**
 	 * Launch the application.
@@ -254,8 +254,8 @@ public class EditorWindow {
 		keyFramesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		keyFramesList.setBackground(Color.LIGHT_GRAY);
 
-		treeEditor = new TreeEditorWithJtreeInterceptorImpl( //
-				new TreeEditorImpl(), tree, keyFramesList);
+		treeEditor = new EditorInterceptorImpl( //
+				new SkeletonEditorImpl(), tree, keyFramesList);
 
 		editorApplication.setTreeEditor(treeEditor);
 		editorApplication.setAnimationEditor(treeEditor);

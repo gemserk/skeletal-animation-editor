@@ -2,9 +2,9 @@ package com.gemserk.tools.animationeditor.core;
 
 import com.gemserk.animation4j.converters.TypeConverter;
 
-public class NodeConverter implements TypeConverter<Node> {
+public class JointConverter implements TypeConverter<Joint> {
 	
-	public static final NodeConverter instance = new NodeConverter();
+	public static final JointConverter instance = new JointConverter();
 
 	@Override
 	public int variables() {
@@ -12,7 +12,7 @@ public class NodeConverter implements TypeConverter<Node> {
 	}
 
 	@Override
-	public float[] copyFromObject(Node n, float[] x) {
+	public float[] copyFromObject(Joint n, float[] x) {
 		if (x == null)
 			x = new float[variables()];
 		x[0] = n.getLocalX();
@@ -22,7 +22,7 @@ public class NodeConverter implements TypeConverter<Node> {
 	}
 
 	@Override
-	public Node copyToObject(Node n, float[] x) {
+	public Joint copyToObject(Joint n, float[] x) {
 		if (n == null)
 			throw new IllegalArgumentException("cant copy to null node");
 		n.setLocalPosition(x[0], x[1]);

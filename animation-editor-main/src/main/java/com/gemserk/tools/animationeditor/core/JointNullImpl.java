@@ -2,11 +2,11 @@ package com.gemserk.tools.animationeditor.core;
 
 import java.util.ArrayList;
 
-public class NodeNullImpl implements Node {
+class JointNullImpl implements Joint {
 	
 	final String id = "";
 
-	ArrayList<Node> children = new ArrayList<Node>();
+	ArrayList<Joint> children = new ArrayList<Joint>();
 	
 	@Override
 	public String getId() {
@@ -44,17 +44,17 @@ public class NodeNullImpl implements Node {
 	}
 
 	@Override
-	public void setParent(Node node) {
+	public void setParent(Joint joint) {
 
 	}
 
 	@Override
-	public Node getParent() {
+	public Joint getParent() {
 		return null;
 	}
 
 	@Override
-	public ArrayList<Node> getChildren() {
+	public ArrayList<Joint> getChildren() {
 		return children;
 	}
 
@@ -94,7 +94,7 @@ public class NodeNullImpl implements Node {
 	}
 
 	@Override
-	public Node getChild(String id) {
+	public Joint getChild(String id) {
 		return null;
 	}
 

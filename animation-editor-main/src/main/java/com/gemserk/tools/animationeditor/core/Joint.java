@@ -5,7 +5,7 @@ import java.util.ArrayList;
 /**
  * Concept of spatial node with location and angle.
  */
-public interface Node {
+public interface Joint {
 
 	String getId();
 
@@ -23,7 +23,7 @@ public interface Node {
 
 	float getAngle();
 
-	Node getParent();
+	Joint getParent();
 
 	void setPosition(float x, float y);
 
@@ -33,9 +33,9 @@ public interface Node {
 
 	void setLocalAngle(float angle);
 
-	void setParent(Node node);
+	void setParent(Joint joint);
 
-	ArrayList<Node> getChildren();
+	ArrayList<Joint> getChildren();
 
 	/**
 	 * Returns the x coordinate of the specified position in local to the Node coordinates.
@@ -53,6 +53,6 @@ public interface Node {
 
 	float getLocalAngle();
 	
-	Node getChild(String id);
+	Joint getChild(String id);
 
 }
