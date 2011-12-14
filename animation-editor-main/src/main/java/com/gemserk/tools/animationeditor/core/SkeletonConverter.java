@@ -4,17 +4,17 @@ import java.util.ArrayList;
 
 import com.gemserk.animation4j.converters.TypeConverter;
 
-public class TreeConverter implements TypeConverter<Joint> {
+public class SkeletonConverter implements TypeConverter<Skeleton> {
 
-	public static TreeConverter instance = new TreeConverter();
+	public static SkeletonConverter instance = new SkeletonConverter();
 
 	@Override
 	public int variables() {
 		throw new UnsupportedOperationException("cant return the number of variables of a variable tree");
 	}
 
-	public Joint copyToObject(Joint joint, float[] x) {
-		ArrayList<Joint> joints = JointUtils.getArrayList(joint);
+	public Skeleton copyToObject(Skeleton skeleton, float[] x) {
+		ArrayList<Joint> joints = JointUtils.getArrayList(skeleton.getRoot());
 		int nodeIndex = 0;
 		for (int i = 0; i < x.length; i += 3) {
 			Joint n = joints.get(nodeIndex);
@@ -25,12 +25,12 @@ public class TreeConverter implements TypeConverter<Joint> {
 			n.setLocalAngle(localAngle);
 			nodeIndex++;
 		}
-		return joint;
+		return skeleton;
 	}
 
 	@Override
-	public float[] copyFromObject(Joint joint, float[] x) {
-		ArrayList<Joint> joints = JointUtils.getArrayList(joint);
+	public float[] copyFromObject(Skeleton skeleton, float[] x) {
+		ArrayList<Joint> joints = JointUtils.getArrayList(skeleton.getRoot());
 		if (x == null)
 			x = new float[joints.size() * 3];
 		int j = 0;

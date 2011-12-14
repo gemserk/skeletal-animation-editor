@@ -111,11 +111,11 @@ public class SkeletonIdeasTest {
 		leaf1.setParent(root);
 		leaf2.setParent(root);
 
-		KeyFrame frame1 = new KeyFrame(0f, TreeConverter.instance.copyFromObject(root, null));
+		KeyFrame frame1 = new KeyFrame(0f, SkeletonConverter.instance.copyFromObject(new Skeleton(root), null));
 
 		root.setPosition(-100f, -100f);
 		
-		KeyFrame frame2 = new KeyFrame(0f, TreeConverter.instance.copyFromObject(root, null));
+		KeyFrame frame2 = new KeyFrame(0f, SkeletonConverter.instance.copyFromObject(new Skeleton(root), null));
 		
 		TransitionFloatArrayImpl transition = new TransitionFloatArrayImpl(frame1.getValue());
 		transition.set(frame2.getValue(), 5f);
