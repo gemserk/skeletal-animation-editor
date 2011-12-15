@@ -187,43 +187,19 @@ public class EditorWindow {
 		panel.add(panelTimeline, BorderLayout.SOUTH);
 		panelTimeline.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
-		final JToggleButton tglbtnNewToggleButton = new JToggleButton("Play");
-		panelTimeline.add(tglbtnNewToggleButton);
-
-		tglbtnNewToggleButton.addActionListener(new ActionListener() {
+		final JToggleButton toggleButtonPlay = new JToggleButton("");
+		toggleButtonPlay.setSelectedIcon(new ImageIcon(TestWindow.class.getResource("/data/buttonpause.png")));
+		toggleButtonPlay.setIcon(new ImageIcon(TestWindow.class.getResource("/data/buttonplay.png")));
+		toggleButtonPlay.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (tglbtnNewToggleButton.isSelected())
+				if (toggleButtonPlay.isSelected())
 					editor.playAnimation();
 				else
 					editor.stopAnimation();
 			}
 		});
-
-		JButton btnAddKeyframe = new JButton("Add");
-		btnAddKeyframe.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				AnimationKeyFrame keyFrame = editor.addKeyFrame();
-				editor.selectKeyFrame(keyFrame);
-			}
-		});
-		panelTimeline.add(btnAddKeyframe);
-		
-		JButton btnStoreKeyframe = new JButton("Store");
-		btnStoreKeyframe.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				editor.updateKeyFrame();
-			}
-		});
-		panelTimeline.add(btnStoreKeyframe);
-
-		JButton btnRemoveKeyframe = new JButton("Remove");
-		btnRemoveKeyframe.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				editor.removeKeyFrame();
-			}
-		});
-		panelTimeline.add(btnRemoveKeyframe);
+		panelTimeline.add(toggleButtonPlay);
 
 		JPanel panelStructure = new JPanel();
 		panelStructure.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
