@@ -1,5 +1,6 @@
 package com.gemserk.tools.animationeditor.core;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -9,16 +10,16 @@ import com.gemserk.commons.gdx.graphics.SpriteUtils;
 
 public class Skin {
 
-	static class SkinPatch {
+	public static class SkinPatch {
 		
 		Joint joint;
 		Sprite sprite;
 
-		Joint getJoint() {
+		public Joint getJoint() {
 			return joint;
 		}
 
-		Sprite getSprite() {
+		public Sprite getSprite() {
 			return sprite;
 		}
 
@@ -35,17 +36,22 @@ public class Skin {
 	}
 	
 	Map<String, SkinPatch> patches;
+	ArrayList<SkinPatch> patchList;
 	
 	public Skin() {
 		patches = new HashMap<String, Skin.SkinPatch>();
+		patchList = new ArrayList<Skin.SkinPatch>();
 	}
 	
 	public void addPatch(Joint joint, Sprite sprite) {
-		patches.put(joint.getId(), new SkinPatch(joint, sprite));
+		SkinPatch patch = new SkinPatch(joint, sprite);
+		patches.put(joint.getId(), patch);
+		patchList.add(patch);
 	}
 	
 	public void removePatch(Joint joint) {
-		patches.remove(joint.getId());
+		SkinPatch patch = patches.remove(joint.getId());
+		patchList.remove(patch);
 	}
 	
 	public void update() {
@@ -55,5 +61,13 @@ public class Skin {
 			skinPatch.update();
 		}
 	}
-
+	
+	public int patchesCount() {
+		return patchList.size();
+	}
+	
+	public SkinPatch getPatch(int index) {
+		return patchList.get(index);
+	}
+	
 }

@@ -7,6 +7,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -20,6 +22,8 @@ import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.JointImpl;
 import com.gemserk.tools.animationeditor.core.JointUtils;
 import com.gemserk.tools.animationeditor.core.Skeleton;
+import com.gemserk.tools.animationeditor.core.Skin;
+import com.gemserk.tools.animationeditor.core.Skin.SkinPatch;
 import com.gemserk.tools.animationeditor.core.tree.AnimationEditor;
 import com.gemserk.tools.animationeditor.core.tree.SkeletonEditor;
 
@@ -78,16 +82,16 @@ public class EditorLibgdxApplicationListener extends Game {
 	class PlayingAnimationState implements EditorState {
 
 		private TimelineAnimation timelineAnimation;
-		private Skeleton animatedSkeleton;
+		private Skeleton skeleton;
 
 		public PlayingAnimationState() {
 			Animation currentAnimation = animationEditor.getCurrentAnimation();
 
 			ArrayList<AnimationKeyFrame> keyFrames = currentAnimation.getKeyFrames();
 
-			animatedSkeleton = JointUtils.cloneSkeleton(skeletonEditor.getSkeleton());
+			skeleton = skeletonEditor.getSkeleton();
 
-			timelineAnimation = new TimelineAnimation(JointUtils.getTimeline(animatedSkeleton.getRoot(), keyFrames), (float) keyFrames.size() - 1);
+			timelineAnimation = new TimelineAnimation(JointUtils.getTimeline(skeleton.getRoot(), keyFrames), (float) keyFrames.size() - 1);
 			timelineAnimation.setSpeed(1f);
 			timelineAnimation.setDelay(0f);
 			timelineAnimation.start(0);
@@ -107,7 +111,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		@Override
 		public void render() {
-			renderSkeleton(animatedSkeleton);
+			renderSkeleton(skeleton);
 		}
 
 	}
@@ -231,6 +235,7 @@ public class EditorLibgdxApplicationListener extends Game {
 	}
 
 	EditorState currentState;
+	Skin skin;
 
 	@Override
 	public void create() {
@@ -261,6 +266,10 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		skeletonEditor.setSkeleton(new Skeleton(root));
 		skeletonEditor.select(root);
+		
+		skin = new Skin();
+		skin.addPatch(root, new Sprite(new Texture(Gdx.files.internal("data/island01.png"))));
+		
 	}
 
 	@Override
@@ -284,11 +293,21 @@ public class EditorLibgdxApplicationListener extends Game {
 		nearNode = skeletonEditor.getNearestNode(x, y);
 
 		currentState.update();
+		
+		skin.update();
 	}
 
 	private void realRender() {
 		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
 		currentState.render();
+		
+		spriteBatch.begin();
+		for (int i = 0; i < skin.patchesCount(); i++) {
+			SkinPatch patch = skin.getPatch(i);
+			patch.getSprite().draw(spriteBatch);
+		}
+		spriteBatch.end();
+		
 	}
 	
 	private void renderSkeleton(Skeleton skeleton) {
