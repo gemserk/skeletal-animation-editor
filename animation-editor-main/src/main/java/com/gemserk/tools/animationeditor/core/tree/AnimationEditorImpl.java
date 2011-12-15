@@ -1,7 +1,10 @@
 package com.gemserk.tools.animationeditor.core.tree;
 
+import java.util.ArrayList;
+
 import com.gemserk.tools.animationeditor.core.Animation;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
+import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.JointUtils;
 import com.gemserk.tools.animationeditor.core.Skeleton;
 
@@ -22,11 +25,13 @@ public class AnimationEditorImpl implements AnimationEditor {
 	@Override
 	public AnimationKeyFrame addKeyFrame() {
 		String name = "keyFrame" + index++;
-		AnimationKeyFrame keyFrame = new AnimationKeyFrame(name, new Skeleton(JointUtils.cloneTree(skeletonEditor.getRoot())), duration);
+		AnimationKeyFrame keyFrame = new AnimationKeyFrame(name, JointUtils.cloneSkeleton(skeletonEditor.getSkeleton()), duration);
 		currentAnimation.getKeyFrames().add(keyFrame);
 		duration += 1f;
 
-		skeletonEditor.setCurrentKeyFrame(keyFrame);
+		// copy current skeleton values to keyframe.
+
+		// skeletonEditor.setCurrentKeyFrame(keyFrame);
 
 		return keyFrame;
 	}
@@ -34,8 +39,25 @@ public class AnimationEditorImpl implements AnimationEditor {
 	@Override
 	public void selectKeyFrame(AnimationKeyFrame keyFrame) {
 		selectedKeyFrame = keyFrame;
-		skeletonEditor.setCurrentKeyFrame(keyFrame);
-		skeletonEditor.select(keyFrame.getSkeleton().getRoot());
+
+		// copy current keyframe values to skeleton.
+
+		Skeleton skeleton = skeletonEditor.getSkeleton();
+		ArrayList<Joint> joints = JointUtils.getArrayList(skeleton.getRoot());
+
+		Skeleton keyFrameSkeleton = keyFrame.getSkeleton();
+
+		for (int i = 0; i < joints.size(); i++) {
+			Joint joint = joints.get(i);
+			Joint keyFrameJointValue = keyFrameSkeleton.getRoot().find(joint.getId());
+			if (keyFrameJointValue == null)
+				continue;
+			joint.setLocalPosition(keyFrameJointValue.getLocalX(), keyFrameJointValue.getLocalY());
+			joint.setLocalAngle(keyFrameJointValue.getLocalAngle());
+		}
+
+		// skeletonEditor.setCurrentKeyFrame(keyFrame);
+		// skeletonEditor.select(keyFrameSkeleton.getRoot());
 	}
 
 	@Override

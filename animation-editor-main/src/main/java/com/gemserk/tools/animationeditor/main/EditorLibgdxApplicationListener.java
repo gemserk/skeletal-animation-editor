@@ -77,17 +77,17 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	class PlayingAnimationState implements EditorState {
 
-		private Joint root;
 		private TimelineAnimation timelineAnimation;
+		private Skeleton animatedSkeleton;
 
 		public PlayingAnimationState() {
 			Animation currentAnimation = animationEditor.getCurrentAnimation();
 
 			ArrayList<AnimationKeyFrame> keyFrames = currentAnimation.getKeyFrames();
 
-			root = JointUtils.cloneTree(skeletonEditor.getRoot());
+			animatedSkeleton = JointUtils.cloneSkeleton(skeletonEditor.getSkeleton());
 
-			timelineAnimation = new TimelineAnimation(JointUtils.getTimeline(root, keyFrames), (float) keyFrames.size() - 1);
+			timelineAnimation = new TimelineAnimation(JointUtils.getTimeline(animatedSkeleton.getRoot(), keyFrames), (float) keyFrames.size() - 1);
 			timelineAnimation.setSpeed(1f);
 			timelineAnimation.setDelay(0f);
 			timelineAnimation.start(0);
@@ -107,7 +107,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		@Override
 		public void render() {
-			renderNodeTree(root);
+			renderSkeleton(animatedSkeleton);
 		}
 
 	}
@@ -130,7 +130,7 @@ public class EditorLibgdxApplicationListener extends Game {
 				skeletonEditor.select(nearNode);
 
 			if (inputMonitor.getButton(Actions.DeleteNodeButton).isReleased()) {
-				if (!skeletonEditor.isSelectedNode(skeletonEditor.getRoot())) {
+				if (!skeletonEditor.isSelectedNode(skeletonEditor.getSkeleton().getRoot())) {
 					if (skeletonEditor.getSelectedNode() != null)
 						skeletonEditor.remove(skeletonEditor.getSelectedNode());
 				}
@@ -160,7 +160,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		@Override
 		public void render() {
-			renderNodeTree(skeletonEditor.getRoot());
+			renderSkeleton(skeletonEditor.getSkeleton());
 		}
 
 	}
@@ -193,7 +193,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		@Override
 		public void render() {
-			renderNodeTree(skeletonEditor.getRoot());
+			renderSkeleton(skeletonEditor.getSkeleton());
 		}
 
 	}
@@ -220,15 +220,12 @@ public class EditorLibgdxApplicationListener extends Game {
 			float rotation = (float) (currentY - y) * rotationSpeed;
 			skeletonEditor.rotateSelected(rotation);
 
-			// float currentAngle = selectedNode.getAngle();
-			// selectedNode.setAngle(currentAngle + rotation);
-
 			currentY = y;
 		}
 
 		@Override
 		public void render() {
-			renderNodeTree(skeletonEditor.getRoot());
+			renderSkeleton(skeletonEditor.getSkeleton());
 		}
 
 	}
@@ -241,15 +238,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		Gdx.graphics.getGL10().glClearColor(0f, 0f, 0f, 1f);
 
-		Joint root = new JointImpl("root");
-		root.setPosition(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f);
-
-		// selectedNode = root;
-
 		currentState = new NormalEditorState();
-
-		// nodes = new ArrayList<Node>();
-		// nodes.add(root);
 
 		spriteBatch = new SpriteBatch();
 
@@ -264,12 +253,14 @@ public class EditorLibgdxApplicationListener extends Game {
 				monitorKey(Actions.RotateButton, Keys.CONTROL_LEFT);
 			}
 		};
+		
+		Joint root = new JointImpl("root");
+		
+		root.setPosition(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f);
+		root.setAngle(0f);
 
-		skeletonEditor.setCurrentKeyFrame(new AnimationKeyFrame("keyFrame0", new Skeleton(root), 0f));
+		skeletonEditor.setSkeleton(new Skeleton(root));
 		skeletonEditor.select(root);
-
-		// treeObserver.update(root);
-		// skeletonEditor.add(root);
 	}
 
 	@Override
@@ -297,10 +288,11 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	private void realRender() {
 		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
-
-		// renderNodeTree(treeEditor.getRoot());
-
 		currentState.render();
+	}
+	
+	private void renderSkeleton(Skeleton skeleton) {
+		renderNodeTree(skeleton.getRoot());
 	}
 
 	private void renderNodeTree(Joint joint) {
@@ -334,13 +326,5 @@ public class EditorLibgdxApplicationListener extends Game {
 		ImmediateModeRendererUtils.fillRectangle(joint.getX() - nodeSize, joint.getY() - nodeSize, joint.getX() + nodeSize, joint.getY() + nodeSize, //
 				Colors.nodeColor);
 	}
-
-	// private Color getColor(Node node) {
-	// if (treeEditor.isSelectedNode(node))
-	// return Colors.selectedNodeColor;
-	// // if (node == nearNode)
-	// // return Colors.nearNodeColor;
-	// return Colors.nodeColor;
-	// }
 
 }
