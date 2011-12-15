@@ -31,7 +31,7 @@
  inkscape:cx="7.24506"
  inkscape:cy="27.7726"
  inkscape:document-units="px"
- inkscape:current-layer="layer1"
+ inkscape:current-layer="layer5"
  showgrid="false"
  inkscape:window-width="1440"
  inkscape:window-height="849"
@@ -55,7 +55,7 @@
  inkscape:groupmode="layer"
  id="layer1"
  transform="translate(0,-1004.36)"
- style="display:inline">
+ style="display:none">
 <g
  style="display:inline"
  id="g3050"
@@ -121,8 +121,8 @@
 <g
  inkscape:groupmode="layer"
  id="layer5"
- inkscape:label="store"
- style="display:none">
+ inkscape:label="save"
+ style="display:inline">
 <path
  style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
  d="M 0.6036,2.82984 2.00288,45.9477 46.5661,45.9479 47.5901,3.65153 z"

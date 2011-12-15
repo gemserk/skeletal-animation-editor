@@ -8,6 +8,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -158,6 +159,10 @@ public class EditorLibgdxApplicationListener extends Game {
 				newNode.setPosition(x, y);
 
 				skeletonEditor.select(newNode.getParent());
+				
+				Texture texture = new Texture(Gdx.files.internal("data/bone.png"));
+				texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+				skin.addPatch(newNode, new Sprite(texture));
 			}
 
 		}
@@ -267,8 +272,11 @@ public class EditorLibgdxApplicationListener extends Game {
 		skeletonEditor.setSkeleton(new Skeleton(root));
 		skeletonEditor.select(root);
 		
+		Texture texture = new Texture(Gdx.files.internal("data/bone.png"));
+		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+
 		skin = new Skin();
-		skin.addPatch(root, new Sprite(new Texture(Gdx.files.internal("data/island01.png"))));
+		skin.addPatch(root, new Sprite(texture));
 		
 	}
 
@@ -299,7 +307,6 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	private void realRender() {
 		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
-		currentState.render();
 		
 		spriteBatch.begin();
 		for (int i = 0; i < skin.patchesCount(); i++) {
@@ -308,6 +315,7 @@ public class EditorLibgdxApplicationListener extends Game {
 		}
 		spriteBatch.end();
 		
+		currentState.render();
 	}
 	
 	private void renderSkeleton(Skeleton skeleton) {
