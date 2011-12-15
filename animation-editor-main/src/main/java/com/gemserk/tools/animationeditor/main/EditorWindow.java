@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -236,7 +237,7 @@ public class EditorWindow {
 		panelStructure.add(splitPane_1, BorderLayout.CENTER);
 
 		JPanel panel_2 = new JPanel();
-		panel_2.setMinimumSize(new Dimension(10, 400));
+		panel_2.setMinimumSize(new Dimension(10, 300));
 		splitPane_1.setLeftComponent(panel_2);
 		panel_2.setLayout(new BorderLayout(0, 0));
 
@@ -281,5 +282,40 @@ public class EditorWindow {
 
 		JLabel lblNewLabel_2 = new JLabel("KeyFrames");
 		scrollPane_1.setColumnHeaderView(lblNewLabel_2);
+		
+		JPanel panel_7 = new JPanel();
+		panel_3.add(panel_7, BorderLayout.SOUTH);
+		
+		JButton buttonAddKeyFrame = new JButton("");
+		buttonAddKeyFrame.setIcon(new ImageIcon(TestWindow.class.getResource("/data/buttonadd.png")));
+		buttonAddKeyFrame.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AnimationKeyFrame keyFrame = editor.addKeyFrame();
+				editor.selectKeyFrame(keyFrame);
+			}
+		});
+		panel_7.add(buttonAddKeyFrame);
+		
+		JButton buttonRemoveKeyFrame = new JButton("");
+		buttonRemoveKeyFrame.setIcon(new ImageIcon(TestWindow.class.getResource("/data/buttonremove.png")));
+		buttonRemoveKeyFrame.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				editor.removeKeyFrame();
+			}
+		});
+		panel_7.add(buttonRemoveKeyFrame);
+		
+		JButton buttonStoreKeyFrame = new JButton("");
+		buttonStoreKeyFrame.setIcon(new ImageIcon(TestWindow.class.getResource("/data/buttonsave.png")));
+		buttonStoreKeyFrame.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				editor.updateKeyFrame();
+			}
+		});
+		panel_7.add(buttonStoreKeyFrame);
 	}
+	
 }

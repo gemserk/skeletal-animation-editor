@@ -6,10 +6,12 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.AbstractListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -145,11 +147,10 @@ public class TestWindow {
 		panel.add(panelTimeline, BorderLayout.SOUTH);
 		panelTimeline.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 		
-		JToggleButton tglbtnNewToggleButton = new JToggleButton("Play");
+		JToggleButton tglbtnNewToggleButton = new JToggleButton("");
+		tglbtnNewToggleButton.setSelectedIcon(new ImageIcon(TestWindow.class.getResource("/data/buttonpause.png")));
+		tglbtnNewToggleButton.setIcon(new ImageIcon(TestWindow.class.getResource("/data/buttonplay.png")));
 		panelTimeline.add(tglbtnNewToggleButton);
-		
-		JButton btnNewButton = new JButton("Stop");
-		panelTimeline.add(btnNewButton);
 		
 		JButton btnAddKeyframe = new JButton("Add keyframe");
 		btnAddKeyframe.addActionListener(new ActionListener() {
@@ -171,7 +172,7 @@ public class TestWindow {
 		panelStructure.add(splitPane_1, BorderLayout.CENTER);
 		
 		JPanel panel_2 = new JPanel();
-		panel_2.setMinimumSize(new Dimension(10, 400));
+		panel_2.setMinimumSize(new Dimension(10, 300));
 		splitPane_1.setLeftComponent(panel_2);
 		panel_2.setLayout(new BorderLayout(0, 0));
 		
@@ -275,7 +276,7 @@ public class TestWindow {
 		JList list = new JList();
 		panel_6.add(list);
 		list.setModel(new AbstractListModel() {
-			String[] values = new String[] {"pepe", "loco", "toto", "toto", "toto", "toto", "toto", "toto"};
+			String[] values = new String[] {"pepe", "loco", "toto", "toto"};
 			public int getSize() {
 				return values.length;
 			}
@@ -288,6 +289,23 @@ public class TestWindow {
 		
 		JLabel lblNewLabel_2 = new JLabel("KeyFrames");
 		scrollPane_1.setColumnHeaderView(lblNewLabel_2);
+		
+		JPanel panel_7 = new JPanel();
+		panel_3.add(panel_7, BorderLayout.SOUTH);
+		
+		JButton btnNewButton_1 = new JButton("");
+		btnNewButton_1.setFont(new Font("DejaVu Sans", Font.PLAIN, 10));
+		btnNewButton_1.setIconTextGap(0);
+		btnNewButton_1.setIcon(new ImageIcon(TestWindow.class.getResource("/data/buttonadd.png")));
+		panel_7.add(btnNewButton_1);
+		
+		JButton btnNewButton_2 = new JButton("");
+		btnNewButton_2.setIcon(new ImageIcon(TestWindow.class.getResource("/data/buttonremove.png")));
+		panel_7.add(btnNewButton_2);
+		
+		JButton btnStoreKeyFrame = new JButton("");
+		btnStoreKeyFrame.setIcon(new ImageIcon(TestWindow.class.getResource("/data/buttonsave.png")));
+		panel_7.add(btnStoreKeyFrame);
 
 	}
 
