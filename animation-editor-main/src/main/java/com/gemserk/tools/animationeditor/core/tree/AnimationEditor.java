@@ -11,6 +11,11 @@ public interface AnimationEditor {
 	
 	void selectKeyFrame(AnimationKeyFrame keyFrame);
 	
+	/**
+	 * Updates the current key frame with the current skeleton values.
+	 */
+	void updateKeyFrame();
+	
 	void removeKeyFrame();
 	
 	boolean isPlayingAnimation();

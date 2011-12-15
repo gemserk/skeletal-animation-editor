@@ -37,6 +37,15 @@ public class AnimationEditorImpl implements AnimationEditor {
 	}
 
 	@Override
+	public void updateKeyFrame() {
+		if (selectedKeyFrame == null)
+			return;
+		// throw new IllegalStateException("cant store current skeleton to no keyframe");
+
+		selectedKeyFrame.setSkeleton(JointUtils.cloneSkeleton(skeletonEditor.getSkeleton()));
+	}
+
+	@Override
 	public void selectKeyFrame(AnimationKeyFrame keyFrame) {
 		selectedKeyFrame = keyFrame;
 
@@ -56,8 +65,6 @@ public class AnimationEditorImpl implements AnimationEditor {
 			joint.setLocalAngle(keyFrameJointValue.getLocalAngle());
 		}
 
-		// skeletonEditor.setCurrentKeyFrame(keyFrame);
-		// skeletonEditor.select(keyFrameSkeleton.getRoot());
 	}
 
 	@Override

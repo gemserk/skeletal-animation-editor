@@ -41,7 +41,7 @@ public class EditorWindow {
 
 	private JFrame frmGemserksAnimationEditor;
 	private JList keyFramesList;
-	private EditorInterceptorImpl treeEditor;
+	private EditorInterceptorImpl editor;
 
 	/**
 	 * Launch the application.
@@ -193,25 +193,33 @@ public class EditorWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (tglbtnNewToggleButton.isSelected())
-					treeEditor.playAnimation();
+					editor.playAnimation();
 				else
-					treeEditor.stopAnimation();
+					editor.stopAnimation();
 			}
 		});
 
 		JButton btnAddKeyframe = new JButton("Add");
 		btnAddKeyframe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				AnimationKeyFrame keyFrame = treeEditor.addKeyFrame();
-				treeEditor.selectKeyFrame(keyFrame);
+				AnimationKeyFrame keyFrame = editor.addKeyFrame();
+				editor.selectKeyFrame(keyFrame);
 			}
 		});
 		panelTimeline.add(btnAddKeyframe);
+		
+		JButton btnStoreKeyframe = new JButton("Store");
+		btnStoreKeyframe.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				editor.updateKeyFrame();
+			}
+		});
+		panelTimeline.add(btnStoreKeyframe);
 
 		JButton btnRemoveKeyframe = new JButton("Remove");
 		btnRemoveKeyframe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				treeEditor.removeKeyFrame();
+				editor.removeKeyFrame();
 			}
 		});
 		panelTimeline.add(btnRemoveKeyframe);
@@ -251,11 +259,11 @@ public class EditorWindow {
 		keyFramesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		keyFramesList.setBackground(Color.LIGHT_GRAY);
 
-		treeEditor = new EditorInterceptorImpl( //
+		editor = new EditorInterceptorImpl( //
 				new SkeletonEditorImpl(), tree, keyFramesList);
 
-		editorApplication.setTreeEditor(treeEditor);
-		editorApplication.setAnimationEditor(treeEditor);
+		editorApplication.setTreeEditor(editor);
+		editorApplication.setAnimationEditor(editor);
 
 		JPanel panel_3 = new JPanel();
 		splitPane_1.setRightComponent(panel_3);
