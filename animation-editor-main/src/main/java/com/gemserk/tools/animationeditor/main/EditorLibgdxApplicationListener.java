@@ -252,8 +252,6 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			@Override
 			public void run() {
-				Texture.setEnforcePotImages(false);
-
 				Texture texture = new Texture(Gdx.files.absolute(file.getAbsolutePath()));
 				texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
@@ -273,6 +271,8 @@ public class EditorLibgdxApplicationListener extends Game {
 		Gdx.graphics.setVSync(true);
 
 		Gdx.graphics.getGL10().glClearColor(0.25f, 0.25f, 0.25f, 1f);
+		
+		Texture.setEnforcePotImages(false);
 
 		currentState = new NormalEditorState();
 
