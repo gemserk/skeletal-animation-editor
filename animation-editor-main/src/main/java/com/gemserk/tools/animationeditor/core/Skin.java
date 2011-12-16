@@ -33,7 +33,6 @@ public class Skin {
 		}
 
 		void update() {
-
 			float angle = this.angle + joint.getAngle();
 
 			sprite.setRotation(angle);
@@ -51,9 +50,29 @@ public class Skin {
 			y += joint.getY();
 
 			sprite.setPosition(x, y);
-
 		}
 
+		public void project(Vector2 position) {
+			float centerX = sprite.getX() + sprite.getOriginX();
+			float centerY = sprite.getY() + sprite.getOriginY();
+
+			position.add(-centerX, -centerY);
+
+			position.rotate(-sprite.getRotation());
+
+			float scaleX = 1f;
+			float scaleY = 1f;
+
+			position.x *= scaleX;
+			position.y *= scaleY;
+
+			position.add( //
+					sprite.getWidth() * 0.5f, //
+					-sprite.getHeight() * 0.5f //
+			);
+
+			position.y *= -1f;
+		}
 	}
 
 	Map<String, SkinPatch> patches;

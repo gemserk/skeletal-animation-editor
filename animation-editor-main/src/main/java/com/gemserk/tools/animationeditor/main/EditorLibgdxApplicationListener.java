@@ -269,11 +269,18 @@ public class EditorLibgdxApplicationListener extends Game {
 	class ModifyingSkinPatchState implements EditorState {
 
 		Vector2 position = new Vector2();
+		Vector2 positionModifier = new Vector2();
+		
+		float previousY;
+
 		float rotationSpeed = 1f;
 
 		public ModifyingSkinPatchState() {
 			position.x = Gdx.input.getX();
 			position.y = Gdx.graphics.getHeight() - Gdx.input.getY();
+			
+			previousY = Gdx.graphics.getHeight() - Gdx.input.getY();
+			
 			logger.debug("Current state: modifying skin patch");
 		}
 
@@ -285,27 +292,41 @@ public class EditorLibgdxApplicationListener extends Game {
 				return;
 			}
 
+			SkinPatch skinPatch = skin.getPatch(skeletonEditor.getSelectedNode());
+
 			if (inputMonitor.getButton(Actions.RotateButton).isHolded()) {
-				SkinPatch skinPatch = skin.getPatch(skeletonEditor.getSelectedNode());
 				int currentY = Gdx.graphics.getHeight() - Gdx.input.getY();
-				
-				float rotation = (float) (currentY - position.y) * rotationSpeed;
+				float rotation = (float) (currentY - previousY) * rotationSpeed;
 				skinPatch.angle += rotation;
 			} else if (inputMonitor.getButton(Actions.LeftMouseButton).isHolded()) {
 
 				// move center
 
-				SkinPatch skinPatch = skin.getPatch(skeletonEditor.getSelectedNode());
+				positionModifier.x = Gdx.input.getX();
+				positionModifier.y = Gdx.graphics.getHeight() - Gdx.input.getY();
 
-				int currentX = Gdx.input.getX();
-				int currentY = Gdx.graphics.getHeight() - Gdx.input.getY();
+				skinPatch.project(positionModifier);
 
-				skinPatch.center.x -= (currentX - position.x) / skinPatch.getSprite().getWidth();
-				skinPatch.center.y -= (currentY - position.y) / skinPatch.getSprite().getHeight();
+				positionModifier.sub(position);
+
+				positionModifier.x /= skinPatch.getSprite().getWidth();
+				positionModifier.y /= skinPatch.getSprite().getHeight();
+
+				// centerModification.set((currentX - position.x) / skinPatch.getSprite().getWidth(), //
+				// (currentY - position.y) / skinPatch.getSprite().getHeight());
+
+//				centerModification.rotate(-skinPatch.angle);
+
+				skinPatch.center.x -= positionModifier.x;
+				skinPatch.center.y += positionModifier.y;
 			}
 
 			position.x = Gdx.input.getX();
 			position.y = Gdx.graphics.getHeight() - Gdx.input.getY();
+			
+			previousY = Gdx.graphics.getHeight() - Gdx.input.getY();
+
+			skinPatch.project(position);
 		}
 
 		@Override
