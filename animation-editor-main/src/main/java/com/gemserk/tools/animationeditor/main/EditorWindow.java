@@ -10,9 +10,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -28,6 +30,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.border.EtchedBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
@@ -117,6 +120,30 @@ public class EditorWindow {
 
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
+
+		JMenuItem mntmImport = new JMenuItem("Import");
+		mntmImport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Images only", "png", "jpg", "gif");
+
+				chooser.setFileFilter(filter);
+				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				chooser.setMultiSelectionEnabled(false);
+
+				int returnVal = chooser.showOpenDialog(frmGemserksAnimationEditor);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = chooser.getSelectedFile();
+					
+					editorApplication.setCurrentSkin(selectedFile);
+					// File[] selectedFiles = chooser.getSelectedFiles();
+					// for (int i = 0; i < selectedFiles.length; i++) {
+					// System.out.println("file " + i + " : " + selectedFiles[i].getName());
+					// }
+				}
+			}
+		});
+		mnFile.add(mntmImport);
 
 		JMenuItem mntmExit = new JMenuItem("Exit");
 		mnFile.add(mntmExit);
@@ -258,10 +285,10 @@ public class EditorWindow {
 
 		JLabel lblNewLabel_2 = new JLabel("KeyFrames");
 		scrollPane_1.setColumnHeaderView(lblNewLabel_2);
-		
+
 		JPanel panel_7 = new JPanel();
 		panel_3.add(panel_7, BorderLayout.SOUTH);
-		
+
 		JButton buttonAddKeyFrame = new JButton("");
 		buttonAddKeyFrame.setIcon(new ImageIcon(TestWindow.class.getResource("/data/buttonadd.png")));
 		buttonAddKeyFrame.addActionListener(new ActionListener() {
@@ -272,7 +299,7 @@ public class EditorWindow {
 			}
 		});
 		panel_7.add(buttonAddKeyFrame);
-		
+
 		JButton buttonRemoveKeyFrame = new JButton("");
 		buttonRemoveKeyFrame.setIcon(new ImageIcon(TestWindow.class.getResource("/data/buttonremove.png")));
 		buttonRemoveKeyFrame.addActionListener(new ActionListener() {
@@ -282,7 +309,7 @@ public class EditorWindow {
 			}
 		});
 		panel_7.add(buttonRemoveKeyFrame);
-		
+
 		JButton buttonStoreKeyFrame = new JButton("");
 		buttonStoreKeyFrame.setIcon(new ImageIcon(TestWindow.class.getResource("/data/buttonsave.png")));
 		buttonStoreKeyFrame.addActionListener(new ActionListener() {
@@ -293,5 +320,5 @@ public class EditorWindow {
 		});
 		panel_7.add(buttonStoreKeyFrame);
 	}
-	
+
 }

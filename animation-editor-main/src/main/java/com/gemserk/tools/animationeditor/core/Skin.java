@@ -45,6 +45,12 @@ public class Skin {
 	
 	public void addPatch(Joint joint, Sprite sprite) {
 		SkinPatch patch = new SkinPatch(joint, sprite);
+		
+		if (patches.containsKey(joint.getId())) {
+			SkinPatch previousPatch = patches.get(joint.getId());
+			patchList.remove(previousPatch);
+		}
+		
 		patches.put(joint.getId(), patch);
 		patchList.add(patch);
 	}
@@ -68,6 +74,10 @@ public class Skin {
 	
 	public SkinPatch getPatch(int index) {
 		return patchList.get(index);
+	}
+	
+	public SkinPatch getPatch(String jointId) {
+		return patches.get(jointId);
 	}
 	
 }

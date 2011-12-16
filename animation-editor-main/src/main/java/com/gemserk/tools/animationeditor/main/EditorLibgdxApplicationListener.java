@@ -1,5 +1,6 @@
 package com.gemserk.tools.animationeditor.main;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Game;
@@ -136,8 +137,11 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			if (inputMonitor.getButton(Actions.DeleteNodeButton).isReleased()) {
 				if (!skeletonEditor.isSelectedNode(skeletonEditor.getSkeleton().getRoot())) {
-					if (skeletonEditor.getSelectedNode() != null)
-						skeletonEditor.remove(skeletonEditor.getSelectedNode());
+					Joint selectedJoint = skeletonEditor.getSelectedNode();
+					if (selectedJoint != null) {
+						skeletonEditor.remove(selectedJoint);
+						skin.removePatch(selectedJoint);
+					}
 				}
 			}
 
@@ -159,7 +163,7 @@ public class EditorLibgdxApplicationListener extends Game {
 				newNode.setPosition(x, y);
 
 				skeletonEditor.select(newNode.getParent());
-				
+
 				Texture texture = new Texture(Gdx.files.internal("data/bone.png"));
 				texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 				skin.addPatch(newNode, new Sprite(texture));
@@ -239,8 +243,80 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	}
 
+	// class SettingSkinState implements EditorState {
+	//
+	// File file;
+	//
+	// public SettingSkinState(File file) {
+	// this.file = file;
+	// }
+	//
+	// @Override
+	// public void update() {
+	//
+	// Texture texture = new Texture(Gdx.files.external(file.getAbsolutePath()));
+	// texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+	//
+	// Joint selectedNode = skeletonEditor.getSelectedNode();
+	//
+	// if (selectedNode == null)
+	// return;
+	//
+	// SkinPatch patch = skin.getPatch(selectedNode.getId());
+	// patch.getSprite().setTexture(texture);
+	//
+	// }
+	//
+	// @Override
+	// public void render() {
+	// renderSkeleton(skeletonEditor.getSkeleton());
+	// }
+	//
+	// }
+
 	EditorState currentState;
 	Skin skin;
+
+	// File newSkinFile = null;
+
+	public void setCurrentSkin(final File file) {
+
+		// synchronized (newSkinFile) {
+		// newSkinFile = file;
+		// }
+
+		// Texture texture = new Texture(Gdx.files.external(file.getAbsolutePath()));
+		// texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		//
+		// Joint selectedNode = skeletonEditor.getSelectedNode();
+		//
+		// if (selectedNode == null)
+		// return;
+		//
+		// SkinPatch patch = skin.getPatch(selectedNode.getId());
+		// patch.getSprite().setTexture(texture);
+
+		Gdx.app.postRunnable(new Runnable() {
+
+			@Override
+			public void run() {
+				Texture.setEnforcePotImages(false);
+
+				Texture texture = new Texture(Gdx.files.absolute(file.getAbsolutePath()));
+				texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+
+				Joint selectedNode = skeletonEditor.getSelectedNode();
+
+				if (selectedNode == null)
+					return;
+
+				skin.addPatch(selectedNode, new Sprite(texture));
+				// SkinPatch patch = skin.getPatch(selectedNode.getId());
+				// patch.getSprite().setTexture(texture);
+			}
+		});
+
+	}
 
 	@Override
 	public void create() {
@@ -263,21 +339,21 @@ public class EditorLibgdxApplicationListener extends Game {
 				monitorKey(Actions.RotateButton, Keys.CONTROL_LEFT);
 			}
 		};
-		
+
 		Joint root = new JointImpl("root");
-		
+
 		root.setPosition(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f);
 		root.setAngle(0f);
 
 		skeletonEditor.setSkeleton(new Skeleton(root));
 		skeletonEditor.select(root);
-		
+
 		Texture texture = new Texture(Gdx.files.internal("data/bone.png"));
 		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
 		skin = new Skin();
 		skin.addPatch(root, new Sprite(texture));
-		
+
 	}
 
 	@Override
@@ -301,23 +377,23 @@ public class EditorLibgdxApplicationListener extends Game {
 		nearNode = skeletonEditor.getNearestNode(x, y);
 
 		currentState.update();
-		
+
 		skin.update();
 	}
 
 	private void realRender() {
 		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
-		
+
 		spriteBatch.begin();
 		for (int i = 0; i < skin.patchesCount(); i++) {
 			SkinPatch patch = skin.getPatch(i);
 			patch.getSprite().draw(spriteBatch);
 		}
 		spriteBatch.end();
-		
+
 		currentState.render();
 	}
-	
+
 	private void renderSkeleton(Skeleton skeleton) {
 		renderNodeTree(skeleton.getRoot());
 	}
