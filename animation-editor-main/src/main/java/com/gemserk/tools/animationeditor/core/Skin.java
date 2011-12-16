@@ -56,8 +56,12 @@ public class Skin {
 	}
 	
 	public void removePatch(Joint joint) {
-		SkinPatch patch = patches.remove(joint.getId());
-		patchList.remove(patch);
+		ArrayList<Joint> joints = JointUtils.toArrayList(joint);
+		for (int i = 0; i < joints.size(); i++) {
+			Joint j = joints.get(i);
+			SkinPatch patch = patches.remove(j.getId());
+			patchList.remove(patch);
+		}
 	}
 	
 	public void update() {

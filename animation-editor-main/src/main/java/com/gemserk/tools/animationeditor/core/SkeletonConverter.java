@@ -14,7 +14,7 @@ public class SkeletonConverter implements TypeConverter<Skeleton> {
 	}
 
 	public Skeleton copyToObject(Skeleton skeleton, float[] x) {
-		ArrayList<Joint> joints = JointUtils.getArrayList(skeleton.getRoot());
+		ArrayList<Joint> joints = JointUtils.toArrayList(skeleton.getRoot());
 		int nodeIndex = 0;
 		for (int i = 0; i < x.length; i += 3) {
 			Joint n = joints.get(nodeIndex);
@@ -30,7 +30,7 @@ public class SkeletonConverter implements TypeConverter<Skeleton> {
 
 	@Override
 	public float[] copyFromObject(Skeleton skeleton, float[] x) {
-		ArrayList<Joint> joints = JointUtils.getArrayList(skeleton.getRoot());
+		ArrayList<Joint> joints = JointUtils.toArrayList(skeleton.getRoot());
 		if (x == null)
 			x = new float[joints.size() * 3];
 		int j = 0;

@@ -52,7 +52,7 @@ public class AnimationEditorImpl implements AnimationEditor {
 		// copy current keyframe values to skeleton.
 
 		Skeleton skeleton = skeletonEditor.getSkeleton();
-		ArrayList<Joint> joints = JointUtils.getArrayList(skeleton.getRoot());
+		ArrayList<Joint> joints = JointUtils.toArrayList(skeleton.getRoot());
 
 		Skeleton keyFrameSkeleton = keyFrame.getSkeleton();
 

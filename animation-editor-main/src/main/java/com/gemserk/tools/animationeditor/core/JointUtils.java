@@ -9,7 +9,13 @@ import com.gemserk.animation4j.timeline.TimelineValueMutableObjectImpl;
 
 public class JointUtils {
 
-	public static ArrayList<Joint> getArrayList(Joint joint) {
+	/**
+	 * Returns an array list with the specified Joint and its children.
+	 * 
+	 * @param joint
+	 *            The Joint from where to start the collection.
+	 */
+	public static ArrayList<Joint> toArrayList(Joint joint) {
 		ArrayList<Joint> joints = new ArrayList<Joint>();
 		addTreeToList(joints, joint);
 		return joints;
@@ -40,7 +46,7 @@ public class JointUtils {
 	}
 
 	public static Timeline getTimeline(Joint root, ArrayList<AnimationKeyFrame> frames) {
-		ArrayList<Joint> joints = JointUtils.getArrayList(root);
+		ArrayList<Joint> joints = JointUtils.toArrayList(root);
 
 		ArrayList<TimelineValue> timelineValues = new ArrayList<TimelineValue>();
 
