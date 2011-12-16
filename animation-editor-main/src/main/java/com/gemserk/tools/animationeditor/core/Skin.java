@@ -18,7 +18,8 @@ public class Skin {
 		Sprite sprite;
 
 		Spatial spatial;
-		Vector2 center;
+
+		public Vector2 center;
 
 		public Joint getJoint() {
 			return joint;
@@ -43,16 +44,27 @@ public class Skin {
 
 			float angle = spatial.getAngle() + joint.getAngle();
 			sprite.setRotation(angle);
-			
-//			float newCenterX = (spatial.getX() - joint.getX() + spatial.getWidth()) / spatial.getWidth();
-//			float newCenterY = (spatial.getY() - joint.getY() + spatial.getHeight()) / spatial.getHeight();
-//			
-//			center.x = -newCenterX;
-//			center.y = newCenterY;
-			
-//			System.out.println(newCenterX);
-//			System.out.println(newCenterY);
-			
+
+			// float newCenterX = (spatial.getX() - joint.getX() + spatial.getWidth()) / spatial.getWidth();
+			// float newCenterY = (spatial.getY() - joint.getY() + spatial.getHeight()) / spatial.getHeight();
+			//
+			// center.x = -newCenterX;
+			// center.y = newCenterY;
+
+			// System.out.println(newCenterX);
+			// System.out.println(newCenterY);
+
+			// center.x = joint.getX() - spatial.getX() / spatial.getWidth();
+			// center.y = joint.getY() - spatial.getY() / spatial.getHeight();
+
+			// center.x = spatial.getX() / spatial.getWidth();
+			// center.y = spatial.getY() / spatial.getHeight();
+
+			// center.y = spatial.getY() / spatial.getHeight();
+			// center.y = 0f;
+
+			// sprite.setOrigin(center.x, center.y);
+
 			float ox = spatial.getWidth() * center.x;
 			float oy = spatial.getHeight() * center.y;
 

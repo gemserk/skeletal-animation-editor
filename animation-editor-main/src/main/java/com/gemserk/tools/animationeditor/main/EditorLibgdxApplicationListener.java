@@ -34,7 +34,7 @@ import com.gemserk.tools.animationeditor.core.tree.AnimationEditor;
 import com.gemserk.tools.animationeditor.core.tree.SkeletonEditor;
 
 public class EditorLibgdxApplicationListener extends Game {
-	
+
 	protected static final Logger logger = LoggerFactory.getLogger(EditorLibgdxApplicationListener.class);
 
 	private static class Colors {
@@ -43,7 +43,7 @@ public class EditorLibgdxApplicationListener extends Game {
 		public static final Color nodeColor = new Color(1f, 1f, 1f, 1f);
 		public static final Color selectedNodeColor = new Color(0f, 0f, 1f, 1f);
 		public static final Color nearNodeColor = new Color(1f, 0f, 0f, 1f);
-		
+
 		public static final Color spatialColor = new Color(0f, 1f, 0f, 1f);
 
 	}
@@ -54,9 +54,11 @@ public class EditorLibgdxApplicationListener extends Game {
 		public static final String RightMouseButton = "rightMouseButton";
 		public static final String DeleteNodeButton = "deleteNodeButton";
 		public static final String RotateButton = "rotateButton";
-		
+
 		public static final String ModifySkinPatchButton = "modifySkinPatchButton";
 		public static final String CancelStateButton = "cancelStateButton";
+
+		public static final String SecondActionButton = "secondActionButton";
 
 	}
 
@@ -130,7 +132,7 @@ public class EditorLibgdxApplicationListener extends Game {
 	}
 
 	class NormalEditorState implements EditorState {
-		
+
 		public NormalEditorState() {
 			logger.debug("Current state: none");
 		}
@@ -154,7 +156,7 @@ public class EditorLibgdxApplicationListener extends Game {
 				currentState = new ModifyingSkinPatchState();
 				return;
 			}
-			
+
 			if (inputMonitor.getButton(Actions.DeleteNodeButton).isReleased()) {
 				if (!skeletonEditor.isSelectedNode(skeletonEditor.getSkeleton().getRoot())) {
 					Joint selectedJoint = skeletonEditor.getSelectedNode();
@@ -264,9 +266,9 @@ public class EditorLibgdxApplicationListener extends Game {
 		}
 
 	}
-	
+
 	class ModifyingSkinPatchState implements EditorState {
-		
+
 		Vector2 position = new Vector2();
 		float rotationSpeed = 1f;
 
@@ -278,34 +280,56 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		@Override
 		public void update() {
-			
+
 			if (inputMonitor.getButton(Actions.CancelStateButton).isReleased()) {
 				currentState = new NormalEditorState();
 				return;
 			}
-			
+
 			if (inputMonitor.getButton(Actions.RotateButton).isHolded()) {
 				SkinPatch skinPatch = skin.getPatch(skeletonEditor.getSelectedNode());
 				int currentY = Gdx.graphics.getHeight() - Gdx.input.getY();
-				
+
 				Spatial spatial = skinPatch.getSpatial();
 				float rotation = (float) (currentY - position.y) * rotationSpeed;
 				spatial.setAngle(spatial.getAngle() + rotation);
 			} else if (inputMonitor.getButton(Actions.LeftMouseButton).isHolded()) {
 
-				SkinPatch skinPatch = skin.getPatch(skeletonEditor.getSelectedNode());
+				if (inputMonitor.getButton(Actions.SecondActionButton).isHolded()) {
 
-				int currentX = Gdx.input.getX();
-				int currentY = Gdx.graphics.getHeight() - Gdx.input.getY();
-				
-				Spatial spatial = skinPatch.getSpatial();
-				
-				float newX = spatial.getX() + currentX - position.x;
-				float newY = spatial.getY() + currentY - position.y;
-				
-				spatial.setPosition(newX, newY);
+					// move center
+
+					SkinPatch skinPatch = skin.getPatch(skeletonEditor.getSelectedNode());
+
+					int currentX = Gdx.input.getX();
+					int currentY = Gdx.graphics.getHeight() - Gdx.input.getY();
+
+					Spatial spatial = skinPatch.getSpatial();
+
+					skinPatch.center.x += (currentX - position.x) / spatial.getWidth();
+					skinPatch.center.y += (currentY - position.y) / spatial.getHeight();
+
+					// spatial.setPosition(newX, newY);
+
+				} else {
+
+					// move spatial
+
+					SkinPatch skinPatch = skin.getPatch(skeletonEditor.getSelectedNode());
+
+					int currentX = Gdx.input.getX();
+					int currentY = Gdx.graphics.getHeight() - Gdx.input.getY();
+
+					Spatial spatial = skinPatch.getSpatial();
+
+					float newX = spatial.getX() + currentX - position.x;
+					float newY = spatial.getY() + currentY - position.y;
+
+					spatial.setPosition(newX, newY);
+
+				}
 			}
-			
+
 			position.x = Gdx.input.getX();
 			position.y = Gdx.graphics.getHeight() - Gdx.input.getY();
 		}
@@ -313,11 +337,15 @@ public class EditorLibgdxApplicationListener extends Game {
 		@Override
 		public void render() {
 			renderSkeleton(skeletonEditor.getSkeleton());
-			
-			SkinPatch skinPatch = skin.getPatch(skeletonEditor.getSelectedNode());
+
+			Joint selectedJoint = skeletonEditor.getSelectedNode();
+
+			SkinPatch skinPatch = skin.getPatch(selectedJoint);
 			Spatial spatial = skinPatch.getSpatial();
-			
-			renderPoint(spatial);
+
+			// renderPoint(spatial.getX() + selectedJoint.getX(), spatial.getY() + selectedJoint.getY());
+
+			renderPoint(spatial.getX() + selectedJoint.getX() + skinPatch.center.x * spatial.getWidth(), spatial.getY() + selectedJoint.getY() + skinPatch.center.y * spatial.getHeight());
 		}
 
 	}
@@ -350,7 +378,7 @@ public class EditorLibgdxApplicationListener extends Game {
 		Gdx.graphics.setVSync(true);
 
 		Gdx.graphics.getGL10().glClearColor(0.25f, 0.25f, 0.25f, 1f);
-		
+
 		Texture.setEnforcePotImages(false);
 
 		currentState = new NormalEditorState();
@@ -366,9 +394,11 @@ public class EditorLibgdxApplicationListener extends Game {
 				monitorKeys(Actions.DeleteNodeButton, Keys.DEL, Keys.BACKSPACE);
 
 				monitorKey(Actions.RotateButton, Keys.CONTROL_LEFT);
-				
+
 				monitorKey(Actions.ModifySkinPatchButton, Keys.R);
 				monitorKey(Actions.CancelStateButton, Keys.ESCAPE);
+
+				monitorKey(Actions.SecondActionButton, Keys.SHIFT_LEFT);
 			}
 		};
 
@@ -461,9 +491,9 @@ public class EditorLibgdxApplicationListener extends Game {
 		ImmediateModeRendererUtils.fillRectangle(joint.getX() - nodeSize, joint.getY() - nodeSize, joint.getX() + nodeSize, joint.getY() + nodeSize, //
 				Colors.nodeColor);
 	}
-	
-	private void renderPoint(Spatial spatial) {
-		ImmediateModeRendererUtils.fillRectangle(spatial.getX() - nodeSize, spatial.getY() - nodeSize, spatial.getX() + nodeSize, spatial.getY() + nodeSize, //
+
+	private void renderPoint(float x, float y) {
+		ImmediateModeRendererUtils.fillRectangle(x - nodeSize, y - nodeSize, x + nodeSize, y + nodeSize, //
 				Colors.spatialColor);
 	}
 
