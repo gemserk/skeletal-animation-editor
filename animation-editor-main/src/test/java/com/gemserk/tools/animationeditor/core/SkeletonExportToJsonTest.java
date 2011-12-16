@@ -1,64 +1,20 @@
 package com.gemserk.tools.animationeditor.core;
 
-import java.lang.reflect.Type;
-import java.util.ArrayList;
 
 import org.junit.Test;
 
+import com.gemserk.tools.animationeditor.json.JointDeserializer;
+import com.gemserk.tools.animationeditor.json.JointSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonDeserializationContext;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
-import com.google.gson.reflect.TypeToken;
 
 public class SkeletonExportToJsonTest {
-
-	static class JointDeserializer implements JsonDeserializer<Joint> {
-
-		Type childrenType = new TypeToken<ArrayList<Joint>>() {
-		}.getType();
-
-		@Override
-		public Joint deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-			JointImpl joint = new JointImpl();
-			JsonObject jsonObject = json.getAsJsonObject();
-			joint.setId(jsonObject.get("id").getAsString());
-			joint.setPosition(jsonObject.get("x").getAsFloat(), jsonObject.get("y").getAsFloat());
-			joint.setAngle(jsonObject.get("angle").getAsFloat());
-
-			ArrayList<Joint> children = context.deserialize(jsonObject.get("children").getAsJsonArray(), childrenType);
-
-			for (Joint child : children) 
-				child.setParent(joint);
-
-			return joint;
-		}
-
-	}
-
-	static class JointSerializer implements JsonSerializer<JointImpl> {
-		@Override
-		public JsonElement serialize(JointImpl joint, Type typeOfSrc, JsonSerializationContext context) {
-			JsonObject jsonObject = new JsonObject();
-			jsonObject.addProperty("id", joint.getId());
-			jsonObject.addProperty("x", joint.getX());
-			jsonObject.addProperty("y", joint.getY());
-			jsonObject.addProperty("angle", joint.getAngle());
-			jsonObject.add("children", context.serialize(joint.getChildren()));
-			return jsonObject;
-		}
-	}
 
 	@Test
 	public void exportSkeletonTest() {
 
 		Skeleton skeleton = new Skeleton();
-		skeleton.setRoot(new JointImpl("root", 50f, 75f, 10f));
+		skeleton.setRoot(new JointImpl("root", 50f, 75f, 0f));
 
 		JointImpl child1 = new JointImpl("toto1", 75f, 40f, 0f);
 		child1.setParent(skeleton.getRoot());
@@ -93,5 +49,10 @@ public class SkeletonExportToJsonTest {
 		System.out.println(joint.getY());
 		System.out.println(joint.getAngle());
 		System.out.println(joint.getChildren().size());
+		
+		System.out.println(joint.getLocalX());
+		System.out.println(joint.getLocalY());
+		System.out.println(joint.getLocalAngle());
+
 	}
 }
