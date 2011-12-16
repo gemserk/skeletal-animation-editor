@@ -144,6 +144,27 @@ public class EditorWindow {
 			}
 		});
 		mnFile.add(mntmImport);
+		
+		JMenuItem mntmSave= new JMenuItem("Save");
+		mntmSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Project files only", ".aprj");
+
+				chooser.setFileFilter(filter);
+				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				chooser.setMultiSelectionEnabled(false);
+
+				int returnVal = chooser.showSaveDialog(frmGemserksAnimationEditor);
+				
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = chooser.getSelectedFile();
+					System.out.println("save project to... " + selectedFile.getName());
+					// save 
+				}
+			}
+		});
+		mnFile.add(mntmSave);
 
 		JMenuItem mntmExit = new JMenuItem("Exit");
 		mnFile.add(mntmExit);
@@ -185,10 +206,13 @@ public class EditorWindow {
 		lblTitle.setVerticalAlignment(SwingConstants.TOP);
 		lblTitle.setToolTipText("Select image");
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
-
-		Canvas canvasImages = new Canvas();
-		panel_4.add(canvasImages);
-		canvasImages.setBackground(Color.LIGHT_GRAY);
+		
+		JScrollPane scrollPane_2 = new JScrollPane();
+		panel_4.add(scrollPane_2, BorderLayout.CENTER);
+		
+		JPanel panelImages = new JPanel();
+		panelImages.setBackground(Color.LIGHT_GRAY);
+		scrollPane_2.setViewportView(panelImages);
 
 		JPanel panel = new JPanel();
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));

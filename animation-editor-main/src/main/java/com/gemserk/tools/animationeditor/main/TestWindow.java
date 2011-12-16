@@ -76,36 +76,6 @@ public class TestWindow {
 		frmGemserksAnimationEditor.setBounds(100, 100, 800, 600);
 		frmGemserksAnimationEditor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-		JMenuBar menuBar = new JMenuBar();
-		frmGemserksAnimationEditor.setJMenuBar(menuBar);
-
-		JMenu mnFile = new JMenu("File");
-		menuBar.add(mnFile);
-
-		JMenuItem mntmImport = new JMenuItem("Import");
-		mntmImport.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JFileChooser chooser = new JFileChooser();
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("Only image files", "png");
-				
-				chooser.setFileFilter(filter);
-				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				chooser.setMultiSelectionEnabled(true);
-				
-				int returnVal = chooser.showOpenDialog(frmGemserksAnimationEditor);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					File[] selectedFiles = chooser.getSelectedFiles();
-					for (int i = 0; i < selectedFiles.length; i++) {
-						System.out.println("file " + i + " : " + selectedFiles[i].getName());
-					}
-				}
-			}
-		});
-		mnFile.add(mntmImport);
-
-		JMenuItem mntmExit = new JMenuItem("Exit");
-		mnFile.add(mntmExit);
-
 		JPanel panelTools = new JPanel();
 		panelTools.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		frmGemserksAnimationEditor.getContentPane().add(panelTools, BorderLayout.WEST);
@@ -143,10 +113,12 @@ public class TestWindow {
 		lblTitle.setVerticalAlignment(SwingConstants.TOP);
 		lblTitle.setToolTipText("Select image");
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
-
-		Canvas canvasImages = new Canvas();
-		panel_4.add(canvasImages);
-		canvasImages.setBackground(Color.LIGHT_GRAY);
+		
+		JScrollPane scrollPane_2 = new JScrollPane();
+		panel_4.add(scrollPane_2, BorderLayout.CENTER);
+		
+		JPanel panelImages = new JPanel();
+		scrollPane_2.setViewportView(panelImages);
 
 		JPanel panel = new JPanel();
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
@@ -331,6 +303,35 @@ public class TestWindow {
 		btnStoreKeyFrame.setIcon(new ImageIcon(TestWindow.class.getResource("/data/buttonsave.png")));
 		panel_7.add(btnStoreKeyFrame);
 
+		JMenuBar menuBar = new JMenuBar();
+		frmGemserksAnimationEditor.setJMenuBar(menuBar);
+		
+		JMenu mnFile = new JMenu("File");
+		menuBar.add(mnFile);
+
+		JMenuItem mntmImport = new JMenuItem("Import");
+		mntmImport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Only image files", "png");
+				
+				chooser.setFileFilter(filter);
+				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				chooser.setMultiSelectionEnabled(true);
+				
+				int returnVal = chooser.showOpenDialog(frmGemserksAnimationEditor);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File[] selectedFiles = chooser.getSelectedFiles();
+					for (int i = 0; i < selectedFiles.length; i++) {
+						System.out.println("file " + i + " : " + selectedFiles[i].getName());
+					}
+				}
+			}
+		});
+		mnFile.add(mntmImport);
+
+		JMenuItem mntmExit = new JMenuItem("Exit");
+		mnFile.add(mntmExit);
 	}
 
 }
