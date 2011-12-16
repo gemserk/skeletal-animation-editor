@@ -43,7 +43,16 @@ public class Skin {
 
 			float angle = spatial.getAngle() + joint.getAngle();
 			sprite.setRotation(angle);
-
+			
+//			float newCenterX = (spatial.getX() - joint.getX() + spatial.getWidth()) / spatial.getWidth();
+//			float newCenterY = (spatial.getY() - joint.getY() + spatial.getHeight()) / spatial.getHeight();
+//			
+//			center.x = -newCenterX;
+//			center.y = newCenterY;
+			
+//			System.out.println(newCenterX);
+//			System.out.println(newCenterY);
+			
 			float ox = spatial.getWidth() * center.x;
 			float oy = spatial.getHeight() * center.y;
 

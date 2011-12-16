@@ -43,6 +43,8 @@ public class EditorLibgdxApplicationListener extends Game {
 		public static final Color nodeColor = new Color(1f, 1f, 1f, 1f);
 		public static final Color selectedNodeColor = new Color(0f, 0f, 1f, 1f);
 		public static final Color nearNodeColor = new Color(1f, 0f, 0f, 1f);
+		
+		public static final Color spatialColor = new Color(0f, 1f, 0f, 1f);
 
 	}
 
@@ -265,11 +267,12 @@ public class EditorLibgdxApplicationListener extends Game {
 	
 	class ModifyingSkinPatchState implements EditorState {
 		
-		int previousY;
+		Vector2 position = new Vector2();
 		float rotationSpeed = 1f;
 
 		public ModifyingSkinPatchState() {
-			previousY = Gdx.graphics.getHeight() - Gdx.input.getY();
+			position.x = Gdx.input.getX();
+			position.y = Gdx.graphics.getHeight() - Gdx.input.getY();
 			logger.debug("Current state: modifying skin patch");
 		}
 
@@ -286,17 +289,35 @@ public class EditorLibgdxApplicationListener extends Game {
 				int currentY = Gdx.graphics.getHeight() - Gdx.input.getY();
 				
 				Spatial spatial = skinPatch.getSpatial();
-				float rotation = (float) (currentY - previousY) * rotationSpeed;
+				float rotation = (float) (currentY - position.y) * rotationSpeed;
 				spatial.setAngle(spatial.getAngle() + rotation);
+			} else if (inputMonitor.getButton(Actions.LeftMouseButton).isHolded()) {
+
+				SkinPatch skinPatch = skin.getPatch(skeletonEditor.getSelectedNode());
+
+				int currentX = Gdx.input.getX();
+				int currentY = Gdx.graphics.getHeight() - Gdx.input.getY();
 				
+				Spatial spatial = skinPatch.getSpatial();
+				
+				float newX = spatial.getX() + currentX - position.x;
+				float newY = spatial.getY() + currentY - position.y;
+				
+				spatial.setPosition(newX, newY);
 			}
 			
-			previousY = Gdx.graphics.getHeight() - Gdx.input.getY();
+			position.x = Gdx.input.getX();
+			position.y = Gdx.graphics.getHeight() - Gdx.input.getY();
 		}
 
 		@Override
 		public void render() {
 			renderSkeleton(skeletonEditor.getSkeleton());
+			
+			SkinPatch skinPatch = skin.getPatch(skeletonEditor.getSelectedNode());
+			Spatial spatial = skinPatch.getSpatial();
+			
+			renderPoint(spatial);
 		}
 
 	}
@@ -439,6 +460,11 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		ImmediateModeRendererUtils.fillRectangle(joint.getX() - nodeSize, joint.getY() - nodeSize, joint.getX() + nodeSize, joint.getY() + nodeSize, //
 				Colors.nodeColor);
+	}
+	
+	private void renderPoint(Spatial spatial) {
+		ImmediateModeRendererUtils.fillRectangle(spatial.getX() - nodeSize, spatial.getY() - nodeSize, spatial.getX() + nodeSize, spatial.getY() + nodeSize, //
+				Colors.spatialColor);
 	}
 
 }
