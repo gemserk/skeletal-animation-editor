@@ -13,9 +13,9 @@ public class JointImpl implements Joint {
 	 */
 	Vector2 localPosition = new Vector2();
 	Vector2 absolutePosition = new Vector2();
-	Vector2 tmp = new Vector2(0f, 0f);
-
 	float angle = 0f;
+	
+	private Vector2 tmp = new Vector2(0f, 0f);
 
 	Joint parent = new JointNullImpl();
 	ArrayList<Joint> children = new ArrayList<Joint>();
