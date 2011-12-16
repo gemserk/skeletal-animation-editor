@@ -295,39 +295,42 @@ public class EditorLibgdxApplicationListener extends Game {
 				spatial.setAngle(spatial.getAngle() + rotation);
 			} else if (inputMonitor.getButton(Actions.LeftMouseButton).isHolded()) {
 
-				if (inputMonitor.getButton(Actions.SecondActionButton).isHolded()) {
+				// move center
 
-					// move center
+				SkinPatch skinPatch = skin.getPatch(skeletonEditor.getSelectedNode());
 
-					SkinPatch skinPatch = skin.getPatch(skeletonEditor.getSelectedNode());
+				int currentX = Gdx.input.getX();
+				int currentY = Gdx.graphics.getHeight() - Gdx.input.getY();
 
-					int currentX = Gdx.input.getX();
-					int currentY = Gdx.graphics.getHeight() - Gdx.input.getY();
+				Spatial spatial = skinPatch.getSpatial();
 
-					Spatial spatial = skinPatch.getSpatial();
+				skinPatch.center.x -= (currentX - position.x) / spatial.getWidth();
+				skinPatch.center.y -= (currentY - position.y) / spatial.getHeight();
 
-					skinPatch.center.x += (currentX - position.x) / spatial.getWidth();
-					skinPatch.center.y += (currentY - position.y) / spatial.getHeight();
-
-					// spatial.setPosition(newX, newY);
-
-				} else {
-
-					// move spatial
-
-					SkinPatch skinPatch = skin.getPatch(skeletonEditor.getSelectedNode());
-
-					int currentX = Gdx.input.getX();
-					int currentY = Gdx.graphics.getHeight() - Gdx.input.getY();
-
-					Spatial spatial = skinPatch.getSpatial();
-
-					float newX = spatial.getX() + currentX - position.x;
-					float newY = spatial.getY() + currentY - position.y;
-
-					spatial.setPosition(newX, newY);
-
-				}
+				// if (inputMonitor.getButton(Actions.SecondActionButton).isHolded()) {
+				//
+				//
+				//
+				// // spatial.setPosition(newX, newY);
+				//
+				// }
+				// else {
+				//
+				// // move spatial
+				//
+				// SkinPatch skinPatch = skin.getPatch(skeletonEditor.getSelectedNode());
+				//
+				// int currentX = Gdx.input.getX();
+				// int currentY = Gdx.graphics.getHeight() - Gdx.input.getY();
+				//
+				// Spatial spatial = skinPatch.getSpatial();
+				//
+				// float newX = spatial.getX() + currentX - position.x;
+				// float newY = spatial.getY() + currentY - position.y;
+				//
+				// spatial.setPosition(newX, newY);
+				//
+				// }
 			}
 
 			position.x = Gdx.input.getX();
@@ -345,7 +348,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			// renderPoint(spatial.getX() + selectedJoint.getX(), spatial.getY() + selectedJoint.getY());
 
-			renderPoint(spatial.getX() + selectedJoint.getX() + skinPatch.center.x * spatial.getWidth(), spatial.getY() + selectedJoint.getY() + skinPatch.center.y * spatial.getHeight());
+			// renderPoint(spatial.getX() + selectedJoint.getX() + skinPatch.center.x * spatial.getWidth(), spatial.getY() + selectedJoint.getY() + skinPatch.center.y * spatial.getHeight());
 		}
 
 	}
