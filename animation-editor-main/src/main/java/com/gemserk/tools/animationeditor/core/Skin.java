@@ -7,8 +7,6 @@ import java.util.Set;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.gemserk.commons.gdx.games.Spatial;
-import com.gemserk.commons.gdx.games.SpatialImpl;
 
 public class Skin {
 
@@ -17,10 +15,9 @@ public class Skin {
 		Joint joint;
 		Sprite sprite;
 
-		Spatial spatial;
-
+		public float angle;
 		public Vector2 center;
-
+		
 		public Joint getJoint() {
 			return joint;
 		}
@@ -29,62 +26,31 @@ public class Skin {
 			return sprite;
 		}
 
-		public Spatial getSpatial() {
-			return spatial;
-		}
-
 		SkinPatch(Joint joint, Sprite sprite) {
 			this.joint = joint;
 			this.sprite = sprite;
-			this.spatial = new SpatialImpl(0f, 0f, sprite.getWidth(), sprite.getHeight(), 0f);
 			this.center = new Vector2(0.5f, 0.5f);
 		}
 
 		void update() {
 
-			float angle = spatial.getAngle() + joint.getAngle();
+			float angle = this.angle + joint.getAngle();
+
 			sprite.setRotation(angle);
 
-			// float newCenterX = (spatial.getX() - joint.getX() + spatial.getWidth()) / spatial.getWidth();
-			// float newCenterY = (spatial.getY() - joint.getY() + spatial.getHeight()) / spatial.getHeight();
-			//
-			// center.x = -newCenterX;
-			// center.y = newCenterY;
-
-			// System.out.println(newCenterX);
-			// System.out.println(newCenterY);
-
-			// center.x = joint.getX() - spatial.getX() / spatial.getWidth();
-			// center.y = joint.getY() - spatial.getY() / spatial.getHeight();
-
-			// center.x = spatial.getX() / spatial.getWidth();
-			// center.y = spatial.getY() / spatial.getHeight();
-
-			// center.y = spatial.getY() / spatial.getHeight();
-			// center.y = 0f;
-
-			// sprite.setOrigin(center.x, center.y);
-
-			float ox = spatial.getWidth() * center.x;
-			float oy = spatial.getHeight() * center.y;
+			float ox = sprite.getWidth() * center.x;
+			float oy = sprite.getHeight() * center.y;
 
 			if (ox != sprite.getOriginX() || oy != sprite.getOriginY())
 				sprite.setOrigin(ox, oy);
 
-			if (sprite.getWidth() != spatial.getWidth() || sprite.getHeight() != spatial.getHeight())
-				sprite.setSize(spatial.getWidth(), spatial.getHeight());
-
-			float x = spatial.getX() - sprite.getOriginX();
-			float y = spatial.getY() - sprite.getOriginY();
+			float x = -sprite.getOriginX();
+			float y = -sprite.getOriginY();
 
 			x += joint.getX();
 			y += joint.getY();
 
-			if (x != sprite.getX() || y != sprite.getY())
-				sprite.setPosition(x, y);
-
-			// SpriteUtils.centerOn(sprite, joint.getX(), joint.getY(), 0.5f, 0.5f);
-			// sprite.setRotation(joint.getAngle());
+			sprite.setPosition(x, y);
 
 		}
 

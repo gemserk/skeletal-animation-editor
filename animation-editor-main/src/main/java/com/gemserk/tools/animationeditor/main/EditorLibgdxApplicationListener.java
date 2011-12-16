@@ -18,7 +18,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.gemserk.animation4j.timeline.TimelineAnimation;
-import com.gemserk.commons.gdx.games.Spatial;
 import com.gemserk.commons.gdx.graphics.ImmediateModeRendererUtils;
 import com.gemserk.componentsengine.input.InputDevicesMonitorImpl;
 import com.gemserk.componentsengine.input.LibgdxInputMappingBuilder;
@@ -289,10 +288,9 @@ public class EditorLibgdxApplicationListener extends Game {
 			if (inputMonitor.getButton(Actions.RotateButton).isHolded()) {
 				SkinPatch skinPatch = skin.getPatch(skeletonEditor.getSelectedNode());
 				int currentY = Gdx.graphics.getHeight() - Gdx.input.getY();
-
-				Spatial spatial = skinPatch.getSpatial();
+				
 				float rotation = (float) (currentY - position.y) * rotationSpeed;
-				spatial.setAngle(spatial.getAngle() + rotation);
+				skinPatch.angle += rotation;
 			} else if (inputMonitor.getButton(Actions.LeftMouseButton).isHolded()) {
 
 				// move center
@@ -302,35 +300,8 @@ public class EditorLibgdxApplicationListener extends Game {
 				int currentX = Gdx.input.getX();
 				int currentY = Gdx.graphics.getHeight() - Gdx.input.getY();
 
-				Spatial spatial = skinPatch.getSpatial();
-
-				skinPatch.center.x -= (currentX - position.x) / spatial.getWidth();
-				skinPatch.center.y -= (currentY - position.y) / spatial.getHeight();
-
-				// if (inputMonitor.getButton(Actions.SecondActionButton).isHolded()) {
-				//
-				//
-				//
-				// // spatial.setPosition(newX, newY);
-				//
-				// }
-				// else {
-				//
-				// // move spatial
-				//
-				// SkinPatch skinPatch = skin.getPatch(skeletonEditor.getSelectedNode());
-				//
-				// int currentX = Gdx.input.getX();
-				// int currentY = Gdx.graphics.getHeight() - Gdx.input.getY();
-				//
-				// Spatial spatial = skinPatch.getSpatial();
-				//
-				// float newX = spatial.getX() + currentX - position.x;
-				// float newY = spatial.getY() + currentY - position.y;
-				//
-				// spatial.setPosition(newX, newY);
-				//
-				// }
+				skinPatch.center.x -= (currentX - position.x) / skinPatch.getSprite().getWidth();
+				skinPatch.center.y -= (currentY - position.y) / skinPatch.getSprite().getHeight();
 			}
 
 			position.x = Gdx.input.getX();
@@ -340,15 +311,6 @@ public class EditorLibgdxApplicationListener extends Game {
 		@Override
 		public void render() {
 			renderSkeleton(skeletonEditor.getSkeleton());
-
-			Joint selectedJoint = skeletonEditor.getSelectedNode();
-
-			SkinPatch skinPatch = skin.getPatch(selectedJoint);
-			Spatial spatial = skinPatch.getSpatial();
-
-			// renderPoint(spatial.getX() + selectedJoint.getX(), spatial.getY() + selectedJoint.getY());
-
-			// renderPoint(spatial.getX() + selectedJoint.getX() + skinPatch.center.x * spatial.getWidth(), spatial.getY() + selectedJoint.getY() + skinPatch.center.y * spatial.getHeight());
 		}
 
 	}
