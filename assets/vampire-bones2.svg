@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+ xmlns:dc="http://purl.org/dc/elements/1.1/"
+ xmlns:cc="http://creativecommons.org/ns#"
+ xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+ xmlns:svg="http://www.w3.org/2000/svg"
+ xmlns="http://www.w3.org/2000/svg"
+ xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+ xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+ width="128"
+ height="128"
+ id="svg3085"
+ version="1.1"
+ inkscape:version="0.48.1 r9760"
+ sodipodi:docname="vampire-bones2.svg">
+<defs
+ id="defs3087" />
+<sodipodi:namedview
+ id="base"
+ pagecolor="#20326a"
+ bordercolor="#666666"
+ borderopacity="1.0"
+ inkscape:pageopacity="0"
+ inkscape:pageshadow="2"
+ inkscape:zoom="3.4565"
+ inkscape:cx="65.1413"
+ inkscape:cy="44.5427"
+ inkscape:document-units="px"
+ inkscape:current-layer="layer1"
+ showgrid="false"
+ inkscape:window-width="1440"
+ inkscape:window-height="849"
+ inkscape:window-x="0"
+ inkscape:window-y="24"
+ inkscape:window-maximized="1" />
+<metadata
+ id="metadata3090">
+<rdf:RDF>
+<cc:Work
+ rdf:about="">
+<dc:format>image/svg+xml</dc:format>
+<dc:type
+ rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+<dc:title></dc:title>
+</cc:Work>
+</rdf:RDF>
+</metadata>
+<g
+ inkscape:label="Layer 1"
+ inkscape:groupmode="layer"
+ id="layer1"
+ transform="translate(0,-924.362)">
+<path
+ style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+ d="M 46.2485,1005.06 46.8915,1007.12 48.7295,1009.33 50.6135,1010.57 53.0495,1010.02 53.8765,1008.64 55.1175,1006.94 55.4845,1004.37 57.0015,1000.69 58.1955,998.116 58.4715,993.476 57.3225,990.076 55.3465,987.226 54.2435,986.256 50.7055,985.436 46.9835,985.986 45.1445,987.456 43.7205,989.196 42.6635,993.616 43.0315,995.816 44.3635,1000.74 45.5585,1003.77 z"
+ id="path3035"
+ inkscape:connector-curvature="0"
+ inkscape:export-filename="/home/acoppes/workspace/animation-editor/assets/bones/vampire/torso_top.png"
+ inkscape:export-xdpi="180"
+ inkscape:export-ydpi="180" />
+<path
+ style="fill:#660000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+ d="M 25.6445,997.795 27.8193,997.971 29.4771,999.463 31.3507,1005.3 31.8006,1008.83 31.3524,1013.43 29.7026,1017.32 26.1791,1018.83 22.8536,1017.37 22.2174,1012.86 21.7413,1009.96 21.9403,1005.26 22.4995,1001.45 23.3034,999.801 24.7156,998.096 z"
+ id="path3021"
+ inkscape:connector-curvature="0"
+ inkscape:export-filename="/home/acoppes/workspace/animation-editor/assets/bones/vampire/leg_bottom.png"
+ inkscape:export-xdpi="180"
+ inkscape:export-ydpi="180" />
+<path
+ style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+ d="M 2.10007,1030.13 C 2.10007,1030.13 5.83491,1028.93 7.57391,1028.04 8.87991,1027.37 10.1322,1026.57 11.2546,1025.62 11.5196,1025.39 11.7798,1025.15 11.9723,1024.85 12.2929,1024.38 12.6955,1023.31 12.6955,1023.31 12.6955,1023.31 13.658,1027.04 13.6476,1028.94 13.6463,1030.51 12.8378,1033.55 12.8378,1033.55 12.8378,1033.55 16.8735,1035.87 18.7118,1037.28 20.0539,1038.31 22.4436,1040.71 22.4436,1040.71 22.4436,1040.71 23.239,1041.7 23.0675,1042.22 22.6738,1043.37 21.0567,1043.66 19.8932,1044.02 17.0563,1044.92 11.0076,1044.78 11.0076,1044.78 L 4.06969,1044.17 1.90416,1042.89 1.67928,1041.63 2.27788,1035.64 z"
+ id="path3017"
+ inkscape:connector-curvature="0"
+ sodipodi:nodetypes="caaacacacaacccccc"
+ inkscape:export-filename="/home/acoppes/workspace/animation-editor/assets/bones/vampire/foot.png"
+ inkscape:export-xdpi="180"
+ inkscape:export-ydpi="180" />
+<path
+ style="fill:#660000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+ d="M 5.50121,999.091 5.50121,999.091 7.26471,1000.09 8.11258,1001.07 8.94702,1004.04 9.71992,1008.64 9.77874,1014.12 9.41051,1015.13 8.13674,1016.74 5.6148,1017.19 3.86339,1016.1 3.58151,1014.34 3.95682,1005.97 4.22859,1000.69 4.43496,999.206 5.28804,998.971 z"
+ id="path3023"
+ inkscape:connector-curvature="0"
+ inkscape:export-filename="/home/acoppes/workspace/animation-editor/assets/bones/vampire/leg_top.png"
+ inkscape:export-xdpi="180"
+ inkscape:export-ydpi="180" />
+<path
+ style="fill:#660000;fill-opacity:1;fill-rule:nonzero;stroke:none"
+ d="M 4.64845,981.959 4.36155,985.672 4.15585,987.099 3.72035,988.512 3.55975,989.98 3.64345,990.542 5.09065,992.074 6.49395,993.466 8.04345,994.329 9.00395,994.613 9.69755,994.355 10.678,993.35 12.1325,991.402 12.4295,990.026 12.5914,988.468 12.6492,987.689 12.9218,984.896 13.0308,983.788 13.268,983.291 10.4619,983.468 9.17085,983.728 8.34905,983.396 6.24735,982.583 z"
+ id="path3025"
+ inkscape:connector-curvature="0"
+ inkscape:export-filename="/home/acoppes/workspace/animation-editor/assets/bones/vampire/torso_bottom.png"
+ inkscape:export-xdpi="180"
+ inkscape:export-ydpi="180" />
+<path
+ style="fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:none"
+ d="M 65.3851,950.628 C 65.5341,950.039 65.6213,949.421 65.8846,948.87 66.1606,948.297 66.4372,947.631 66.9903,947.319 67.5104,947.025 68.2047,947.008 68.7786,947.177 69.4578,947.375 70.1017,947.857 70.47,948.463 71.0685,949.439 70.8681,950.718 71.075,951.848 71.3913,953.578 71.4909,955.348 72.0513,956.998 72.4237,958.108 73.3007,959.008 73.6139,960.128 73.8456,960.958 73.9274,961.848 73.8258,962.698 73.7359,963.458 73.108,964.878 73.108,964.878 L 73.7341,965.868 74.1842,967.148 73.8218,968.908 73.7917,971.028 73.0609,971.168 73.2649,970.298 72.4187,969.678 72.3473,968.768 70.7708,971.528 69.6413,972.188 69.1467,972.588 68.3667,972.648 67.7113,972.208 67.4237,971.848 67.3848,970.468 65.6461,969.188 63.9734,966.978 63.5759,965.938 63.4946,964.748 61.6224,963.608 C 61.6224,963.608 62.9598,963.168 63.5286,962.768 64.1074,962.358 64.6261,961.848 65.0031,961.258 65.2861,960.808 65.4855,960.288 65.5566,959.768 65.6383,959.188 65.4865,958.598 65.4149,958.028 65.2911,957.028 65.0136,956.058 64.9151,955.058 64.8489,954.388 64.7939,953.708 64.8563,953.038 64.9337,952.218 65.1837,951.428 65.3851,950.628 z"
+ id="path3013"
+ inkscape:connector-curvature="0"
+ sodipodi:nodetypes="aaaaaaaaacccccccccccccccccccccaaaaaaa"
+ inkscape:transform-center-x="5.12561"
+ inkscape:transform-center-y="21.3838"
+ inkscape:export-filename="/home/acoppes/workspace/animation-editor/assets/bones/vampire/arm-bottom.png"
+ inkscape:export-xdpi="180"
+ inkscape:export-ydpi="180" />
+<path
+ style="fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:none"
+ d="M 65.5172,938.822 65.5172,938.822 C 65.5172,938.822 66.3061,940.634 67.0761,941.174 67.4531,941.441 67.9626,941.56 68.4212,941.5 68.9593,941.436 69.4362,941.082 69.8591,940.742 70.6355,940.115 71.2555,939.294 71.788,938.451 72.5571,937.226 73.3405,935.923 73.5704,934.498 73.6253,934.144 73.4217,933.791 73.4567,933.432 73.5372,932.625 73.9351,931.882 74.1801,931.107 74.3562,930.553 74.5308,929.998 74.7166,929.443 74.8544,929.039 75.1877,928.658 75.1441,928.231 75.0647,927.443 74.5372,926.682 73.9145,926.19 73.4817,925.847 72.8897,925.723 72.3393,925.682 71.867,925.65 71.3506,925.687 70.9396,925.921 68.8034,927.155 67.3183,929.406 66.2069,931.613 65.7845,932.447 65.6956,933.419 65.5355,934.346 65.359,935.373 65.1627,936.414 65.22,937.451 65.2471,937.918 65.5172,938.822 65.5172,938.822 z"
+ id="path3015"
+ inkscape:connector-curvature="0"
+ sodipodi:nodetypes="aaaaaaaaaaaaaaaaaa"
+ inkscape:transform-center-x="2.84997"
+ inkscape:transform-center-y="5.52874"
+ inkscape:export-filename="/home/acoppes/workspace/animation-editor/assets/bones/vampire/arm-top.png"
+ inkscape:export-xdpi="180"
+ inkscape:export-ydpi="180" />
+<path
+ style="fill:#b3b3b3;fill-opacity:1;fill-rule:nonzero;stroke:none"
+ d="M 29.7947,971.725 30.8057,975.495 34.5737,975.954 35.6767,974.76 36.3197,971.082 45.2347,970.715 55.1617,968.049 54.6097,964.281 51.9447,960.789 51.6687,955.733 53.4147,950.219 54.6097,946.176 54.2427,942.775 52.5877,939.192 48.3607,930.827 40.6397,926.876 30.3457,925.313 20.8797,925.129 15.4573,928.896 12.884,935.147 13.2518,944.063 14.7222,948.657 3.60121,940.386 0.384412,940.202 0.843912,942.498 1.76301,947.37 10.6779,957.48 14.9979,958.584 16.5607,958.676 13.6191,963.821 13.1596,966.211 15.7329,968.969 22.4427,970.806 29.0597,971.266 z"
+ id="path3037"
+ inkscape:connector-curvature="0"
+ inkscape:export-filename="/home/acoppes/workspace/animation-editor/assets/bones/vampire/head.png"
+ inkscape:export-xdpi="180"
+ inkscape:export-ydpi="180" />
+</g>
+</svg>

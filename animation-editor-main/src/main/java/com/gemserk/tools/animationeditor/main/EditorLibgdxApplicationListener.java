@@ -243,58 +243,10 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	}
 
-	// class SettingSkinState implements EditorState {
-	//
-	// File file;
-	//
-	// public SettingSkinState(File file) {
-	// this.file = file;
-	// }
-	//
-	// @Override
-	// public void update() {
-	//
-	// Texture texture = new Texture(Gdx.files.external(file.getAbsolutePath()));
-	// texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-	//
-	// Joint selectedNode = skeletonEditor.getSelectedNode();
-	//
-	// if (selectedNode == null)
-	// return;
-	//
-	// SkinPatch patch = skin.getPatch(selectedNode.getId());
-	// patch.getSprite().setTexture(texture);
-	//
-	// }
-	//
-	// @Override
-	// public void render() {
-	// renderSkeleton(skeletonEditor.getSkeleton());
-	// }
-	//
-	// }
-
 	EditorState currentState;
 	Skin skin;
 
-	// File newSkinFile = null;
-
 	public void setCurrentSkin(final File file) {
-
-		// synchronized (newSkinFile) {
-		// newSkinFile = file;
-		// }
-
-		// Texture texture = new Texture(Gdx.files.external(file.getAbsolutePath()));
-		// texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		//
-		// Joint selectedNode = skeletonEditor.getSelectedNode();
-		//
-		// if (selectedNode == null)
-		// return;
-		//
-		// SkinPatch patch = skin.getPatch(selectedNode.getId());
-		// patch.getSprite().setTexture(texture);
 
 		Gdx.app.postRunnable(new Runnable() {
 
@@ -311,8 +263,6 @@ public class EditorLibgdxApplicationListener extends Game {
 					return;
 
 				skin.addPatch(selectedNode, new Sprite(texture));
-				// SkinPatch patch = skin.getPatch(selectedNode.getId());
-				// patch.getSprite().setTexture(texture);
 			}
 		});
 
@@ -322,7 +272,7 @@ public class EditorLibgdxApplicationListener extends Game {
 	public void create() {
 		Gdx.graphics.setVSync(true);
 
-		Gdx.graphics.getGL10().glClearColor(0f, 0f, 0f, 1f);
+		Gdx.graphics.getGL10().glClearColor(0.25f, 0.25f, 0.25f, 1f);
 
 		currentState = new NormalEditorState();
 
