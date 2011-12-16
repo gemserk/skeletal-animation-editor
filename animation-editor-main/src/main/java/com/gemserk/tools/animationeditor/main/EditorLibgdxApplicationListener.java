@@ -3,6 +3,9 @@ package com.gemserk.tools.animationeditor.main;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -15,6 +18,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.gemserk.animation4j.timeline.TimelineAnimation;
+import com.gemserk.commons.gdx.games.Spatial;
 import com.gemserk.commons.gdx.graphics.ImmediateModeRendererUtils;
 import com.gemserk.componentsengine.input.InputDevicesMonitorImpl;
 import com.gemserk.componentsengine.input.LibgdxInputMappingBuilder;
@@ -30,6 +34,8 @@ import com.gemserk.tools.animationeditor.core.tree.AnimationEditor;
 import com.gemserk.tools.animationeditor.core.tree.SkeletonEditor;
 
 public class EditorLibgdxApplicationListener extends Game {
+	
+	protected static final Logger logger = LoggerFactory.getLogger(EditorLibgdxApplicationListener.class);
 
 	private static class Colors {
 
@@ -46,6 +52,9 @@ public class EditorLibgdxApplicationListener extends Game {
 		public static final String RightMouseButton = "rightMouseButton";
 		public static final String DeleteNodeButton = "deleteNodeButton";
 		public static final String RotateButton = "rotateButton";
+		
+		public static final String ModifySkinPatchButton = "modifySkinPatchButton";
+		public static final String CancelStateButton = "cancelStateButton";
 
 	}
 
@@ -119,6 +128,10 @@ public class EditorLibgdxApplicationListener extends Game {
 	}
 
 	class NormalEditorState implements EditorState {
+		
+		public NormalEditorState() {
+			logger.debug("Current state: none");
+		}
 
 		public void update() {
 
@@ -135,6 +148,11 @@ public class EditorLibgdxApplicationListener extends Game {
 			if (inputMonitor.getButton(Actions.RightMouseButton).isReleased())
 				skeletonEditor.select(nearNode);
 
+			if (inputMonitor.getButton(Actions.ModifySkinPatchButton).isReleased()) {
+				currentState = new ModifyingSkinPatchState();
+				return;
+			}
+			
 			if (inputMonitor.getButton(Actions.DeleteNodeButton).isReleased()) {
 				if (!skeletonEditor.isSelectedNode(skeletonEditor.getSkeleton().getRoot())) {
 					Joint selectedJoint = skeletonEditor.getSelectedNode();
@@ -146,13 +164,13 @@ public class EditorLibgdxApplicationListener extends Game {
 			}
 
 			if (inputMonitor.getButton(Actions.RotateButton).isPressed()) {
-				currentState = new RotatingNodeState();
+				currentState = new RotatingJointState();
 			}
 
 			if (inputMonitor.getButton(Actions.LeftMouseButton).isPressed()) {
 				if (position.dst(x, y) < selectDistance) {
 					skeletonEditor.select(nearNode);
-					currentState = new DraggingNodeState();
+					currentState = new DraggingJointState();
 					return;
 				}
 			}
@@ -178,14 +196,15 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	}
 
-	class DraggingNodeState implements EditorState {
+	class DraggingJointState implements EditorState {
 
 		private int x0;
 		private int y0;
 
-		public DraggingNodeState() {
+		public DraggingJointState() {
 			x0 = Gdx.input.getX();
 			y0 = Gdx.graphics.getHeight() - Gdx.input.getY();
+			logger.debug("Current state: dragging joint");
 		}
 
 		@Override
@@ -211,13 +230,14 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	}
 
-	class RotatingNodeState implements EditorState {
+	class RotatingJointState implements EditorState {
 
 		private int currentY;
 		float rotationSpeed = 1f;
 
-		public RotatingNodeState() {
+		public RotatingJointState() {
 			currentY = Gdx.graphics.getHeight() - Gdx.input.getY();
+			logger.debug("Current state: rotating joint");
 		}
 
 		@Override
@@ -234,6 +254,44 @@ public class EditorLibgdxApplicationListener extends Game {
 			skeletonEditor.rotateSelected(rotation);
 
 			currentY = y;
+		}
+
+		@Override
+		public void render() {
+			renderSkeleton(skeletonEditor.getSkeleton());
+		}
+
+	}
+	
+	class ModifyingSkinPatchState implements EditorState {
+		
+		int previousY;
+		float rotationSpeed = 1f;
+
+		public ModifyingSkinPatchState() {
+			previousY = Gdx.graphics.getHeight() - Gdx.input.getY();
+			logger.debug("Current state: modifying skin patch");
+		}
+
+		@Override
+		public void update() {
+			
+			if (inputMonitor.getButton(Actions.CancelStateButton).isReleased()) {
+				currentState = new NormalEditorState();
+				return;
+			}
+			
+			if (inputMonitor.getButton(Actions.RotateButton).isHolded()) {
+				SkinPatch skinPatch = skin.getPatch(skeletonEditor.getSelectedNode());
+				int currentY = Gdx.graphics.getHeight() - Gdx.input.getY();
+				
+				Spatial spatial = skinPatch.getSpatial();
+				float rotation = (float) (currentY - previousY) * rotationSpeed;
+				spatial.setAngle(spatial.getAngle() + rotation);
+				
+			}
+			
+			previousY = Gdx.graphics.getHeight() - Gdx.input.getY();
 		}
 
 		@Override
@@ -287,6 +345,9 @@ public class EditorLibgdxApplicationListener extends Game {
 				monitorKeys(Actions.DeleteNodeButton, Keys.DEL, Keys.BACKSPACE);
 
 				monitorKey(Actions.RotateButton, Keys.CONTROL_LEFT);
+				
+				monitorKey(Actions.ModifySkinPatchButton, Keys.R);
+				monitorKey(Actions.CancelStateButton, Keys.ESCAPE);
 			}
 		};
 

@@ -28,16 +28,21 @@ public class Skin {
 			return sprite;
 		}
 
+		public Spatial getSpatial() {
+			return spatial;
+		}
+
 		SkinPatch(Joint joint, Sprite sprite) {
 			this.joint = joint;
 			this.sprite = sprite;
-			this.spatial = new SpatialImpl(joint.getX(), joint.getY(), sprite.getWidth(), sprite.getHeight(), 0f);
+			this.spatial = new SpatialImpl(0f, 0f, sprite.getWidth(), sprite.getHeight(), 0f);
 			this.center = new Vector2(0.5f, 0.5f);
 		}
 
 		void update() {
 
-			sprite.setRotation(spatial.getAngle());
+			float angle = spatial.getAngle() + joint.getAngle();
+			sprite.setRotation(angle);
 
 			float ox = spatial.getWidth() * center.x;
 			float oy = spatial.getHeight() * center.y;
@@ -51,8 +56,14 @@ public class Skin {
 			float x = spatial.getX() - sprite.getOriginX();
 			float y = spatial.getY() - sprite.getOriginY();
 
+			x += joint.getX();
+			y += joint.getY();
+
 			if (x != sprite.getX() || y != sprite.getY())
 				sprite.setPosition(x, y);
+
+			// SpriteUtils.centerOn(sprite, joint.getX(), joint.getY(), 0.5f, 0.5f);
+			// sprite.setRotation(joint.getAngle());
 
 		}
 
@@ -107,4 +118,7 @@ public class Skin {
 		return patches.get(jointId);
 	}
 
+	public SkinPatch getPatch(Joint joint) {
+		return getPatch(joint.getId());
+	}
 }
