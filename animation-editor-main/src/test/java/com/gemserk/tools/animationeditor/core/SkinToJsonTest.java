@@ -5,6 +5,8 @@ import java.lang.reflect.Type;
 import org.junit.Test;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.gemserk.resources.Resource;
+import com.gemserk.resources.dataloaders.DataLoader;
 import com.gemserk.tools.animationeditor.core.Skin.SkinPatch;
 import com.gemserk.tools.animationeditor.json.SkinJsonDeserializer;
 import com.gemserk.tools.animationeditor.json.SkinJsonSerializer;
@@ -18,6 +20,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 
 public class SkinToJsonTest {
+	
+	class MockResource<T> extends Resource<T> {
+
+		public MockResource(DataLoader<T> dataLoader) {
+			super(dataLoader);
+		}
+		
+	}
 
 	public static class SkinPatchJsonDeserializer implements JsonDeserializer<SkinPatch> {
 
@@ -64,8 +74,8 @@ public class SkinToJsonTest {
 
 		Skin skin = new Skin();
 
-		skin.addPatch(root, new MockSprite(), "/tmp/body.png");
-		skin.addPatch(child, new MockSprite(), "/tmp/leg.png");
+		skin.addPatch(root, new MockResource<Sprite>(null), "/tmp/body.png");
+		skin.addPatch(child, new MockResource<Sprite>(null), "/tmp/leg.png");
 
 		SkinPatchJsonDeserializer skinPatchDeserializer = new SkinPatchJsonDeserializer(skeleton);
 

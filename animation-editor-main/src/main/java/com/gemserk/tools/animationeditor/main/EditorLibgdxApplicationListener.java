@@ -364,13 +364,14 @@ public class EditorLibgdxApplicationListener extends Game {
 			public void run() {
 				String resourceId = file.getAbsolutePath();
 				
-				Resource<Texture> resource = resourceManager.get(resourceId);
+				Resource<Sprite> resource = resourceManager.get(resourceId);
 
 				if (resource == null) {
-					resourceBuilder.resource(resourceId, resourceBuilder //
+					resourceBuilder.resource(resourceId + ".Texture", resourceBuilder //
 							.texture2(Gdx.files.absolute(resourceId))//
 							.minFilter(TextureFilter.Linear) //
 							.magFilter(TextureFilter.Linear));
+					resourceBuilder.sprite(resourceId, resourceId + ".Texture");
 					resource = resourceManager.get(resourceId);
 				}
 
@@ -382,7 +383,7 @@ public class EditorLibgdxApplicationListener extends Game {
 				if (selectedNode == null)
 					return;
 
-				skin.addPatch(selectedNode, new Sprite(resource.get()), resourceId);
+				skin.addPatch(selectedNode, resource, resourceId);
 			}
 		});
 

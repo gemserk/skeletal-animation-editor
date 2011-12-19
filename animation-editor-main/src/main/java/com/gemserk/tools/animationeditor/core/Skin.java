@@ -7,29 +7,32 @@ import java.util.Set;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.gemserk.resources.Resource;
 
 public class Skin {
 
 	public static class SkinPatch {
 
 		Joint joint;
-		Sprite sprite;
+		// Sprite sprite;
+
+		Resource<Sprite> sprite;
 
 		public float angle;
 		public Vector2 center = new Vector2(0.5f, 0.5f);
-		
+
 		// path to the texture file
 		public String textureId;
-		
+
 		public Joint getJoint() {
 			return joint;
 		}
 
 		public Sprite getSprite() {
-			return sprite;
+			return sprite.get();
 		}
 
-		public SkinPatch(Joint joint, Sprite sprite, String textureId) {
+		public SkinPatch(Joint joint, Resource<Sprite> sprite, String textureId) {
 			this.joint = joint;
 			this.sprite = sprite;
 			this.textureId = textureId;
@@ -37,6 +40,8 @@ public class Skin {
 
 		void update() {
 			float angle = this.angle + joint.getAngle();
+			
+			Sprite sprite = this.sprite.get();
 
 			sprite.setRotation(angle);
 
@@ -56,6 +61,8 @@ public class Skin {
 		}
 
 		public void project(Vector2 position) {
+			Sprite sprite = this.sprite.get();
+			
 			float centerX = sprite.getX() + sprite.getOriginX();
 			float centerY = sprite.getY() + sprite.getOriginY();
 
@@ -76,21 +83,21 @@ public class Skin {
 
 			position.y *= -1f;
 		}
-		
+
 		@Override
 		public String toString() {
-			 return "SkinPatch [id:" + joint.getId() + ", textureId:" + textureId + ", center:" + center.toString() + ", angle:" + angle + "]";
+			return "SkinPatch [id:" + joint.getId() + ", textureId:" + textureId + ", center:" + center.toString() + ", angle:" + angle + "]";
 		}
-		
+
 	}
 
 	Map<String, SkinPatch> patches;
 	ArrayList<SkinPatch> patchList;
-	
+
 	public Map<String, SkinPatch> getPatches() {
 		return patches;
 	}
-	
+
 	public ArrayList<SkinPatch> getPatchList() {
 		return patchList;
 	}
@@ -100,7 +107,7 @@ public class Skin {
 		patchList = new ArrayList<Skin.SkinPatch>();
 	}
 
-	public void addPatch(Joint joint, Sprite sprite, String textureId) {
+	public void addPatch(Joint joint, Resource<Sprite> sprite, String textureId) {
 		SkinPatch patch = new SkinPatch(joint, sprite, textureId);
 
 		if (patches.containsKey(joint.getId())) {

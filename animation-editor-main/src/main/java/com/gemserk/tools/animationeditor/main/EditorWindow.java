@@ -57,6 +57,7 @@ import com.gemserk.tools.animationeditor.core.Skin.SkinPatch;
 import com.gemserk.tools.animationeditor.core.tree.SkeletonEditorImpl;
 import com.gemserk.tools.animationeditor.json.JointJsonDeserializer;
 import com.gemserk.tools.animationeditor.json.JointJsonSerializer;
+import com.gemserk.tools.animationeditor.json.SkinJsonDeserializer;
 import com.gemserk.tools.animationeditor.json.SkinJsonSerializer;
 import com.gemserk.tools.animationeditor.json.SkinPatchJsonDeserializer;
 import com.gemserk.tools.animationeditor.json.SkinPatchJsonSerializer;
@@ -215,12 +216,12 @@ public class EditorWindow {
 				skinPatchJsonDeserializer.setResourceManager(resourceManager);
 
 				Gson gson = new GsonBuilder() //
-						.registerTypeAdapter(Skin.class, new SkinJsonSerializer()) //
+						.registerTypeAdapter(Skin.class, new SkinJsonDeserializer()) //
 						.registerTypeAdapter(SkinPatch.class, skinPatchJsonDeserializer) //
 						.setPrettyPrinting() //
 						.create();
 
-				return gson.fromJson(new FileReader(project.skeletonFile), Skin.class);
+				return gson.fromJson(new FileReader(project.skinFile), Skin.class);
 			}
 
 		});

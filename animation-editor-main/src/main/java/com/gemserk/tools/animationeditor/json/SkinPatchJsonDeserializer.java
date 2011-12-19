@@ -3,7 +3,6 @@ package com.gemserk.tools.animationeditor.json;
 import java.lang.reflect.Type;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.gemserk.commons.gdx.resources.LibgdxResourceBuilder;
@@ -41,18 +40,19 @@ public class SkinPatchJsonDeserializer implements JsonDeserializer<SkinPatch> {
 		Float cx = jsonObject.get("cx").getAsFloat();
 		Float cy = jsonObject.get("cy").getAsFloat();
 
-		Resource<Texture> resource = resourceManager.get(textureId);
+		Resource<Sprite> resource = resourceManager.get(textureId);
 
 		if (resource == null) {
 			LibgdxResourceBuilder resourceBuilder = new LibgdxResourceBuilder(resourceManager);
-			resourceBuilder.resource(textureId, resourceBuilder.texture2(Gdx.files.absolute(textureId)) //
+			resourceBuilder.resource(textureId + ".Texture", resourceBuilder.texture2(Gdx.files.absolute(textureId)) //
 					.minFilter(TextureFilter.Linear) //
 					.magFilter(TextureFilter.Linear) //
 					);
+			resourceBuilder.sprite(textureId, textureId + ".Texture");
 			resource = resourceManager.get(textureId);
 		}
 
-		SkinPatch skinPatch = new SkinPatch(skeleton.getRoot().find(jointId), new Sprite(resource.get()), textureId);
+		SkinPatch skinPatch = new SkinPatch(skeleton.getRoot().find(jointId), resource, textureId);
 
 		skinPatch.angle = angle.floatValue();
 		skinPatch.center.set(cx.floatValue(), cy.floatValue());
