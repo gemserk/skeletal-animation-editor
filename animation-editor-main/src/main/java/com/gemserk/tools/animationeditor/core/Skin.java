@@ -16,10 +16,10 @@ public class Skin {
 		Sprite sprite;
 
 		public float angle;
-		public Vector2 center;
+		public Vector2 center = new Vector2(0.5f, 0.5f);
 		
 		// path to the texture file
-		public String filePath;
+		public String textureId;
 		
 		public Joint getJoint() {
 			return joint;
@@ -29,11 +29,10 @@ public class Skin {
 			return sprite;
 		}
 
-		public SkinPatch(Joint joint, Sprite sprite, String filePath) {
+		public SkinPatch(Joint joint, Sprite sprite, String textureId) {
 			this.joint = joint;
 			this.sprite = sprite;
-			this.filePath = filePath;
-			this.center = new Vector2(0.5f, 0.5f);
+			this.textureId = textureId;
 		}
 
 		void update() {
@@ -77,6 +76,12 @@ public class Skin {
 
 			position.y *= -1f;
 		}
+		
+		@Override
+		public String toString() {
+			 return "SkinPatch [id:" + joint.getId() + ", textureId:" + textureId + ", center:" + center.toString() + ", angle:" + angle + "]";
+		}
+		
 	}
 
 	Map<String, SkinPatch> patches;
@@ -87,8 +92,8 @@ public class Skin {
 		patchList = new ArrayList<Skin.SkinPatch>();
 	}
 
-	public void addPatch(Joint joint, Sprite sprite, String filePath) {
-		SkinPatch patch = new SkinPatch(joint, sprite, filePath);
+	public void addPatch(Joint joint, Sprite sprite, String textureId) {
+		SkinPatch patch = new SkinPatch(joint, sprite, textureId);
 
 		if (patches.containsKey(joint.getId())) {
 			SkinPatch previousPatch = patches.get(joint.getId());
