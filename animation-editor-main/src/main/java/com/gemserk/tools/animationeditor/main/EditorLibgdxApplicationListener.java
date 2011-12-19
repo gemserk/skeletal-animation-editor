@@ -416,14 +416,20 @@ public class EditorLibgdxApplicationListener extends Game {
 		skeletonEditor.setSkeleton(new Skeleton(root));
 		skeletonEditor.select(root);
 
-		Texture texture = new Texture(Gdx.files.internal("data/bone.png"));
-		texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		resourceBuilder = new LibgdxResourceBuilder(resourceManager);
+		
+		resourceBuilder.resource("DefaultBone", resourceBuilder //
+				.texture2(Gdx.files.internal("data/bone.png"))//
+				.minFilter(TextureFilter.Linear) //
+				.magFilter(TextureFilter.Linear));
+
+		Resource<Texture> resource = resourceManager.get("DefaultBone");
+
+		// Texture texture = new Texture(Gdx.files.internal("data/bone.png"));
+		// texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
 		skin = new Skin();
-		skin.addPatch(root, new Sprite(texture));
-
-		resourceBuilder = new LibgdxResourceBuilder(resourceManager);
-
+		skin.addPatch(root, new Sprite(resource.get()));
 	}
 
 	@Override
