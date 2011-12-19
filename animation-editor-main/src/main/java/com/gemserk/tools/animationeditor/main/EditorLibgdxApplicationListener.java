@@ -507,4 +507,9 @@ public class EditorLibgdxApplicationListener extends Game {
 				Colors.spatialColor);
 	}
 
+	@Override
+	public void dispose() {
+		super.dispose();
+		resourceManager.unloadAll();
+	}
 }
