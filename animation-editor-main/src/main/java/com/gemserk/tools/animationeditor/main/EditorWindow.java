@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -61,6 +63,8 @@ import com.gemserk.tools.animationeditor.main.list.AnimationKeyFrameListModel;
 import com.gemserk.tools.animationeditor.main.tree.EditorInterceptorImpl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonIOException;
+import com.google.gson.JsonSyntaxException;
 
 public class EditorWindow {
 
@@ -150,11 +154,12 @@ public class EditorWindow {
 		JMenu mnFile = new JMenu("File");
 		menuBar.add(mnFile);
 
-		JMenuItem mntmImport = new JMenuItem("Import");
-		mntmImport.addActionListener(new ActionListener() {
+		JMenuItem mntmOpen = new JMenuItem("Open");
+		mntmOpen.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("Images only", "png", "jpg", "gif");
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Project files only", Project.PROJECT_EXTENSION);
 
 				chooser.setFileFilter(filter);
 				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -164,24 +169,44 @@ public class EditorWindow {
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = chooser.getSelectedFile();
 
-					editorApplication.setCurrentSkin(selectedFile);
-					// File[] selectedFiles = chooser.getSelectedFiles();
-					// for (int i = 0; i < selectedFiles.length; i++) {
-					// System.out.println("file " + i + " : " + selectedFiles[i].getName());
-					// }
+					Gson gson = new GsonBuilder() //
+							.setPrettyPrinting() //
+							.create();
+
+					try {
+						logger.info("Loading project from " + selectedFile);
+						Project project = gson.fromJson(new FileReader(selectedFile), Project.class);
+						editor.setSkeleton(loadSkeleton(project));
+					} catch (JsonSyntaxException e1) {
+						logger.error("Failed when loading project from file " + selectedFile, e1);
+					} catch (JsonIOException e1) {
+						logger.error("Failed when loading project from file " + selectedFile, e1);
+					} catch (FileNotFoundException e1) {
+						logger.error("Failed when loading project from file " + selectedFile, e1);
+					}
+
 				}
 			}
-		});
-		mnFile.add(mntmImport);
 
-		JMenuItem mntmSave = new JMenuItem("Save");
+			private Skeleton loadSkeleton(Project project) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
+				Gson gson = new GsonBuilder() //
+						.registerTypeAdapter(Joint.class, new JointJsonDeserializer()) //
+						.setPrettyPrinting() //
+						.create();
+				return gson.fromJson(new FileReader(project.skeletonFile), Skeleton.class);
+			}
+			
+		});
+		mnFile.add(mntmOpen);
+
+		JMenuItem mntmSave = new JMenuItem("Save as...");
 		mntmSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
-				
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("Project files only", // 
-						Project.PROJECT_EXTENSION,  //
-						Project.SKELETON_EXTENSION,  //
+
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Project files only", //
+						Project.PROJECT_EXTENSION, //
+						Project.SKELETON_EXTENSION, //
 						Project.SKIN_EXTENSION);
 
 				chooser.setFileFilter(filter);
@@ -247,7 +272,6 @@ public class EditorWindow {
 				try {
 					Gson gson = new GsonBuilder() //
 							.registerTypeAdapter(JointImpl.class, new JointJsonSerializer()) //
-							.registerTypeAdapter(Joint.class, new JointJsonDeserializer()) //
 							.setPrettyPrinting() //
 							.create();
 					FileWriter writer = new FileWriter(new File(project.skeletonFile));
@@ -264,6 +288,34 @@ public class EditorWindow {
 			}
 		});
 		mnFile.add(mntmSave);
+
+		mnFile.addSeparator();
+
+		JMenuItem mntmImport = new JMenuItem("Import");
+		mntmImport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Images only", "png", "jpg", "gif");
+
+				chooser.setFileFilter(filter);
+				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				chooser.setMultiSelectionEnabled(false);
+
+				int returnVal = chooser.showOpenDialog(frmGemserksAnimationEditor);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = chooser.getSelectedFile();
+
+					editorApplication.setCurrentSkin(selectedFile);
+					// File[] selectedFiles = chooser.getSelectedFiles();
+					// for (int i = 0; i < selectedFiles.length; i++) {
+					// System.out.println("file " + i + " : " + selectedFiles[i].getName());
+					// }
+				}
+			}
+		});
+		mnFile.add(mntmImport);
+
+		mnFile.addSeparator();
 
 		JMenuItem mntmExit = new JMenuItem("Exit");
 		mnFile.add(mntmExit);

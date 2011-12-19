@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Vector2;
 import com.gemserk.tools.animationeditor.core.Joint;
+import com.gemserk.tools.animationeditor.core.JointUtils;
 import com.gemserk.tools.animationeditor.core.Skeleton;
 
 public class SkeletonEditorImpl implements SkeletonEditor {
@@ -29,6 +30,8 @@ public class SkeletonEditorImpl implements SkeletonEditor {
 	@Override
 	public void setSkeleton(Skeleton skeleton) {
 		this.skeleton = skeleton;
+		joints.clear();
+		joints.addAll(JointUtils.toArrayList(skeleton.getRoot()));
 	}
 
 	@Override
