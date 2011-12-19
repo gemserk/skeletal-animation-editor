@@ -58,6 +58,7 @@ import com.gemserk.tools.animationeditor.core.tree.SkeletonEditorImpl;
 import com.gemserk.tools.animationeditor.json.JointJsonDeserializer;
 import com.gemserk.tools.animationeditor.json.JointJsonSerializer;
 import com.gemserk.tools.animationeditor.json.SkinJsonSerializer;
+import com.gemserk.tools.animationeditor.json.SkinPatchJsonDeserializer;
 import com.gemserk.tools.animationeditor.json.SkinPatchJsonSerializer;
 import com.gemserk.tools.animationeditor.main.list.AnimationKeyFrameListModel;
 import com.gemserk.tools.animationeditor.main.tree.EditorInterceptorImpl;
@@ -73,6 +74,8 @@ public class EditorWindow {
 	private JFrame frmGemserksAnimationEditor;
 	private JList keyFramesList;
 	private EditorInterceptorImpl editor;
+
+	private ResourceManager<String> resourceManager;
 
 	/**
 	 * Launch the application.
@@ -102,7 +105,7 @@ public class EditorWindow {
 	 */
 	private void initialize() {
 
-		ResourceManager<String> resourceManager = new ResourceManagerImpl<String>();
+		resourceManager = new ResourceManagerImpl<String>();
 
 		Injector injector = new InjectorImpl();
 
@@ -176,7 +179,15 @@ public class EditorWindow {
 					try {
 						logger.info("Loading project from " + selectedFile);
 						Project project = gson.fromJson(new FileReader(selectedFile), Project.class);
-						editor.setSkeleton(loadSkeleton(project));
+						
+						resourceManager.unloadAll();
+						
+						Skeleton skeleton = loadSkeleton(project);
+						Skin skin = loadSkin(project, skeleton, resourceManager);
+						
+						editor.setSkeleton(skeleton);
+						editorApplication.skin = skin;
+						
 					} catch (JsonSyntaxException e1) {
 						logger.error("Failed when loading project from file " + selectedFile, e1);
 					} catch (JsonIOException e1) {
@@ -195,7 +206,23 @@ public class EditorWindow {
 						.create();
 				return gson.fromJson(new FileReader(project.skeletonFile), Skeleton.class);
 			}
-			
+
+			private Skin loadSkin(Project project, Skeleton skeleton, ResourceManager<String> resourceManager) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
+
+				SkinPatchJsonDeserializer skinPatchJsonDeserializer = new SkinPatchJsonDeserializer();
+
+				skinPatchJsonDeserializer.setSkeleton(skeleton);
+				skinPatchJsonDeserializer.setResourceManager(resourceManager);
+
+				Gson gson = new GsonBuilder() //
+						.registerTypeAdapter(Skin.class, new SkinJsonSerializer()) //
+						.registerTypeAdapter(SkinPatch.class, skinPatchJsonDeserializer) //
+						.setPrettyPrinting() //
+						.create();
+
+				return gson.fromJson(new FileReader(project.skeletonFile), Skin.class);
+			}
+
 		});
 		mnFile.add(mntmOpen);
 
