@@ -6,8 +6,21 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
-	<name>Gemserk's Tools - Animation Editor</name>
-	<description>Gemserk's Tools - Animation Editor</description>
+	<name>Gemserk's Tools - 2D Skeletal Animation Editor</name>
+	<description>Gemserk's Tools - 2D Skeletal Animation Editor</description>
+
+	<url>https://github.com/gemserk/skeletal-animation-editor</url>
+
+	<issueManagement>
+		<system>github</system>
+		<url>https://github.com/gemserk/skeletal-animation-editor/issues</url>
+	</issueManagement>
+
+	<scm>
+		<url>https://github.com/gemserk/skeletal-animation-editor</url>
+		<developerConnection>git@github.com:gemserk/skeletal-animation-editor.git</developerConnection>
+		<connection>git://github.com/gemserk/skeletal-animation-editor.git</connection>
+	</scm>
 
 	<organization>
 		<name>Gemserk</name>
