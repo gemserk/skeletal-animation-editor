@@ -1,0 +1,52 @@
+TODO
+==========================
+
+* Import a list of images to the images panel to be used to easily edit the skin of each Joint.
+* Zoom with ctrl + mouse wheel (and possibly a gui component)
+* Undo with ctrl + z
+* Edit menu with all the stuff with Copy/Paste/Undo/Etc.
+* Cut/Copy part of the skeleton and paste it as child of another Skeleton Joint.
+* Save project animations
+* Save relative paths to the project not absolute
+* Specify the duration of a keyframe of the current animation
+* Panel with a list of animations to switch between animations
+* BUG: be able to resize the viewport when the application is resized
+* BUG: cant select a node from the JTree when we are modifying a Skin
+* Save button to save the current project
+* Title bar shows the current project (updated when open or save as...)
+* Perform exit when EXIT button touched
+* Dialog when exit the application if project was modified since the last modification
+* Dialog when opening a new project the application if project was modified since the last modification
+* Application configuration in the user home or something like that
+	- recent projects
+	- last opened folders for each operation
+* Export a sequence of images given an animation, a destination folder, a target FPS and a viewport (could be automatic calculated from the boundings of the skeleton)
+	- automatic viewport
+	- fixed viewport
+* Tooltips over each button of the GUI
+* Keyframes stores only changes from the previous state, to be able to animate multiple animations and to be able to move parents and the animations continue the same (for example, an animaiton of only the left arm)
+* Status bar shows current editor state (modifying the SKin, etc etc etc)
+* New Project
+* Change keyframes order
+* Control to get a frame between two keyframes (possibly a timeline)
+* Joint restrictions, 
+	- distance between two joints (min, max)
+
+* More options when playing the animation (how many loops, if should play in reverse, the animation speed, etc)
+
+* Investigate about using Box2d to edit the skeleton and joints.
+
+Quick Concepts structure:
+
+Project
+  -> Images used for the skinning 
+  -> Skeleton
+  -> Skin
+     -> SkinPatch
+  -> Animations
+     -> KeyFrames
+
+DONE
+==========================
+
+* A lot of stuff
