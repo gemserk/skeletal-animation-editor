@@ -49,6 +49,7 @@ import com.gemserk.resources.ResourceManagerImpl;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.JointImpl;
+import com.gemserk.tools.animationeditor.core.Skeleton;
 import com.gemserk.tools.animationeditor.core.Skin;
 import com.gemserk.tools.animationeditor.core.Skin.SkinPatch;
 import com.gemserk.tools.animationeditor.core.tree.SkeletonEditorImpl;
@@ -177,7 +178,11 @@ public class EditorWindow {
 		mntmSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("Project files only", ".aprj");
+				
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("Project files only", // 
+						Project.PROJECT_EXTENSION,  //
+						Project.SKELETON_EXTENSION,  //
+						Project.SKIN_EXTENSION);
 
 				chooser.setFileFilter(filter);
 				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
@@ -191,48 +196,70 @@ public class EditorWindow {
 
 					String projectFileNameWithoutExtension = FileUtils.getFileNameWithoutExtension(selectedFile.getAbsolutePath());
 
-					String projectFileName = projectFileNameWithoutExtension + ".aprj";
-					String skeletonFileName = projectFileNameWithoutExtension + ".skeleton";
-					String skinFileName = projectFileNameWithoutExtension + ".skin";
+					Project project = new Project(projectFileNameWithoutExtension);
 
-					try {
-						Gson gson = new GsonBuilder() //
-								.registerTypeAdapter(JointImpl.class, new JointJsonSerializer()) //
-								.registerTypeAdapter(Joint.class, new JointJsonDeserializer()) //
-								.setPrettyPrinting() //
-								.create();
-						FileWriter writer = new FileWriter(new File(skeletonFileName));
+					saveSkeleton(project, editor.getSkeleton());
+					saveSkin(project, editorApplication.skin);
+					saveProject(project);
+				}
+			}
 
-						gson.toJson(editor.getSkeleton(), writer);
+			private void saveProject(Project project) {
+				try {
+					Gson gson = new GsonBuilder() //
+							.setPrettyPrinting() //
+							.create();
+					FileWriter writer = new FileWriter(new File(project.projectFile));
 
-						writer.flush();
-						writer.close();
+					gson.toJson(project, writer);
 
-						logger.info("Skeleton saved to " + skeletonFileName);
-					} catch (IOException e1) {
-						logger.error("Failed to save skeleton file to " + skeletonFileName, e1);
-					}
+					writer.flush();
+					writer.close();
 
-					try {
-						Gson gson = new GsonBuilder() //
-								.registerTypeAdapter(SkinPatch.class, new SkinPatchJsonSerializer()) //
-								.registerTypeAdapter(Skin.class, new SkinJsonSerializer()) //
-								.setPrettyPrinting() //
-								.create();
-						
-						FileWriter writer = new FileWriter(new File(skinFileName));
+					logger.info("Project file saved to " + project.projectFile);
+				} catch (IOException e1) {
+					logger.error("Failed to save project file to " + project.projectFile, e1);
+				}
+			}
 
-						gson.toJson(editorApplication.skin, writer);
+			private void saveSkin(Project project, Skin skin) {
+				try {
+					Gson gson = new GsonBuilder() //
+							.registerTypeAdapter(SkinPatch.class, new SkinPatchJsonSerializer()) //
+							.registerTypeAdapter(Skin.class, new SkinJsonSerializer()) //
+							.setPrettyPrinting() //
+							.create();
 
-						writer.flush();
-						writer.close();
+					FileWriter writer = new FileWriter(new File(project.skinFile));
 
-						logger.info("Skin saved to " + skinFileName);
-					} catch (IOException e1) {
-						logger.error("Failed to save skin file to " + skeletonFileName, e1);
-					}
+					gson.toJson(skin, writer);
 
-					// save
+					writer.flush();
+					writer.close();
+
+					logger.info("Skin saved to " + project.skinFile);
+				} catch (IOException e1) {
+					logger.error("Failed to save skin file to " + project.skinFile, e1);
+				}
+			}
+
+			private void saveSkeleton(Project project, Skeleton skeleton) {
+				try {
+					Gson gson = new GsonBuilder() //
+							.registerTypeAdapter(JointImpl.class, new JointJsonSerializer()) //
+							.registerTypeAdapter(Joint.class, new JointJsonDeserializer()) //
+							.setPrettyPrinting() //
+							.create();
+					FileWriter writer = new FileWriter(new File(project.skeletonFile));
+
+					gson.toJson(skeleton, writer);
+
+					writer.flush();
+					writer.close();
+
+					logger.info("Skeleton saved to " + project.skeletonFile);
+				} catch (IOException e1) {
+					logger.error("Failed to save skeleton file to " + project.skeletonFile, e1);
 				}
 			}
 		});
