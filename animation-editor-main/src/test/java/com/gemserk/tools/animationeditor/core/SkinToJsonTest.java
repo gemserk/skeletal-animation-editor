@@ -21,12 +21,21 @@ public class SkinToJsonTest {
 			JsonObject jsonObject = new JsonObject();
 			
 			jsonObject.addProperty("jointId", skinPatch.getJoint().getId());
-//			jsonObject.addProperty("textureId", skinPatch.getSprite().getTexture().);
+			jsonObject.addProperty("textureId", skinPatch.filePath);
 			
 			jsonObject.addProperty("angle", skinPatch.angle);
 			jsonObject.addProperty("cx", skinPatch.center.x);
 			jsonObject.addProperty("cy", skinPatch.center.y);
 			
+			return jsonObject;
+		}
+	}
+	
+	public static class SkinJsonSerializer implements JsonSerializer<Skin> {
+		@Override
+		public JsonElement serialize(Skin skin, Type typeOfSrc, JsonSerializationContext context) {
+			JsonObject jsonObject = new JsonObject();
+			jsonObject.add("patches", context.serialize(skin.patches));
 			return jsonObject;
 		}
 	}
@@ -39,27 +48,18 @@ public class SkinToJsonTest {
 	public void exportSkeletonTest() {
 
 		Skin skin = new Skin();
-		skin.addPatch(new JointImpl("root", 30f, 50f, 0f), new MockSprite());
+		skin.addPatch(new JointImpl("root", 30f, 50f, 0f), new MockSprite(), "/tmp/body.png");
+		skin.addPatch(new JointImpl("leg", 30f, 50f, 0f), new MockSprite(), "/tmp/leg.png");
 
 		Gson gson = new GsonBuilder() //
 				.registerTypeAdapter(SkinPatch.class, new SkinPatchJsonSerializer()) //
+				.registerTypeAdapter(Skin.class, new SkinJsonSerializer()) //
 				.setPrettyPrinting() //
 				.create();
-
+		
+		String json = gson.toJson(skin);
+		
+		System.out.println(json);
 	}
 
-	private void sysout(Joint joint) {
-		System.out.println(joint.getId());
-		if (!"".equals(joint.getParent().getId()))
-			System.out.println(joint.getParent().getId());
-		System.out.println(joint.getX());
-		System.out.println(joint.getY());
-		System.out.println(joint.getAngle());
-		System.out.println(joint.getChildren().size());
-
-		System.out.println(joint.getLocalX());
-		System.out.println(joint.getLocalY());
-		System.out.println(joint.getLocalAngle());
-
-	}
 }

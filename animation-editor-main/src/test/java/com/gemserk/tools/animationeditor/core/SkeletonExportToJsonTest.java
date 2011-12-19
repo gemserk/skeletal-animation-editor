@@ -3,8 +3,8 @@ package com.gemserk.tools.animationeditor.core;
 
 import org.junit.Test;
 
-import com.gemserk.tools.animationeditor.json.JointDeserializer;
-import com.gemserk.tools.animationeditor.json.JointSerializer;
+import com.gemserk.tools.animationeditor.json.JointJsonDeserializer;
+import com.gemserk.tools.animationeditor.json.JointJsonSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -20,8 +20,8 @@ public class SkeletonExportToJsonTest {
 		child1.setParent(skeleton.getRoot());
 
 		Gson gson = new GsonBuilder() //
-				.registerTypeAdapter(JointImpl.class, new JointSerializer()) //
-				.registerTypeAdapter(Joint.class, new JointDeserializer()) //
+				.registerTypeAdapter(JointImpl.class, new JointJsonSerializer()) //
+				.registerTypeAdapter(Joint.class, new JointJsonDeserializer()) //
 				.setPrettyPrinting() //
 				.create();
 

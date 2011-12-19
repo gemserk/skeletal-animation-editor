@@ -18,6 +18,9 @@ public class Skin {
 		public float angle;
 		public Vector2 center;
 		
+		// path to the texture file
+		public String filePath;
+		
 		public Joint getJoint() {
 			return joint;
 		}
@@ -26,9 +29,10 @@ public class Skin {
 			return sprite;
 		}
 
-		public SkinPatch(Joint joint, Sprite sprite) {
+		public SkinPatch(Joint joint, Sprite sprite, String filePath) {
 			this.joint = joint;
 			this.sprite = sprite;
+			this.filePath = filePath;
 			this.center = new Vector2(0.5f, 0.5f);
 		}
 
@@ -83,8 +87,8 @@ public class Skin {
 		patchList = new ArrayList<Skin.SkinPatch>();
 	}
 
-	public void addPatch(Joint joint, Sprite sprite) {
-		SkinPatch patch = new SkinPatch(joint, sprite);
+	public void addPatch(Joint joint, Sprite sprite, String filePath) {
+		SkinPatch patch = new SkinPatch(joint, sprite, filePath);
 
 		if (patches.containsKey(joint.getId())) {
 			SkinPatch previousPatch = patches.get(joint.getId());

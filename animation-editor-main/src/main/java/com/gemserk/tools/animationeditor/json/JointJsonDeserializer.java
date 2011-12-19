@@ -12,7 +12,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 
-public class JointDeserializer implements JsonDeserializer<Joint> {
+public class JointJsonDeserializer implements JsonDeserializer<Joint> {
 
 	Type childrenType = new TypeToken<ArrayList<Joint>>() {}.getType();
 

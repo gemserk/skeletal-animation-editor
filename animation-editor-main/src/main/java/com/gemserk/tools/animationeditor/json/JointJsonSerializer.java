@@ -8,7 +8,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 
-public class JointSerializer implements JsonSerializer<JointImpl> {
+public class JointJsonSerializer implements JsonSerializer<JointImpl> {
 
 	@Override
 	public JsonElement serialize(JointImpl joint, Type typeOfSrc, JsonSerializationContext context) {
