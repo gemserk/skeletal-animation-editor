@@ -49,9 +49,13 @@ import com.gemserk.resources.ResourceManagerImpl;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.JointImpl;
+import com.gemserk.tools.animationeditor.core.Skin;
+import com.gemserk.tools.animationeditor.core.Skin.SkinPatch;
 import com.gemserk.tools.animationeditor.core.tree.SkeletonEditorImpl;
 import com.gemserk.tools.animationeditor.json.JointJsonDeserializer;
 import com.gemserk.tools.animationeditor.json.JointJsonSerializer;
+import com.gemserk.tools.animationeditor.json.SkinJsonSerializer;
+import com.gemserk.tools.animationeditor.json.SkinPatchJsonSerializer;
 import com.gemserk.tools.animationeditor.main.list.AnimationKeyFrameListModel;
 import com.gemserk.tools.animationeditor.main.tree.EditorInterceptorImpl;
 import com.google.gson.Gson;
@@ -185,10 +189,11 @@ public class EditorWindow {
 					File selectedFile = chooser.getSelectedFile();
 					System.out.println("save project to... " + selectedFile.getName());
 
-					String projectFileName = FileUtils.getFileNameWithoutExtension(selectedFile.getAbsolutePath());
+					String projectFileNameWithoutExtension = FileUtils.getFileNameWithoutExtension(selectedFile.getAbsolutePath());
 
-					String skeletonFileName = projectFileName + ".skeleton";
-					String skinFileName = projectFileName + ".skin";
+					String projectFileName = projectFileNameWithoutExtension + ".aprj";
+					String skeletonFileName = projectFileNameWithoutExtension + ".skeleton";
+					String skinFileName = projectFileNameWithoutExtension + ".skin";
 
 					try {
 						Gson gson = new GsonBuilder() //
@@ -197,16 +202,34 @@ public class EditorWindow {
 								.setPrettyPrinting() //
 								.create();
 						FileWriter writer = new FileWriter(new File(skeletonFileName));
-						
+
 						gson.toJson(editor.getSkeleton(), writer);
 
 						writer.flush();
 						writer.close();
-						
+
 						logger.info("Skeleton saved to " + skeletonFileName);
 					} catch (IOException e1) {
-						logger.error("Failed to save project to " + skeletonFileName, e1);
-						e1.printStackTrace();
+						logger.error("Failed to save skeleton file to " + skeletonFileName, e1);
+					}
+
+					try {
+						Gson gson = new GsonBuilder() //
+								.registerTypeAdapter(SkinPatch.class, new SkinPatchJsonSerializer()) //
+								.registerTypeAdapter(Skin.class, new SkinJsonSerializer()) //
+								.setPrettyPrinting() //
+								.create();
+						
+						FileWriter writer = new FileWriter(new File(skinFileName));
+
+						gson.toJson(editorApplication.skin, writer);
+
+						writer.flush();
+						writer.close();
+
+						logger.info("Skin saved to " + skinFileName);
+					} catch (IOException e1) {
+						logger.error("Failed to save skin file to " + skeletonFileName, e1);
 					}
 
 					// save
