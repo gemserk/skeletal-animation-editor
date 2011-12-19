@@ -36,6 +36,10 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.gemserk.commons.reflection.Injector;
+import com.gemserk.commons.reflection.InjectorImpl;
+import com.gemserk.resources.ResourceManager;
+import com.gemserk.resources.ResourceManagerImpl;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.tree.SkeletonEditorImpl;
 import com.gemserk.tools.animationeditor.main.list.AnimationKeyFrameListModel;
@@ -74,8 +78,14 @@ public class EditorWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
+		
+		ResourceManager<String> resourceManager = new ResourceManagerImpl<String>();
+		
+		Injector injector = new InjectorImpl();
+		
+		injector.bind("resourceManager", resourceManager);
 
-		final EditorLibgdxApplicationListener editorApplication = new EditorLibgdxApplicationListener();
+		final EditorLibgdxApplicationListener editorApplication = injector.getInstance(EditorLibgdxApplicationListener.class);
 
 		final Canvas canvasEditor = new Canvas() {
 

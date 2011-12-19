@@ -26,7 +26,7 @@ public class Skin {
 			return sprite;
 		}
 
-		SkinPatch(Joint joint, Sprite sprite) {
+		public SkinPatch(Joint joint, Sprite sprite) {
 			this.joint = joint;
 			this.sprite = sprite;
 			this.center = new Vector2(0.5f, 0.5f);

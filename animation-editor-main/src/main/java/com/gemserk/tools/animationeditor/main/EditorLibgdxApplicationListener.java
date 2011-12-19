@@ -19,8 +19,11 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.gemserk.animation4j.timeline.TimelineAnimation;
 import com.gemserk.commons.gdx.graphics.ImmediateModeRendererUtils;
+import com.gemserk.commons.gdx.resources.LibgdxResourceBuilder;
 import com.gemserk.componentsengine.input.InputDevicesMonitorImpl;
 import com.gemserk.componentsengine.input.LibgdxInputMappingBuilder;
+import com.gemserk.resources.Resource;
+import com.gemserk.resources.ResourceManager;
 import com.gemserk.tools.animationeditor.core.Animation;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Joint;
@@ -75,6 +78,9 @@ public class EditorLibgdxApplicationListener extends Game {
 	SkeletonEditor skeletonEditor;
 	AnimationEditor animationEditor;
 
+	ResourceManager<String> resourceManager;
+	LibgdxResourceBuilder resourceBuilder;
+
 	private InputDevicesMonitorImpl<String> inputMonitor;
 
 	public void setTreeEditor(SkeletonEditor skeletonEditor) {
@@ -83,6 +89,10 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	public void setAnimationEditor(AnimationEditor animationEditor) {
 		this.animationEditor = animationEditor;
+	}
+
+	public void setResourceManager(ResourceManager<String> resourceManager) {
+		this.resourceManager = resourceManager;
 	}
 
 	interface EditorState {
@@ -270,7 +280,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		Vector2 position = new Vector2();
 		Vector2 positionModifier = new Vector2();
-		
+
 		float previousY;
 
 		float rotationSpeed = 1f;
@@ -278,9 +288,9 @@ public class EditorLibgdxApplicationListener extends Game {
 		public ModifyingSkinPatchState() {
 			position.x = Gdx.input.getX();
 			position.y = Gdx.graphics.getHeight() - Gdx.input.getY();
-			
+
 			previousY = Gdx.graphics.getHeight() - Gdx.input.getY();
-			
+
 			logger.debug("Current state: modifying skin patch");
 		}
 
@@ -315,7 +325,7 @@ public class EditorLibgdxApplicationListener extends Game {
 				// centerModification.set((currentX - position.x) / skinPatch.getSprite().getWidth(), //
 				// (currentY - position.y) / skinPatch.getSprite().getHeight());
 
-//				centerModification.rotate(-skinPatch.angle);
+				// centerModification.rotate(-skinPatch.angle);
 
 				skinPatch.center.x -= positionModifier.x;
 				skinPatch.center.y += positionModifier.y;
@@ -323,7 +333,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			position.x = Gdx.input.getX();
 			position.y = Gdx.graphics.getHeight() - Gdx.input.getY();
-			
+
 			previousY = Gdx.graphics.getHeight() - Gdx.input.getY();
 
 			skinPatch.project(position);
@@ -345,15 +355,25 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			@Override
 			public void run() {
-				Texture texture = new Texture(Gdx.files.absolute(file.getAbsolutePath()));
-				texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+				Resource<Texture> resource = resourceManager.get(file.getAbsolutePath());
+
+				if (resource == null) {
+					resourceBuilder.resource(file.getAbsolutePath(), resourceBuilder //
+							.texture2(Gdx.files.absolute(file.getAbsolutePath()))//
+							.minFilter(TextureFilter.Linear) //
+							.magFilter(TextureFilter.Linear));
+					resource = resourceManager.get(file.getAbsolutePath());
+				}
+
+				// Texture texture = new Texture(Gdx.files.absolute(file.getAbsolutePath()));
+				// texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
 				Joint selectedNode = skeletonEditor.getSelectedNode();
 
 				if (selectedNode == null)
 					return;
 
-				skin.addPatch(selectedNode, new Sprite(texture));
+				skin.addPatch(selectedNode, new Sprite(resource.get()));
 			}
 		});
 
@@ -401,6 +421,8 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		skin = new Skin();
 		skin.addPatch(root, new Sprite(texture));
+
+		resourceBuilder = new LibgdxResourceBuilder(resourceManager);
 
 	}
 
