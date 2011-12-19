@@ -11,6 +11,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -35,17 +37,29 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.gemserk.commons.files.FileUtils;
 import com.gemserk.commons.reflection.Injector;
 import com.gemserk.commons.reflection.InjectorImpl;
 import com.gemserk.resources.ResourceManager;
 import com.gemserk.resources.ResourceManagerImpl;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
+import com.gemserk.tools.animationeditor.core.Joint;
+import com.gemserk.tools.animationeditor.core.JointImpl;
 import com.gemserk.tools.animationeditor.core.tree.SkeletonEditorImpl;
+import com.gemserk.tools.animationeditor.json.JointJsonDeserializer;
+import com.gemserk.tools.animationeditor.json.JointJsonSerializer;
 import com.gemserk.tools.animationeditor.main.list.AnimationKeyFrameListModel;
 import com.gemserk.tools.animationeditor.main.tree.EditorInterceptorImpl;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class EditorWindow {
+
+	protected static final Logger logger = LoggerFactory.getLogger(EditorWindow.class);
 
 	private JFrame frmGemserksAnimationEditor;
 	private JList keyFramesList;
@@ -78,11 +92,11 @@ public class EditorWindow {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		
+
 		ResourceManager<String> resourceManager = new ResourceManagerImpl<String>();
-		
+
 		Injector injector = new InjectorImpl();
-		
+
 		injector.bind("resourceManager", resourceManager);
 
 		final EditorLibgdxApplicationListener editorApplication = injector.getInstance(EditorLibgdxApplicationListener.class);
@@ -144,7 +158,7 @@ public class EditorWindow {
 				int returnVal = chooser.showOpenDialog(frmGemserksAnimationEditor);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = chooser.getSelectedFile();
-					
+
 					editorApplication.setCurrentSkin(selectedFile);
 					// File[] selectedFiles = chooser.getSelectedFiles();
 					// for (int i = 0; i < selectedFiles.length; i++) {
@@ -154,8 +168,8 @@ public class EditorWindow {
 			}
 		});
 		mnFile.add(mntmImport);
-		
-		JMenuItem mntmSave= new JMenuItem("Save");
+
+		JMenuItem mntmSave = new JMenuItem("Save");
 		mntmSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
@@ -166,11 +180,36 @@ public class EditorWindow {
 				chooser.setMultiSelectionEnabled(false);
 
 				int returnVal = chooser.showSaveDialog(frmGemserksAnimationEditor);
-				
+
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = chooser.getSelectedFile();
 					System.out.println("save project to... " + selectedFile.getName());
-					// save 
+
+					String projectFileName = FileUtils.getFileNameWithoutExtension(selectedFile.getAbsolutePath());
+
+					String skeletonFileName = projectFileName + ".skeleton";
+					String skinFileName = projectFileName + ".skin";
+
+					try {
+						Gson gson = new GsonBuilder() //
+								.registerTypeAdapter(JointImpl.class, new JointJsonSerializer()) //
+								.registerTypeAdapter(Joint.class, new JointJsonDeserializer()) //
+								.setPrettyPrinting() //
+								.create();
+						FileWriter writer = new FileWriter(new File(skeletonFileName));
+						
+						gson.toJson(editor.getSkeleton(), writer);
+
+						writer.flush();
+						writer.close();
+						
+						logger.info("Skeleton saved to " + skeletonFileName);
+					} catch (IOException e1) {
+						logger.error("Failed to save project to " + skeletonFileName, e1);
+						e1.printStackTrace();
+					}
+
+					// save
 				}
 			}
 		});
@@ -216,10 +255,10 @@ public class EditorWindow {
 		lblTitle.setVerticalAlignment(SwingConstants.TOP);
 		lblTitle.setToolTipText("Select image");
 		lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
-		
+
 		JScrollPane scrollPane_2 = new JScrollPane();
 		panel_4.add(scrollPane_2, BorderLayout.CENTER);
-		
+
 		JPanel panelImages = new JPanel();
 		panelImages.setBackground(Color.LIGHT_GRAY);
 		scrollPane_2.setViewportView(panelImages);

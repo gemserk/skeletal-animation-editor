@@ -86,6 +86,14 @@ public class Skin {
 
 	Map<String, SkinPatch> patches;
 	ArrayList<SkinPatch> patchList;
+	
+	public Map<String, SkinPatch> getPatches() {
+		return patches;
+	}
+	
+	public ArrayList<SkinPatch> getPatchList() {
+		return patchList;
+	}
 
 	public Skin() {
 		patches = new HashMap<String, Skin.SkinPatch>();
