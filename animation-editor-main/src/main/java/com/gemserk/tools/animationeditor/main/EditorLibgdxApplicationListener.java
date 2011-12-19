@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.gemserk.animation4j.timeline.Timeline;
 import com.gemserk.animation4j.timeline.TimelineAnimation;
 import com.gemserk.commons.gdx.graphics.ImmediateModeRendererUtils;
 import com.gemserk.commons.gdx.resources.LibgdxResourceBuilder;
@@ -114,8 +115,15 @@ public class EditorLibgdxApplicationListener extends Game {
 			ArrayList<AnimationKeyFrame> keyFrames = currentAnimation.getKeyFrames();
 
 			skeleton = skeletonEditor.getSkeleton();
+			
+			if (keyFrames.size() == 0) {
+				timelineAnimation = null;
+				return;
+			}
 
-			timelineAnimation = new TimelineAnimation(JointUtils.getTimeline(skeleton.getRoot(), keyFrames), (float) keyFrames.size() - 1);
+			Timeline timeline = JointUtils.getTimeline(skeleton.getRoot(), keyFrames);
+			
+			timelineAnimation = new TimelineAnimation(timeline, (float) keyFrames.size() - 1);
 			timelineAnimation.setSpeed(1f);
 			timelineAnimation.setDelay(0f);
 			timelineAnimation.start(0);
@@ -123,6 +131,9 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		@Override
 		public void update() {
+			
+			if (timelineAnimation == null) 
+				return;
 
 			timelineAnimation.update(Gdx.graphics.getDeltaTime());
 
