@@ -24,6 +24,7 @@ TODO
 	- automatic viewport
 	- fixed viewport
 * Tooltips over each button of the GUI
+* Toggle buttons to enable different render stuff (joints, skins, joint axis for inner coordinate system, etc)
 * Keyframes stores only changes from the previous state, to be able to animate multiple animations and to be able to move parents and the animations continue the same (for example, an animaiton of only the left arm)
 * Status bar shows current editor state (modifying the SKin, etc etc etc)
 * New Project
@@ -37,6 +38,8 @@ TODO
 * Investigate about using Box2d to edit the skeleton and joints.
 
 * draw current joint axis to see the current roation, etc
+
+* should we use libgdx to render? or just use Java awt canvas?
 
 Quick Concepts structure:
 

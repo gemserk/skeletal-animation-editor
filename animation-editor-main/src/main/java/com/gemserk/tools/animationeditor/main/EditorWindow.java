@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -25,6 +26,7 @@ import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -42,6 +44,7 @@ import javax.swing.tree.TreeSelectionModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.gemserk.commons.files.FileUtils;
 import com.gemserk.commons.reflection.Injector;
@@ -77,6 +80,8 @@ public class EditorWindow {
 	private EditorInterceptorImpl editor;
 
 	private ResourceManager<String> resourceManager;
+	
+	private ResourceBundle messages;
 
 	/**
 	 * Launch the application.
@@ -106,11 +111,13 @@ public class EditorWindow {
 	 */
 	private void initialize() {
 
+		messages = ResourceBundle.getBundle("messages");
 		resourceManager = new ResourceManagerImpl<String>();
 
 		Injector injector = new InjectorImpl();
 
 		injector.bind("resourceManager", resourceManager);
+		injector.bind("messages", messages);
 
 		final EditorLibgdxApplicationListener editorApplication = injector.getInstance(EditorLibgdxApplicationListener.class);
 
@@ -346,6 +353,18 @@ public class EditorWindow {
 		mnFile.addSeparator();
 
 		JMenuItem mntmExit = new JMenuItem("Exit");
+		mntmExit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int showConfirmDialog = JOptionPane.showConfirmDialog(frmGemserksAnimationEditor, // 
+						messages.getString(Messages.DialogExitMessage), //
+						messages.getString(Messages.DialogExitTitle), // 
+						JOptionPane.YES_NO_OPTION);
+				if (showConfirmDialog == JOptionPane.NO_OPTION)
+					return;
+				Gdx.app.exit();		
+			}
+		});
 		mnFile.add(mntmExit);
 
 		JPanel panelTools = new JPanel();
