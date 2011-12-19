@@ -194,10 +194,6 @@ public class EditorLibgdxApplicationListener extends Game {
 				newNode.setPosition(x, y);
 
 				skeletonEditor.select(newNode.getParent());
-
-				Texture texture = new Texture(Gdx.files.internal("data/bone.png"));
-				texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-				skin.addPatch(newNode, new Sprite(texture));
 			}
 
 		}
@@ -417,19 +413,19 @@ public class EditorLibgdxApplicationListener extends Game {
 		skeletonEditor.select(root);
 
 		resourceBuilder = new LibgdxResourceBuilder(resourceManager);
-		
-		resourceBuilder.resource("DefaultBone", resourceBuilder //
-				.texture2(Gdx.files.internal("data/bone.png"))//
-				.minFilter(TextureFilter.Linear) //
-				.magFilter(TextureFilter.Linear));
 
-		Resource<Texture> resource = resourceManager.get("DefaultBone");
+		// resourceBuilder.resource("DefaultBone", resourceBuilder //
+		// .texture2(Gdx.files.internal("data/bone.png"))//
+		// .minFilter(TextureFilter.Linear) //
+		// .magFilter(TextureFilter.Linear));
+		//
+		// Resource<Texture> resource = resourceManager.get("DefaultBone");
 
 		// Texture texture = new Texture(Gdx.files.internal("data/bone.png"));
 		// texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
 		skin = new Skin();
-		skin.addPatch(root, new Sprite(resource.get()));
+		// skin.addPatch(root, new Sprite(resource.get()));
 	}
 
 	@Override
