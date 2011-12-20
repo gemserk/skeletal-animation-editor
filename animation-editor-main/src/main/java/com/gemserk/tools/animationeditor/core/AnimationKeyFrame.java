@@ -31,6 +31,8 @@ public class AnimationKeyFrame {
 	public void setSkeleton(Skeleton skeleton) {
 		this.skeleton = skeleton;
 	}
+	
+	
 
 	public float getTime() {
 		return time;
