@@ -1,13 +1,16 @@
 TODO
 ==========================
 
-* Export a sequence of images given an animation, a destination folder, a target FPS and a viewport (could be automatic calculated from the boundings of the skeleton)
-	- automatic viewport
-	- fixed viewport
+* Export a sequence of images given an animation, a destination folder, a target FPS and a view port (could be automatic calculated from the bounds of the skeleton)
+	- automatic view port
+	- fixed view port
 
-* runnable jar (with all dependencies) on github uploads
+* runnable jar (with all dependencies) on Github uploads
 
 * Import a list of images to the images panel to be used to easily edit the skin of each Joint.
+
+* move skin patches between different layers back/over
+
 * Zoom with ctrl + mouse wheel (and possibly a gui component)
 * Undo with ctrl + z
 * Edit menu with all the stuff with Copy/Paste/Undo/Etc.
