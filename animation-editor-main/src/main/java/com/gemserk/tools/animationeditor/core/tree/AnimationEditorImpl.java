@@ -10,11 +10,10 @@ public class AnimationEditorImpl implements AnimationEditor {
 
 	protected SkeletonEditor skeletonEditor;
 
-	int index = 0;
 	SkeletonAnimation currentAnimation = new SkeletonAnimation();
 	SkeletonAnimationKeyFrame selectedKeyFrame;
 
-	float duration = 0f;
+	float timeInTimeline = 1f;
 
 	public AnimationEditorImpl(SkeletonEditor skeletonEditor) {
 		this.skeletonEditor = skeletonEditor;
@@ -22,10 +21,14 @@ public class AnimationEditorImpl implements AnimationEditor {
 
 	@Override
 	public SkeletonAnimationKeyFrame addKeyFrame() {
+		int index = currentAnimation.getKeyFrames().size();
+		
+		timeInTimeline = index;
+
 		String name = "keyFrame" + index++;
-		SkeletonAnimationKeyFrame keyFrame = SkeletonAnimationUtils.keyFrame(name, JointUtils.cloneSkeleton(skeletonEditor.getSkeleton()), duration);
+		
+		SkeletonAnimationKeyFrame keyFrame = SkeletonAnimationUtils.keyFrame(name, JointUtils.cloneSkeleton(skeletonEditor.getSkeleton()), timeInTimeline);
 		currentAnimation.getKeyFrames().add(keyFrame);
-		duration += 1f;
 
 		// copy current skeleton values to keyframe.
 
