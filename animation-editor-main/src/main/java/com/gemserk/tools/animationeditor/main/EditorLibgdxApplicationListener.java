@@ -481,7 +481,8 @@ public class EditorLibgdxApplicationListener extends Game {
 		ArrayList<SkinPatch> patchList = skin.getPatchList();
 		for (int i = 0; i < patchList.size(); i++) {
 			SkinPatch skinPatch = patchList.get(i);
-			skinPatch.update(skinSprites.get(skinPatch.getJoint().getId()).get());
+			String jointId = skinPatch.getJoint().getId();
+			skinPatch.update(skinSprites.get(jointId).get(), skeletonEditor.getSkeleton().find(jointId));
 		}
 
 		// skin.update();

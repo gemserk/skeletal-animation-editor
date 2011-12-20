@@ -25,4 +25,8 @@ public class Skeleton {
 		
 	}
 	
+	public Joint find(String id) {
+		return root.find(id);
+	}
+	
 }
