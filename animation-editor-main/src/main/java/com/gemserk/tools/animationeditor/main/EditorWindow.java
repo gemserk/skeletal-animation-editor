@@ -13,7 +13,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -52,23 +51,17 @@ import com.gemserk.commons.reflection.Injector;
 import com.gemserk.commons.reflection.InjectorImpl;
 import com.gemserk.resources.ResourceManager;
 import com.gemserk.resources.ResourceManagerImpl;
-import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.Skeleton;
 import com.gemserk.tools.animationeditor.core.SkeletonAnimation;
 import com.gemserk.tools.animationeditor.core.SkeletonAnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Skin;
-import com.gemserk.tools.animationeditor.core.Skin.SkinPatch;
 import com.gemserk.tools.animationeditor.core.tree.SkeletonEditorImpl;
-import com.gemserk.tools.animationeditor.json.JointJsonDeserializer;
-import com.gemserk.tools.animationeditor.json.SkinJsonDeserializer;
-import com.gemserk.tools.animationeditor.json.SkinPatchJsonDeserializer;
 import com.gemserk.tools.animationeditor.main.list.AnimationKeyFrameListModel;
 import com.gemserk.tools.animationeditor.main.tree.EditorInterceptorImpl;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 
 public class EditorWindow {
 
@@ -80,7 +73,7 @@ public class EditorWindow {
 
 	private ResourceManager<String> resourceManager;
 	private ResourceBundle messages;
-	
+
 	private Project currentProject;
 
 	/**
@@ -180,27 +173,29 @@ public class EditorWindow {
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = chooser.getSelectedFile();
 
-					Gson gson = new GsonBuilder() //
-							.setPrettyPrinting() //
-							.create();
-
 					try {
+						Gson gson = new GsonBuilder() //
+								.setPrettyPrinting() //
+								.create();
+
 						logger.info("Loading project from " + selectedFile);
 						Project project = gson.fromJson(new FileReader(selectedFile), Project.class);
 
 						resourceManager.unloadAll();
 
-						Skeleton skeleton = loadSkeleton(project);
-						Skin skin = loadSkin(project, skeleton, resourceManager);
-						List<SkeletonAnimation> animations = loadAnimations(project);
+						Skeleton skeleton = ProjectUtils.loadSkeleton(project);
+						Skin skin = ProjectUtils.loadSkin(project, skeleton, resourceManager);
+						List<SkeletonAnimation> animations = ProjectUtils.loadAnimations(project);
 
 						editor.setSkeleton(skeleton);
 						editorApplication.skin = skin;
-						
-						if (animations.size()> 0) {
+
+						if (animations.size() > 0) {
 							SkeletonAnimation skeletonAnimation = animations.get(0);
 							editor.setCurrentAnimation(skeletonAnimation);
 						}
+						
+						currentProject = project;
 
 					} catch (JsonSyntaxException e1) {
 						logger.error("Failed when loading project from file " + selectedFile, e1);
@@ -213,71 +208,27 @@ public class EditorWindow {
 				}
 			}
 
-			private List<SkeletonAnimation> loadAnimations(Project project) throws JsonIOException, JsonSyntaxException, FileNotFoundException {
-				Type animationsListType = new TypeToken<List<SkeletonAnimation>>() {}.getType();
-				Gson gson = new GsonBuilder() //
-						.setPrettyPrinting() //
-						.create();
-				return gson.fromJson(new FileReader(project.animationsFile), animationsListType);
-			}
-
-			private Skeleton loadSkeleton(Project project) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
-				Gson gson = new GsonBuilder() //
-						.registerTypeAdapter(Joint.class, new JointJsonDeserializer()) //
-						.setPrettyPrinting() //
-						.create();
-				return gson.fromJson(new FileReader(project.skeletonFile), Skeleton.class);
-			}
-
-			private Skin loadSkin(Project project, Skeleton skeleton, ResourceManager<String> resourceManager) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
-
-				SkinPatchJsonDeserializer skinPatchJsonDeserializer = new SkinPatchJsonDeserializer();
-
-				skinPatchJsonDeserializer.setSkeleton(skeleton);
-				skinPatchJsonDeserializer.setResourceManager(resourceManager);
-
-				Gson gson = new GsonBuilder() //
-						.registerTypeAdapter(Skin.class, new SkinJsonDeserializer()) //
-						.registerTypeAdapter(SkinPatch.class, skinPatchJsonDeserializer) //
-						.setPrettyPrinting() //
-						.create();
-
-				return gson.fromJson(new FileReader(project.skinFile), Skin.class);
-			}
-
 		});
 		mnFile.add(mntmOpen);
 
-		JMenuItem mntmSave = new JMenuItem("Save as...");
+		JMenuItem mntmSave = new JMenuItem("Save");
 		mntmSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser chooser = new JFileChooser();
-
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("Project files only", //
-						Project.PROJECT_EXTENSION);
-
-				chooser.setFileFilter(filter);
-				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				chooser.setMultiSelectionEnabled(false);
-
-				int returnVal = chooser.showSaveDialog(frmGemserksAnimationEditor);
-
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					File selectedFile = chooser.getSelectedFile();
-					System.out.println("save project to... " + selectedFile.getName());
-
-					String projectFileNameWithoutExtension = FileUtils.getFileNameWithoutExtension(selectedFile.getAbsolutePath());
-
-					Project project = new Project(projectFileNameWithoutExtension);
-
-					ProjectUtils.saveSkeleton(project, editor.getSkeleton());
-					ProjectUtils.saveSkin(project, editorApplication.skin);
-					ProjectUtils.saveAnimations(project, Arrays.asList(editor.getCurrentAnimation()));
-					ProjectUtils.saveProject(project);
-				}
+				if (currentProject != null)
+					save(editorApplication);
+				else
+					saveAs(editorApplication);
 			}
 		});
 		mnFile.add(mntmSave);
+
+		JMenuItem mntmSaveAs = new JMenuItem("Save as...");
+		mntmSaveAs.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				saveAs(editorApplication);
+			}
+		});
+		mnFile.add(mntmSaveAs);
 
 		mnFile.addSeparator();
 
@@ -498,4 +449,38 @@ public class EditorWindow {
 		panel_7.add(buttonStoreKeyFrame);
 	}
 
+	private void save(EditorLibgdxApplicationListener editorApplication) {
+		ProjectUtils.saveSkeleton(currentProject, editor.getSkeleton());
+		ProjectUtils.saveSkin(currentProject, editorApplication.skin);
+		ProjectUtils.saveAnimations(currentProject, Arrays.asList(editor.getCurrentAnimation()));
+		ProjectUtils.saveProject(currentProject);
+	}
+
+	private void saveAs(EditorLibgdxApplicationListener editorApplication) {
+		JFileChooser chooser = new JFileChooser();
+
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Project files only", //
+				Project.PROJECT_EXTENSION);
+
+		chooser.setFileFilter(filter);
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		chooser.setMultiSelectionEnabled(false);
+
+		int returnVal = chooser.showSaveDialog(frmGemserksAnimationEditor);
+
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = chooser.getSelectedFile();
+
+			String projectFileNameWithoutExtension = FileUtils.getFileNameWithoutExtension(selectedFile.getAbsolutePath());
+
+			Project project = new Project(projectFileNameWithoutExtension);
+
+			ProjectUtils.saveSkeleton(project, editor.getSkeleton());
+			ProjectUtils.saveSkin(project, editorApplication.skin);
+			ProjectUtils.saveAnimations(project, Arrays.asList(editor.getCurrentAnimation()));
+			ProjectUtils.saveProject(project);
+
+			currentProject = project;
+		}
+	}
 }
