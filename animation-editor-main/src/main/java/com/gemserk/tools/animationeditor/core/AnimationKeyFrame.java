@@ -36,12 +36,7 @@ public class AnimationKeyFrame {
 		this.time = time;
 	}
 
-	public AnimationKeyFrame(String name, Skeleton skeleton) {
-		this.name = name;
-		this.skeleton = skeleton;
-	}
-
-	public AnimationKeyFrame(String name, Skeleton skeleton, float time) {
+	AnimationKeyFrame(String name, Skeleton skeleton, float time) {
 		this.name = name;
 		this.skeleton = skeleton;
 		this.time = time;

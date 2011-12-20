@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.gemserk.tools.animationeditor.core.Animation;
 import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
+import com.gemserk.tools.animationeditor.core.AnimationUtils;
 import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.JointUtils;
 import com.gemserk.tools.animationeditor.core.Skeleton;
@@ -25,7 +26,7 @@ public class AnimationEditorImpl implements AnimationEditor {
 	@Override
 	public AnimationKeyFrame addKeyFrame() {
 		String name = "keyFrame" + index++;
-		AnimationKeyFrame keyFrame = new AnimationKeyFrame(name, JointUtils.cloneSkeleton(skeletonEditor.getSkeleton()), duration);
+		AnimationKeyFrame keyFrame = AnimationUtils.keyFrame(name, JointUtils.cloneSkeleton(skeletonEditor.getSkeleton()), duration);
 		currentAnimation.getKeyFrames().add(keyFrame);
 		duration += 1f;
 
