@@ -12,7 +12,7 @@ public class SkinPatchJsonSerializer implements JsonSerializer<SkinPatch> {
 	@Override
 	public JsonElement serialize(SkinPatch skinPatch, Type typeOfSrc, JsonSerializationContext context) {
 		JsonObject jsonObject = new JsonObject();
-		jsonObject.addProperty("jointId", skinPatch.getJoint().getId());
+		jsonObject.addProperty("jointId", skinPatch.getJointId());
 		jsonObject.addProperty("textureId", skinPatch.textureId);
 		jsonObject.addProperty("angle", skinPatch.angle);
 		jsonObject.addProperty("cx", skinPatch.center.x);

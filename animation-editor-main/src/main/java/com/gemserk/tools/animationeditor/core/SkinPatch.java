@@ -2,32 +2,23 @@ package com.gemserk.tools.animationeditor.core;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.gemserk.resources.Resource;
 
 public class SkinPatch {
 
-	Joint joint;
-	// Sprite sprite;
-
-	// Resource<Sprite> sprite;
+	String jointId;
 
 	public float angle;
 	public Vector2 center = new Vector2(0.5f, 0.5f);
 
 	// path to the texture file
 	public String textureId;
-
-	public Joint getJoint() {
-		return joint;
+	
+	public String getJointId() {
+		return jointId;
 	}
 
-	// public Sprite getSprite() {
-	// return sprite.get();
-	// }
-
-	public SkinPatch(Joint joint, Resource<Sprite> sprite, String textureId) {
-		this.joint = joint;
-		// this.sprite = sprite;
+	public SkinPatch(String jointId, String textureId) {
+		this.jointId = jointId;
 		this.textureId = textureId;
 	}
 
@@ -77,7 +68,7 @@ public class SkinPatch {
 
 	@Override
 	public String toString() {
-		return "SkinPatch [id:" + joint.getId() + ", textureId:" + textureId + ", center:" + center.toString() + ", angle:" + angle + "]";
+		return "SkinPatch [id:" + jointId + ", textureId:" + textureId + ", center:" + center.toString() + ", angle:" + angle + "]";
 	}
 
 }

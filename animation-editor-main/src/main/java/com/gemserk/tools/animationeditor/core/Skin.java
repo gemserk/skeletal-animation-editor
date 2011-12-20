@@ -26,7 +26,7 @@ public class Skin {
 	}
 
 	public void addPatch(Joint joint, Resource<Sprite> sprite, String textureId) {
-		SkinPatch patch = new SkinPatch(joint, sprite, textureId);
+		SkinPatch patch = new SkinPatch(joint.getId(), textureId);
 
 		if (patches.containsKey(joint.getId())) {
 			SkinPatch previousPatch = patches.get(joint.getId());

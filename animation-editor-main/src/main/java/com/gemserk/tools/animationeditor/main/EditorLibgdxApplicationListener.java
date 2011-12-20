@@ -480,12 +480,11 @@ public class EditorLibgdxApplicationListener extends Game {
 	private void updateSkin() {
 		ArrayList<SkinPatch> patchList = skin.getPatchList();
 		for (int i = 0; i < patchList.size(); i++) {
-			SkinPatch skinPatch = patchList.get(i);
-			String jointId = skinPatch.getJoint().getId();
-			skinPatch.update(skinSprites.get(jointId).get(), skeletonEditor.getSkeleton().find(jointId));
+			SkinPatch patch = patchList.get(i);
+			String jointId = patch.getJointId();
+			Joint joint = skeletonEditor.getSkeleton().find(jointId);
+			patch.update(skinSprites.get(jointId).get(), joint);
 		}
-
-		// skin.update();
 	}
 
 	private void realRender() {
@@ -494,9 +493,11 @@ public class EditorLibgdxApplicationListener extends Game {
 		spriteBatch.begin();
 		for (int i = 0; i < skin.patchesCount(); i++) {
 			SkinPatch patch = skin.getPatch(i);
-			Sprite patchSprite = skinSprites.get(patch.getJoint().getId()).get();
+			
+			String jointId = patch.getJointId();
+			
+			Sprite patchSprite = skinSprites.get(jointId).get();
 			patchSprite.draw(spriteBatch);
-			// patch.getSprite().draw(spriteBatch);
 		}
 		spriteBatch.end();
 

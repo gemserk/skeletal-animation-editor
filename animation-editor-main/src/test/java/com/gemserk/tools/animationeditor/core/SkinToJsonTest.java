@@ -47,7 +47,7 @@ public class SkinToJsonTest {
 			Float cx = jsonObject.get("cx").getAsFloat();
 			Float cy = jsonObject.get("cy").getAsFloat();
 
-			SkinPatch skinPatch = new SkinPatch(skeleton.getRoot().find(jointId), null, textureId);
+			SkinPatch skinPatch = new SkinPatch(jointId, textureId);
 
 			skinPatch.angle = angle.floatValue();
 			skinPatch.center.set(cx.floatValue(), cy.floatValue());

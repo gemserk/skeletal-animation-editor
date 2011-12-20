@@ -52,7 +52,7 @@ public class SkinPatchJsonDeserializer implements JsonDeserializer<SkinPatch> {
 			resource = resourceManager.get(textureId);
 		}
 
-		SkinPatch skinPatch = new SkinPatch(skeleton.getRoot().find(jointId), resource, textureId);
+		SkinPatch skinPatch = new SkinPatch(jointId, textureId);
 
 		skinPatch.angle = angle.floatValue();
 		skinPatch.center.set(cx.floatValue(), cy.floatValue());
