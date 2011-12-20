@@ -57,17 +57,12 @@ public class JointUtils {
 
 			for (int i = 0; i < frames.size(); i++) {
 				SkeletonAnimationKeyFrame skeletonAnimationKeyFrame = frames.get(i);
-				// Joint treeState = animationKeyFrame.getSkeleton().getRoot();
-				// Joint nodeState = treeState.find(joint.getId());
-				
-				Joint nodeState = skeletonAnimationKeyFrame.getJoint(joint.getId());
-				
-				if (nodeState == null)
+				if (!skeletonAnimationKeyFrame.containsKeyFrameForJoint(joint.getId()))
 					continue;
-
-				timelineValue.addKeyFrame(new KeyFrame(skeletonAnimationKeyFrame.getTime(), JointConverter.instance.copyFromObject(nodeState, null)));
+				float[] keyFrame = skeletonAnimationKeyFrame.getJointKeyFrame(joint.getId());
+				timelineValue.addKeyFrame(new KeyFrame(skeletonAnimationKeyFrame.getTime(), keyFrame));
 			}
-			
+
 			timelineValues.add(timelineValue);
 
 		}

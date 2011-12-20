@@ -1,11 +1,22 @@
 package com.gemserk.tools.animationeditor.core;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AnimationUtils {
+	
+	static JointConverter jointConverter = JointConverter.instance;
 
 	public static SkeletonAnimationKeyFrame keyFrame(String name, Skeleton skeleton, float time) {
-		return new SkeletonAnimationKeyFrame(name, skeleton, time);
+		HashMap<String, float[]> jointKeyFrames = new HashMap<String, float[]>();
+		
+		ArrayList<Joint> jointList = JointUtils.toArrayList(skeleton.getRoot());
+		
+		for (Joint joint : jointList) {
+			jointKeyFrames.put(joint.getId(), jointConverter.copyFromObject(joint, null));
+		}
+		
+		return new SkeletonAnimationKeyFrame(name, skeleton, time, jointKeyFrames);
 	}
 
 	public static void updateKeyFrame(Skeleton skeleton, SkeletonAnimationKeyFrame keyframe) {
