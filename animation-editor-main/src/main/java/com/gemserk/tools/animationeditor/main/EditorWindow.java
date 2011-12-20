@@ -42,6 +42,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeSelectionModel;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -212,6 +213,34 @@ public class EditorWindow {
 			}
 		});
 		mnFile.add(mntmImport);
+		
+		mnFile.addSeparator();
+		
+		JMenuItem mntmExport = new JMenuItem("Export animation...");
+		mntmExport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFileChooser chooser = new JFileChooser();
+				
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG files", "png");
+
+				chooser.setFileFilter(filter);
+				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				chooser.setMultiSelectionEnabled(false);
+
+				int returnVal = chooser.showOpenDialog(frmGemserksAnimationEditor);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = chooser.getSelectedFile();
+					
+					String absolutePath = selectedFile.getAbsolutePath();
+					
+					String baseName = FilenameUtils.getBaseName(absolutePath);
+					String fullPath = FilenameUtils.getFullPath(absolutePath);
+					
+					editorApplication.exportAnimation(fullPath + baseName + "_");
+				}
+			}
+		});
+		mnFile.add(mntmExport);
 
 		mnFile.addSeparator();
 

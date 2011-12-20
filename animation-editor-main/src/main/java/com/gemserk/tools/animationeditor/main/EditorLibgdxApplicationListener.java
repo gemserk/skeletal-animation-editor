@@ -67,8 +67,6 @@ public class EditorLibgdxApplicationListener extends Game {
 		public static final String CancelStateButton = "cancelStateButton";
 
 		public static final String SecondActionButton = "secondActionButton";
-		
-		public static final String ExportAnimationButton = "exportAnimationButton";
 
 	}
 
@@ -163,13 +161,13 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		private TimelineAnimation timelineAnimation;
 		private Skeleton skeleton;
-		
+
 		int sequence;
 		float fps;
-		
+
 		String animationPath;
 
-		public ExportingAnimationState() {
+		public ExportingAnimationState(String animationPath, float fps) {
 			SkeletonAnimation currentAnimation = animationEditor.getCurrentAnimation();
 
 			ArrayList<SkeletonAnimationKeyFrame> keyFrames = currentAnimation.getKeyFrames();
@@ -187,21 +185,26 @@ public class EditorLibgdxApplicationListener extends Game {
 			timelineAnimation.setSpeed(1f);
 			timelineAnimation.setDelay(0f);
 			timelineAnimation.start(1);
-			
+
 			sequence = 0;
-			fps = 5;
-			
-			animationPath = "/tmp/superanimation";
+			this.fps = fps;
+			this.animationPath = animationPath;
 		}
 
 		@Override
 		public void update() {
 
+		}
+
+		@Override
+		public void render() {
 			if (timelineAnimation == null)
 				return;
-			
+
 			float updateTime = 1f / fps;
 			
+			renderSkin(skin);
+
 			try {
 				ScreenshotSaver.saveScreenshot(new File(animationPath + sequence + ".png"), true);
 			} catch (IOException e) {
@@ -212,15 +215,10 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			timelineAnimation.update(updateTime);
 
-			if (timelineAnimation.isFinished()) 
+			if (timelineAnimation.isFinished())
 				currentState = new NormalEditorState();
 
-		}
 
-		@Override
-		public void render() {
-			renderSkin(skin);
-			// renderSkeleton(skeleton);
 		}
 
 	}
@@ -248,11 +246,6 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			if (inputMonitor.getButton(Actions.ModifySkinPatchButton).isReleased()) {
 				currentState = new ModifyingSkinPatchState();
-				return;
-			}
-			
-			if (inputMonitor.getButton(Actions.ExportAnimationButton).isReleased()) {
-				currentState = new ExportingAnimationState();
 				return;
 			}
 
@@ -498,8 +491,7 @@ public class EditorLibgdxApplicationListener extends Game {
 				monitorKey(Actions.CancelStateButton, Keys.ESCAPE);
 
 				monitorKey(Actions.SecondActionButton, Keys.SHIFT_LEFT);
-				
-				monitorKey(Actions.ExportAnimationButton, Keys.E);
+
 			}
 		};
 
@@ -642,7 +634,8 @@ public class EditorLibgdxApplicationListener extends Game {
 					resourceBuilder.resource(textureId, resourceBuilder //
 							.texture2(Gdx.files.absolute(texturePaths.get(textureId)))//
 							.minFilter(TextureFilter.Linear) //
-							.magFilter(TextureFilter.Linear));
+							.magFilter(TextureFilter.Linear) //
+							);
 				}
 
 				ArrayList<SkinPatch> patchList = skin.getPatchList();
@@ -657,6 +650,17 @@ public class EditorLibgdxApplicationListener extends Game {
 					skinSprites.put(jointId, resource);
 				}
 
+			}
+		});
+
+	}
+
+	public void exportAnimation(final String animationPath) {
+
+		Gdx.app.postRunnable(new Runnable() {
+			@Override
+			public void run() {
+				currentState = new ExportingAnimationState(animationPath, 2f);
 			}
 		});
 
