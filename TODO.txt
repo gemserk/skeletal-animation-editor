@@ -1,7 +1,6 @@
 TODO
 ==========================
 
-* Save relative paths to the project not absolute
 * Export a sequence of images given an animation, a destination folder, a target FPS and a viewport (could be automatic calculated from the boundings of the skeleton)
 	- automatic viewport
 	- fixed viewport
@@ -63,4 +62,7 @@ DONE
 * Save button saves the current project if there is one, show save as otherwise.
 * Skin patches are saved only with ids of the joints and the skeleton is a parameter of the update() method of the Skin and SkinPatch.
 * Loaded textures are stored in a map<textureid, path> as a property of the main project saved with it, when the project loads, the map of images is used to recreate the resource manager used by the editor and the skin.
+* Save skin, skeleton and animations file in a relative path to the project.
+* Save relative paths of images if the images are in the same base path of the project.
+
 
