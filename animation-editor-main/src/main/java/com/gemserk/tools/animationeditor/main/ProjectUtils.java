@@ -31,27 +31,30 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 public class ProjectUtils {
-	
+
 	protected static final Logger logger = LoggerFactory.getLogger(ProjectUtils.class);
-	
+
 	public static List<SkeletonAnimation> loadAnimations(Project project) throws JsonIOException, JsonSyntaxException, FileNotFoundException {
+		String animationsFile = project.getAnimationsFile();
 		Type animationsListType = new TypeToken<List<SkeletonAnimation>>() {
 		}.getType();
 		Gson gson = new GsonBuilder() //
 				.setPrettyPrinting() //
 				.create();
-		return gson.fromJson(new FileReader(project.animationsFile), animationsListType);
+		return gson.fromJson(new FileReader(animationsFile), animationsListType);
 	}
 
 	public static Skeleton loadSkeleton(Project project) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
+		String skeletonFile = project.getSkeletonFile();
 		Gson gson = new GsonBuilder() //
 				.registerTypeAdapter(Joint.class, new JointJsonDeserializer()) //
 				.setPrettyPrinting() //
 				.create();
-		return gson.fromJson(new FileReader(project.skeletonFile), Skeleton.class);
+		return gson.fromJson(new FileReader(skeletonFile), Skeleton.class);
 	}
 
 	public static Skin loadSkin(Project project, Skeleton skeleton, ResourceManager<String> resourceManager) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
+		String skinFile = project.getSkinFile();
 
 		SkinPatchJsonDeserializer skinPatchJsonDeserializer = new SkinPatchJsonDeserializer();
 
@@ -64,47 +67,49 @@ public class ProjectUtils {
 				.setPrettyPrinting() //
 				.create();
 
-		return gson.fromJson(new FileReader(project.skinFile), Skin.class);
+		return gson.fromJson(new FileReader(skinFile), Skin.class);
 	}
-	
+
 	public static void saveProject(Project project) {
 		try {
 			Gson gson = new GsonBuilder() //
 					.setPrettyPrinting() //
 					.create();
-			FileWriter writer = new FileWriter(new File(project.projectFile));
+			FileWriter writer = new FileWriter(new File(project.getProjectFile()));
 
 			gson.toJson(project, writer);
 
 			writer.flush();
 			writer.close();
 
-			logger.info("Project file saved to " + project.projectFile);
+			logger.info("Project file saved to " + project.getProjectFile());
 		} catch (IOException e1) {
-			logger.error("Failed to save project file to " + project.projectFile, e1);
+			logger.error("Failed to save project file to " + project.getProjectFile(), e1);
 		}
 	}
-	
+
 	public static void saveSkeleton(Project project, Skeleton skeleton) {
+		String skeletonFile = project.getSkeletonFile();
 		try {
 			Gson gson = new GsonBuilder() //
 					.registerTypeAdapter(JointImpl.class, new JointJsonSerializer()) //
 					.setPrettyPrinting() //
 					.create();
-			FileWriter writer = new FileWriter(new File(project.skeletonFile));
+			FileWriter writer = new FileWriter(new File(skeletonFile));
 
 			gson.toJson(skeleton, writer);
 
 			writer.flush();
 			writer.close();
 
-			logger.info("Skeleton saved to " + project.skeletonFile);
+			logger.info("Skeleton saved to " + skeletonFile);
 		} catch (IOException e1) {
-			logger.error("Failed to save skeleton file to " + project.skeletonFile, e1);
+			logger.error("Failed to save skeleton file to " + skeletonFile, e1);
 		}
 	}
-	
+
 	public static void saveSkin(Project project, Skin skin) {
+		String skinFile = project.getSkinFile();
 		try {
 			Gson gson = new GsonBuilder() //
 					.registerTypeAdapter(SkinPatch.class, new SkinPatchJsonSerializer()) //
@@ -112,35 +117,36 @@ public class ProjectUtils {
 					.setPrettyPrinting() //
 					.create();
 
-			FileWriter writer = new FileWriter(new File(project.skinFile));
+			FileWriter writer = new FileWriter(new File(skinFile));
 
 			gson.toJson(skin, writer);
 
 			writer.flush();
 			writer.close();
 
-			logger.info("Skin saved to " + project.skinFile);
+			logger.info("Skin saved to " + skinFile);
 		} catch (IOException e1) {
-			logger.error("Failed to save skin file to " + project.skinFile, e1);
+			logger.error("Failed to save skin file to " + skinFile, e1);
 		}
 	}
-	
+
 	public static void saveAnimations(Project project, List<SkeletonAnimation> animations) {
+		String animationsFile = project.getAnimationsFile();
 		try {
 			Gson gson = new GsonBuilder() //
 					.setPrettyPrinting() //
 					.create();
 
-			FileWriter writer = new FileWriter(new File(project.animationsFile));
+			FileWriter writer = new FileWriter(new File(animationsFile));
 
 			gson.toJson(animations, writer);
 
 			writer.flush();
 			writer.close();
 
-			logger.info("Animations saved to " + project.animationsFile);
+			logger.info("Animations saved to " + animationsFile);
 		} catch (IOException e1) {
-			logger.error("Failed to save animations file to " + project.animationsFile, e1);
+			logger.error("Failed to save animations file to " + animationsFile, e1);
 		}
 	}
 

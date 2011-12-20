@@ -46,7 +46,6 @@ import org.slf4j.LoggerFactory;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.gemserk.commons.files.FileUtils;
 import com.gemserk.commons.reflection.Injector;
 import com.gemserk.commons.reflection.InjectorImpl;
 import com.gemserk.resources.ResourceManager;
@@ -471,9 +470,9 @@ public class EditorWindow {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = chooser.getSelectedFile();
 
-			String projectFileNameWithoutExtension = FileUtils.getFileNameWithoutExtension(selectedFile.getAbsolutePath());
+//			String projectFileNameWithoutExtension = FileUtils.getFileNameWithoutExtension(selectedFile.getAbsolutePath());
 
-			Project project = new Project(projectFileNameWithoutExtension);
+			Project project = new Project(selectedFile.getAbsolutePath());
 
 			ProjectUtils.saveSkeleton(project, editor.getSkeleton());
 			ProjectUtils.saveSkin(project, editorApplication.skin);
