@@ -51,10 +51,11 @@ import com.gemserk.commons.reflection.Injector;
 import com.gemserk.commons.reflection.InjectorImpl;
 import com.gemserk.resources.ResourceManager;
 import com.gemserk.resources.ResourceManagerImpl;
-import com.gemserk.tools.animationeditor.core.SkeletonAnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.JointImpl;
 import com.gemserk.tools.animationeditor.core.Skeleton;
+import com.gemserk.tools.animationeditor.core.SkeletonAnimation;
+import com.gemserk.tools.animationeditor.core.SkeletonAnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Skin;
 import com.gemserk.tools.animationeditor.core.Skin.SkinPatch;
 import com.gemserk.tools.animationeditor.core.tree.SkeletonEditorImpl;
@@ -260,6 +261,7 @@ public class EditorWindow {
 
 					saveSkeleton(project, editor.getSkeleton());
 					saveSkin(project, editorApplication.skin);
+					saveAnimations(project, editor.getCurrentAnimation());
 					saveProject(project);
 				}
 			}
@@ -279,6 +281,25 @@ public class EditorWindow {
 					logger.info("Project file saved to " + project.projectFile);
 				} catch (IOException e1) {
 					logger.error("Failed to save project file to " + project.projectFile, e1);
+				}
+			}
+			
+			private void saveAnimations(Project project, SkeletonAnimation animation) {
+				try {
+					Gson gson = new GsonBuilder() //
+							.setPrettyPrinting() //
+							.create();
+
+					FileWriter writer = new FileWriter(new File(project.animationsFile));
+
+					gson.toJson(animation, writer);
+
+					writer.flush();
+					writer.close();
+
+					logger.info("Animations saved to " + project.animationsFile);
+				} catch (IOException e1) {
+					logger.error("Failed to save animations file to " + project.animationsFile, e1);
 				}
 			}
 
