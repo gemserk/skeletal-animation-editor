@@ -1,7 +1,7 @@
 package com.gemserk.tools.animationeditor.core.tree;
 
-import com.gemserk.tools.animationeditor.core.Animation;
-import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
+import com.gemserk.tools.animationeditor.core.SkeletonAnimation;
+import com.gemserk.tools.animationeditor.core.SkeletonAnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.AnimationUtils;
 import com.gemserk.tools.animationeditor.core.JointUtils;
 import com.gemserk.tools.animationeditor.core.Skeleton;
@@ -11,8 +11,8 @@ public class AnimationEditorImpl implements AnimationEditor {
 	protected SkeletonEditor skeletonEditor;
 
 	int index = 0;
-	Animation currentAnimation = new Animation();
-	AnimationKeyFrame selectedKeyFrame;
+	SkeletonAnimation currentAnimation = new SkeletonAnimation();
+	SkeletonAnimationKeyFrame selectedKeyFrame;
 
 	float duration = 0f;
 
@@ -21,9 +21,9 @@ public class AnimationEditorImpl implements AnimationEditor {
 	}
 
 	@Override
-	public AnimationKeyFrame addKeyFrame() {
+	public SkeletonAnimationKeyFrame addKeyFrame() {
 		String name = "keyFrame" + index++;
-		AnimationKeyFrame keyFrame = AnimationUtils.keyFrame(name, JointUtils.cloneSkeleton(skeletonEditor.getSkeleton()), duration);
+		SkeletonAnimationKeyFrame keyFrame = AnimationUtils.keyFrame(name, JointUtils.cloneSkeleton(skeletonEditor.getSkeleton()), duration);
 		currentAnimation.getKeyFrames().add(keyFrame);
 		duration += 1f;
 
@@ -44,7 +44,7 @@ public class AnimationEditorImpl implements AnimationEditor {
 	}
 
 	@Override
-	public void selectKeyFrame(AnimationKeyFrame keyFrame) {
+	public void selectKeyFrame(SkeletonAnimationKeyFrame keyFrame) {
 		selectedKeyFrame = keyFrame;
 		Skeleton skeleton = skeletonEditor.getSkeleton();
 		AnimationUtils.setKeyframeToSkeleton(skeleton, keyFrame);
@@ -57,7 +57,7 @@ public class AnimationEditorImpl implements AnimationEditor {
 	}
 
 	@Override
-	public Animation getCurrentAnimation() {
+	public SkeletonAnimation getCurrentAnimation() {
 		return currentAnimation;
 	}
 

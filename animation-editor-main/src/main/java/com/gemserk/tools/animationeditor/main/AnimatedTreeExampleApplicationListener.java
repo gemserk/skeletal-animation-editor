@@ -11,7 +11,7 @@ import com.gemserk.animation4j.timeline.Timeline;
 import com.gemserk.animation4j.transitions.TimeTransition;
 import com.gemserk.animation4j.transitions.TransitionFloatArrayImpl;
 import com.gemserk.commons.gdx.graphics.ImmediateModeRendererUtils;
-import com.gemserk.tools.animationeditor.core.Animation;
+import com.gemserk.tools.animationeditor.core.SkeletonAnimation;
 import com.gemserk.tools.animationeditor.core.AnimationUtils;
 import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.JointImpl;
@@ -117,12 +117,12 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 		// transition = new TransitionFloatArrayImpl(keyFrame0.getValue());
 		// transition.set(keyFrame1.getValue(), keyFrame1.getTime() - keyFrame0.getTime());
 		
-		Animation animation = new Animation();
+		SkeletonAnimation skeletonAnimation = new SkeletonAnimation();
 		
-		animation.getKeyFrames().add(AnimationUtils.keyFrame("keyframe0", new Skeleton(state0), 0f));
-		animation.getKeyFrames().add(AnimationUtils.keyFrame("keyframe1", new Skeleton(state1), 1f));
+		skeletonAnimation.getKeyFrames().add(AnimationUtils.keyFrame("keyframe0", new Skeleton(state0), 0f));
+		skeletonAnimation.getKeyFrames().add(AnimationUtils.keyFrame("keyframe1", new Skeleton(state1), 1f));
 
-		timeline = JointUtils.getTimeline(root, animation.getKeyFrames());
+		timeline = JointUtils.getTimeline(root, skeletonAnimation.getKeyFrames());
 
 		// TimelineValueMutableObjectImpl<Node> timelineValue1 = new TimelineValueMutableObjectImpl<Node>(root, NodeConverter.instance);
 		// TimelineValueMutableObjectImpl<Node> timelineValue2 = new TimelineValueMutableObjectImpl<Node>(node1, NodeConverter.instance);

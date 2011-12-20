@@ -4,11 +4,11 @@ import java.util.ArrayList;
 
 public class AnimationUtils {
 
-	public static AnimationKeyFrame keyFrame(String name, Skeleton skeleton, float time) {
-		return new AnimationKeyFrame(name, skeleton, time);
+	public static SkeletonAnimationKeyFrame keyFrame(String name, Skeleton skeleton, float time) {
+		return new SkeletonAnimationKeyFrame(name, skeleton, time);
 	}
 
-	public static void updateKeyFrame(Skeleton skeleton, AnimationKeyFrame keyframe) {
+	public static void updateKeyFrame(Skeleton skeleton, SkeletonAnimationKeyFrame keyframe) {
 		keyframe.setSkeleton(JointUtils.cloneSkeleton(skeleton));
 	}
 
@@ -20,7 +20,7 @@ public class AnimationUtils {
 	 * @param keyframe
 	 *            The keyframe of the skeleton.
 	 */
-	public static void setKeyframeToSkeleton(Skeleton skeleton, AnimationKeyFrame keyframe) {
+	public static void setKeyframeToSkeleton(Skeleton skeleton, SkeletonAnimationKeyFrame keyframe) {
 		ArrayList<Joint> joints = JointUtils.toArrayList(skeleton.getRoot());
 
 		Skeleton keyFrameSkeleton = keyframe.getSkeleton();

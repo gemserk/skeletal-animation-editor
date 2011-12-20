@@ -1,11 +1,9 @@
 package com.gemserk.tools.animationeditor.core;
 
 /**
- * Defines a state of the Skeleton.
- * 
- * @author acoppes
+ * Holds a specific state of the Skeleton for a given time. Used for the Skeleton Animation.
  */
-public class AnimationKeyFrame {
+public class SkeletonAnimationKeyFrame {
 
 	String name;
 	Skeleton skeleton;
@@ -20,19 +18,17 @@ public class AnimationKeyFrame {
 		this.name = name;
 	}
 
-	public Skeleton getSkeleton() {
+	Skeleton getSkeleton() {
 		return skeleton;
 	}
-	
+
 	public Joint getJoint(String id) {
 		return skeleton.getRoot().find(id);
 	}
-	
-	public void setSkeleton(Skeleton skeleton) {
+
+	void setSkeleton(Skeleton skeleton) {
 		this.skeleton = skeleton;
 	}
-	
-	
 
 	public float getTime() {
 		return time;
@@ -42,7 +38,7 @@ public class AnimationKeyFrame {
 		this.time = time;
 	}
 
-	AnimationKeyFrame(String name, Skeleton skeleton, float time) {
+	SkeletonAnimationKeyFrame(String name, Skeleton skeleton, float time) {
 		this.name = name;
 		this.skeleton = skeleton;
 		this.time = time;

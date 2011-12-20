@@ -45,7 +45,7 @@ public class JointUtils {
 		return clonedNode;
 	}
 
-	public static Timeline getTimeline(Joint root, ArrayList<AnimationKeyFrame> frames) {
+	public static Timeline getTimeline(Joint root, ArrayList<SkeletonAnimationKeyFrame> frames) {
 		ArrayList<Joint> joints = JointUtils.toArrayList(root);
 
 		ArrayList<TimelineValue> timelineValues = new ArrayList<TimelineValue>();
@@ -56,16 +56,16 @@ public class JointUtils {
 			TimelineValue timelineValue = new TimelineValueMutableObjectImpl<Joint>(joint, JointConverter.instance);
 
 			for (int i = 0; i < frames.size(); i++) {
-				AnimationKeyFrame animationKeyFrame = frames.get(i);
+				SkeletonAnimationKeyFrame skeletonAnimationKeyFrame = frames.get(i);
 				// Joint treeState = animationKeyFrame.getSkeleton().getRoot();
 				// Joint nodeState = treeState.find(joint.getId());
 				
-				Joint nodeState = animationKeyFrame.getJoint(joint.getId());
+				Joint nodeState = skeletonAnimationKeyFrame.getJoint(joint.getId());
 				
 				if (nodeState == null)
 					continue;
 
-				timelineValue.addKeyFrame(new KeyFrame(animationKeyFrame.getTime(), JointConverter.instance.copyFromObject(nodeState, null)));
+				timelineValue.addKeyFrame(new KeyFrame(skeletonAnimationKeyFrame.getTime(), JointConverter.instance.copyFromObject(nodeState, null)));
 			}
 			
 			timelineValues.add(timelineValue);

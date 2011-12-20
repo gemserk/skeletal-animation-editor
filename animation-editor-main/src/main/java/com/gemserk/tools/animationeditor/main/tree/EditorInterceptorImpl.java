@@ -14,8 +14,8 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-import com.gemserk.tools.animationeditor.core.Animation;
-import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
+import com.gemserk.tools.animationeditor.core.SkeletonAnimation;
+import com.gemserk.tools.animationeditor.core.SkeletonAnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.Skeleton;
 import com.gemserk.tools.animationeditor.core.tree.AnimationEditor;
@@ -34,7 +34,7 @@ public class EditorInterceptorImpl implements SkeletonEditor, AnimationEditor {
 			AnimationKeyFrameListModel model = (AnimationKeyFrameListModel) keyFramesList.getModel();
 			if (keyFramesList.getSelectedIndex() == -1)
 				return;
-			AnimationKeyFrame keyFrame = model.values.get(keyFramesList.getSelectedIndex());
+			SkeletonAnimationKeyFrame keyFrame = model.values.get(keyFramesList.getSelectedIndex());
 			animationEditor.selectKeyFrame(keyFrame);
 		}
 	}
@@ -184,16 +184,16 @@ public class EditorInterceptorImpl implements SkeletonEditor, AnimationEditor {
 	}
 
 	@Override
-	public AnimationKeyFrame addKeyFrame() {
-		AnimationKeyFrame newKeyFrame = animationEditor.addKeyFrame();
-		ArrayList<AnimationKeyFrame> keyFrames = getCurrentAnimation().getKeyFrames();
+	public SkeletonAnimationKeyFrame addKeyFrame() {
+		SkeletonAnimationKeyFrame newKeyFrame = animationEditor.addKeyFrame();
+		ArrayList<SkeletonAnimationKeyFrame> keyFrames = getCurrentAnimation().getKeyFrames();
 		keyFramesList.setModel(new AnimationKeyFrameListModel(keyFrames));
 		keyFramesList.setSelectedIndex(keyFrames.indexOf(newKeyFrame));
 		return newKeyFrame;
 	}
 
 	@Override
-	public void selectKeyFrame(AnimationKeyFrame keyFrame) {
+	public void selectKeyFrame(SkeletonAnimationKeyFrame keyFrame) {
 		animationEditor.selectKeyFrame(keyFrame);
 		keyFramesList.setSelectedValue(keyFrame, true);
 	}
@@ -201,13 +201,13 @@ public class EditorInterceptorImpl implements SkeletonEditor, AnimationEditor {
 	@Override
 	public void removeKeyFrame() {
 		animationEditor.removeKeyFrame();
-		Animation currentAnimation = animationEditor.getCurrentAnimation();
+		SkeletonAnimation currentAnimation = animationEditor.getCurrentAnimation();
 		keyFramesList.setModel(new AnimationKeyFrameListModel(currentAnimation.getKeyFrames()));
 		keyFramesList.setSelectedIndex(0);
 	}
 
 	@Override
-	public Animation getCurrentAnimation() {
+	public SkeletonAnimation getCurrentAnimation() {
 		return animationEditor.getCurrentAnimation();
 	}
 

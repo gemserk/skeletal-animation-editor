@@ -51,7 +51,7 @@ import com.gemserk.commons.reflection.Injector;
 import com.gemserk.commons.reflection.InjectorImpl;
 import com.gemserk.resources.ResourceManager;
 import com.gemserk.resources.ResourceManagerImpl;
-import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
+import com.gemserk.tools.animationeditor.core.SkeletonAnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.JointImpl;
 import com.gemserk.tools.animationeditor.core.Skeleton;
@@ -516,7 +516,7 @@ public class EditorWindow {
 		buttonAddKeyFrame.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AnimationKeyFrame keyFrame = editor.addKeyFrame();
+				SkeletonAnimationKeyFrame keyFrame = editor.addKeyFrame();
 				editor.selectKeyFrame(keyFrame);
 			}
 		});

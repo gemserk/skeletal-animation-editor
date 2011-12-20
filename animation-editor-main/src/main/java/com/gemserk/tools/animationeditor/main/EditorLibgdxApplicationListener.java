@@ -25,8 +25,8 @@ import com.gemserk.componentsengine.input.InputDevicesMonitorImpl;
 import com.gemserk.componentsengine.input.LibgdxInputMappingBuilder;
 import com.gemserk.resources.Resource;
 import com.gemserk.resources.ResourceManager;
-import com.gemserk.tools.animationeditor.core.Animation;
-import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
+import com.gemserk.tools.animationeditor.core.SkeletonAnimation;
+import com.gemserk.tools.animationeditor.core.SkeletonAnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.JointImpl;
 import com.gemserk.tools.animationeditor.core.JointUtils;
@@ -110,9 +110,9 @@ public class EditorLibgdxApplicationListener extends Game {
 		private Skeleton skeleton;
 
 		public PlayingAnimationState() {
-			Animation currentAnimation = animationEditor.getCurrentAnimation();
+			SkeletonAnimation currentAnimation = animationEditor.getCurrentAnimation();
 
-			ArrayList<AnimationKeyFrame> keyFrames = currentAnimation.getKeyFrames();
+			ArrayList<SkeletonAnimationKeyFrame> keyFrames = currentAnimation.getKeyFrames();
 
 			skeleton = skeletonEditor.getSkeleton();
 			

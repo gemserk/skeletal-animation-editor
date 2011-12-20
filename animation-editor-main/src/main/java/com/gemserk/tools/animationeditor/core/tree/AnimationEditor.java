@@ -1,15 +1,15 @@
 package com.gemserk.tools.animationeditor.core.tree;
 
-import com.gemserk.tools.animationeditor.core.Animation;
-import com.gemserk.tools.animationeditor.core.AnimationKeyFrame;
+import com.gemserk.tools.animationeditor.core.SkeletonAnimation;
+import com.gemserk.tools.animationeditor.core.SkeletonAnimationKeyFrame;
 
 public interface AnimationEditor {
 	
-	Animation getCurrentAnimation();
+	SkeletonAnimation getCurrentAnimation();
 	
-	AnimationKeyFrame addKeyFrame();
+	SkeletonAnimationKeyFrame addKeyFrame();
 	
-	void selectKeyFrame(AnimationKeyFrame keyFrame);
+	void selectKeyFrame(SkeletonAnimationKeyFrame keyFrame);
 	
 	/**
 	 * Updates the current key frame with the current skeleton values.
