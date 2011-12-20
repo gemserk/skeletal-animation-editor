@@ -193,12 +193,10 @@ public class EditorWindow {
 		JMenuItem mntmImport = new JMenuItem("Import");
 		mntmImport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser chooser;
+				JFileChooser chooser = new JFileChooser();
 
 				if (currentProject != null)
 					chooser = new JFileChooser(FilenameUtils.getFullPath(currentProject.getProjectFile()));
-				else
-					chooser = new JFileChooser();
 
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("Images only", "png", "jpg", "gif");
 
@@ -226,6 +224,9 @@ public class EditorWindow {
 		mntmExport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
+
+				if (currentProject != null)
+					chooser = new JFileChooser(FilenameUtils.getFullPath(currentProject.getProjectFile()));
 
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG files", "png");
 
