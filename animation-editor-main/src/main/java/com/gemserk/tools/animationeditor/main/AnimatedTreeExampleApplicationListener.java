@@ -12,7 +12,7 @@ import com.gemserk.animation4j.transitions.TimeTransition;
 import com.gemserk.animation4j.transitions.TransitionFloatArrayImpl;
 import com.gemserk.commons.gdx.graphics.ImmediateModeRendererUtils;
 import com.gemserk.tools.animationeditor.core.SkeletonAnimation;
-import com.gemserk.tools.animationeditor.core.AnimationUtils;
+import com.gemserk.tools.animationeditor.core.SkeletonAnimationUtils;
 import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.JointImpl;
 import com.gemserk.tools.animationeditor.core.JointUtils;
@@ -119,8 +119,8 @@ public class AnimatedTreeExampleApplicationListener extends Game {
 		
 		SkeletonAnimation skeletonAnimation = new SkeletonAnimation();
 		
-		skeletonAnimation.getKeyFrames().add(AnimationUtils.keyFrame("keyframe0", new Skeleton(state0), 0f));
-		skeletonAnimation.getKeyFrames().add(AnimationUtils.keyFrame("keyframe1", new Skeleton(state1), 1f));
+		skeletonAnimation.getKeyFrames().add(SkeletonAnimationUtils.keyFrame("keyframe0", new Skeleton(state0), 0f));
+		skeletonAnimation.getKeyFrames().add(SkeletonAnimationUtils.keyFrame("keyframe1", new Skeleton(state1), 1f));
 
 		timeline = JointUtils.getTimeline(root, skeletonAnimation.getKeyFrames());
 

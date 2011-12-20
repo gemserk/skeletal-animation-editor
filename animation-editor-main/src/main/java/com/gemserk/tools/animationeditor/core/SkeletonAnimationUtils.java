@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
-public class AnimationUtils {
+public class SkeletonAnimationUtils {
 
 	static JointConverter jointConverter = JointConverter.instance;
 

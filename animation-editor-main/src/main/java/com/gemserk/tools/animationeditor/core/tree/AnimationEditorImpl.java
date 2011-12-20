@@ -2,7 +2,7 @@ package com.gemserk.tools.animationeditor.core.tree;
 
 import com.gemserk.tools.animationeditor.core.SkeletonAnimation;
 import com.gemserk.tools.animationeditor.core.SkeletonAnimationKeyFrame;
-import com.gemserk.tools.animationeditor.core.AnimationUtils;
+import com.gemserk.tools.animationeditor.core.SkeletonAnimationUtils;
 import com.gemserk.tools.animationeditor.core.JointUtils;
 import com.gemserk.tools.animationeditor.core.Skeleton;
 
@@ -23,7 +23,7 @@ public class AnimationEditorImpl implements AnimationEditor {
 	@Override
 	public SkeletonAnimationKeyFrame addKeyFrame() {
 		String name = "keyFrame" + index++;
-		SkeletonAnimationKeyFrame keyFrame = AnimationUtils.keyFrame(name, JointUtils.cloneSkeleton(skeletonEditor.getSkeleton()), duration);
+		SkeletonAnimationKeyFrame keyFrame = SkeletonAnimationUtils.keyFrame(name, JointUtils.cloneSkeleton(skeletonEditor.getSkeleton()), duration);
 		currentAnimation.getKeyFrames().add(keyFrame);
 		duration += 1f;
 
@@ -40,14 +40,14 @@ public class AnimationEditorImpl implements AnimationEditor {
 			return;
 		// throw new IllegalStateException("cant store current skeleton to no keyframe");
 		// then we should disable the button when you can't save a keyframe!!
-		AnimationUtils.updateKeyFrame(skeletonEditor.getSkeleton(), selectedKeyFrame);
+		SkeletonAnimationUtils.updateKeyFrame(skeletonEditor.getSkeleton(), selectedKeyFrame);
 	}
 
 	@Override
 	public void selectKeyFrame(SkeletonAnimationKeyFrame keyFrame) {
 		selectedKeyFrame = keyFrame;
 		Skeleton skeleton = skeletonEditor.getSkeleton();
-		AnimationUtils.setKeyframeToSkeleton(skeleton, keyFrame);
+		SkeletonAnimationUtils.setKeyframeToSkeleton(skeleton, keyFrame);
 	}
 
 	@Override
