@@ -6,17 +6,19 @@ import com.badlogic.gdx.math.Vector2;
 public class SkinPatch {
 
 	String jointId;
+	String textureId;
 
 	public float angle;
 	public Vector2 center = new Vector2(0.5f, 0.5f);
 
-	// path to the texture file
-	public String textureId;
-	
 	public String getJointId() {
 		return jointId;
 	}
-
+	
+	public String getTextureId() {
+		return textureId;
+	}
+	
 	public SkinPatch(String jointId, String textureId) {
 		this.jointId = jointId;
 		this.textureId = textureId;
@@ -68,7 +70,7 @@ public class SkinPatch {
 
 	@Override
 	public String toString() {
-		return "SkinPatch [id:" + jointId + ", textureId:" + textureId + ", center:" + center.toString() + ", angle:" + angle + "]";
+		return "SkinPatch [id:" + jointId + ", center:" + center.toString() + ", angle:" + angle + "]";
 	}
 
 }

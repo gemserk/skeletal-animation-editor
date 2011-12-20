@@ -1,5 +1,8 @@
 package com.gemserk.tools.animationeditor.main;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Project {
 
 	public static final String PROJECT_EXTENSION = "aprj";
@@ -11,6 +14,8 @@ public class Project {
 	public String skinFile;
 	public String projectFile;
 	public String animationsFile;
+	
+	public Map<String, String> texturePaths = new HashMap<String, String>();
 
 	public Project(String projectName) {
 		projectFile = projectName + "." + PROJECT_EXTENSION;

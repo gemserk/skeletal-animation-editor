@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.gemserk.resources.Resource;
 
 public class Skin {
 
@@ -25,15 +23,15 @@ public class Skin {
 		patchList = new ArrayList<SkinPatch>();
 	}
 
-	public void addPatch(Joint joint, Resource<Sprite> sprite, String textureId) {
-		SkinPatch patch = new SkinPatch(joint.getId(), textureId);
+	public void addPatch(String jointId, String textureId) {
+		SkinPatch patch = new SkinPatch(jointId, textureId);
 
-		if (patches.containsKey(joint.getId())) {
-			SkinPatch previousPatch = patches.get(joint.getId());
+		if (patches.containsKey(jointId)) {
+			SkinPatch previousPatch = patches.get(jointId);
 			patchList.remove(previousPatch);
 		}
 
-		patches.put(joint.getId(), patch);
+		patches.put(jointId, patch);
 		patchList.add(patch);
 	}
 

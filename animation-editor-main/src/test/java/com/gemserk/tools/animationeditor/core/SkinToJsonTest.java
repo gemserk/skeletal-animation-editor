@@ -73,8 +73,8 @@ public class SkinToJsonTest {
 
 		Skin skin = new Skin();
 
-		skin.addPatch(root, new MockResource<Sprite>(null), "/tmp/body.png");
-		skin.addPatch(child, new MockResource<Sprite>(null), "/tmp/leg.png");
+		skin.addPatch(root.getId(), "/tmp/body.png");
+		skin.addPatch(child.getId(), "/tmp/leg.png");
 
 		SkinPatchJsonDeserializer skinPatchDeserializer = new SkinPatchJsonDeserializer(skeleton);
 

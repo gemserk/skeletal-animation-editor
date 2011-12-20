@@ -11,7 +11,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.gemserk.resources.ResourceManager;
 import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.JointImpl;
 import com.gemserk.tools.animationeditor.core.Skeleton;
@@ -31,9 +30,9 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 
 public class ProjectUtils {
-	
+
 	protected static final Logger logger = LoggerFactory.getLogger(ProjectUtils.class);
-	
+
 	public static List<SkeletonAnimation> loadAnimations(Project project) throws JsonIOException, JsonSyntaxException, FileNotFoundException {
 		Type animationsListType = new TypeToken<List<SkeletonAnimation>>() {
 		}.getType();
@@ -51,22 +50,15 @@ public class ProjectUtils {
 		return gson.fromJson(new FileReader(project.skeletonFile), Skeleton.class);
 	}
 
-	public static Skin loadSkin(Project project, Skeleton skeleton, ResourceManager<String> resourceManager) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
-
-		SkinPatchJsonDeserializer skinPatchJsonDeserializer = new SkinPatchJsonDeserializer();
-
-		skinPatchJsonDeserializer.setSkeleton(skeleton);
-		skinPatchJsonDeserializer.setResourceManager(resourceManager);
-
+	public static Skin loadSkin(Project project) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
 		Gson gson = new GsonBuilder() //
 				.registerTypeAdapter(Skin.class, new SkinJsonDeserializer()) //
-				.registerTypeAdapter(SkinPatch.class, skinPatchJsonDeserializer) //
+				.registerTypeAdapter(SkinPatch.class, new SkinPatchJsonDeserializer()) //
 				.setPrettyPrinting() //
 				.create();
-
 		return gson.fromJson(new FileReader(project.skinFile), Skin.class);
 	}
-	
+
 	public static void saveProject(Project project) {
 		try {
 			Gson gson = new GsonBuilder() //
@@ -84,7 +76,7 @@ public class ProjectUtils {
 			logger.error("Failed to save project file to " + project.projectFile, e1);
 		}
 	}
-	
+
 	public static void saveSkeleton(Project project, Skeleton skeleton) {
 		try {
 			Gson gson = new GsonBuilder() //
@@ -103,7 +95,7 @@ public class ProjectUtils {
 			logger.error("Failed to save skeleton file to " + project.skeletonFile, e1);
 		}
 	}
-	
+
 	public static void saveSkin(Project project, Skin skin) {
 		try {
 			Gson gson = new GsonBuilder() //
@@ -124,7 +116,7 @@ public class ProjectUtils {
 			logger.error("Failed to save skin file to " + project.skinFile, e1);
 		}
 	}
-	
+
 	public static void saveAnimations(Project project, List<SkeletonAnimation> animations) {
 		try {
 			Gson gson = new GsonBuilder() //
