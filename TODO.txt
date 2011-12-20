@@ -1,12 +1,12 @@
 TODO
 ==========================
 
+* Save project animations
 * Import a list of images to the images panel to be used to easily edit the skin of each Joint.
 * Zoom with ctrl + mouse wheel (and possibly a gui component)
 * Undo with ctrl + z
 * Edit menu with all the stuff with Copy/Paste/Undo/Etc.
 * Cut/Copy part of the skeleton and paste it as child of another Skeleton Joint.
-* Save project animations
 * Save relative paths to the project not absolute
 * Specify the duration of a keyframe of the current animation
 * Panel with a list of animations to switch between animations
@@ -55,3 +55,7 @@ DONE
 ==========================
 
 * A lot of stuff
+* Exit button shows an exit dialog and let the user exit the application
+* animation keyframes stores float[] for each joint instead a skeleton, to be easily serialized/deserialized
+
+
