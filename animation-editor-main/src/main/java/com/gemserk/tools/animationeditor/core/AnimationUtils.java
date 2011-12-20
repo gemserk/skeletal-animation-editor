@@ -2,25 +2,37 @@ package com.gemserk.tools.animationeditor.core;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class AnimationUtils {
-	
+
 	static JointConverter jointConverter = JointConverter.instance;
 
 	public static SkeletonAnimationKeyFrame keyFrame(String name, Skeleton skeleton, float time) {
 		HashMap<String, float[]> jointKeyFrames = new HashMap<String, float[]>();
-		
+
 		ArrayList<Joint> jointList = JointUtils.toArrayList(skeleton.getRoot());
-		
+
 		for (Joint joint : jointList) {
 			jointKeyFrames.put(joint.getId(), jointConverter.copyFromObject(joint, null));
 		}
-		
-		return new SkeletonAnimationKeyFrame(name, skeleton, time, jointKeyFrames);
+
+		return new SkeletonAnimationKeyFrame(name, time, jointKeyFrames);
 	}
 
 	public static void updateKeyFrame(Skeleton skeleton, SkeletonAnimationKeyFrame keyframe) {
-		keyframe.setSkeleton(JointUtils.cloneSkeleton(skeleton));
+		HashMap<String, float[]> jointKeyFrames = new HashMap<String, float[]>();
+
+		ArrayList<Joint> jointList = JointUtils.toArrayList(skeleton.getRoot());
+
+		for (Joint joint : jointList) {
+			jointKeyFrames.put(joint.getId(), jointConverter.copyFromObject(joint, null));
+		}
+
+		keyframe.jointKeyFrames.clear();
+		keyframe.jointKeyFrames.putAll(jointKeyFrames);
+
+		// keyframe.setSkeleton(JointUtils.cloneSkeleton(skeleton));
 	}
 
 	/**
@@ -32,19 +44,13 @@ public class AnimationUtils {
 	 *            The keyframe of the skeleton.
 	 */
 	public static void setKeyframeToSkeleton(Skeleton skeleton, SkeletonAnimationKeyFrame keyframe) {
-		ArrayList<Joint> joints = JointUtils.toArrayList(skeleton.getRoot());
+		Set<String> keySet = keyframe.jointKeyFrames.keySet();
 
-		Skeleton keyFrameSkeleton = keyframe.getSkeleton();
-
-		for (int i = 0; i < joints.size(); i++) {
-			Joint joint = joints.get(i);
-			Joint keyFrameJointValue = keyFrameSkeleton.getRoot().find(joint.getId());
-			if (keyFrameJointValue == null)
-				continue;
-			joint.setLocalPosition(keyFrameJointValue.getLocalX(), keyFrameJointValue.getLocalY());
-			joint.setLocalAngle(keyFrameJointValue.getLocalAngle());
+		for (String jointId : keySet) {
+			float[] jointKeyFrame = keyframe.getJointKeyFrame(jointId);
+			Joint joint = skeleton.getRoot().find(jointId);
+			jointConverter.copyToObject(joint, jointKeyFrame);
 		}
-
 	}
 
 }

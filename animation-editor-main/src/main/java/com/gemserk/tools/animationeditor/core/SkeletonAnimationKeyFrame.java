@@ -8,10 +8,9 @@ import java.util.Map;
 public class SkeletonAnimationKeyFrame {
 
 	String name;
-	Skeleton skeleton;
 	float time;
-	
-	Map<String, float[]> jointKeyFrames; 
+
+	Map<String, float[]> jointKeyFrames;
 
 	public String getName() {
 		return name;
@@ -21,20 +20,12 @@ public class SkeletonAnimationKeyFrame {
 		this.name = name;
 	}
 
-	Skeleton getSkeleton() {
-		return skeleton;
-	}
-
 	public float[] getJointKeyFrame(String id) {
 		return jointKeyFrames.get(id);
 	}
-	
+
 	public boolean containsKeyFrameForJoint(String id) {
 		return jointKeyFrames.containsKey(id);
-	}
-
-	void setSkeleton(Skeleton skeleton) {
-		this.skeleton = skeleton;
 	}
 
 	public float getTime() {
@@ -45,9 +36,8 @@ public class SkeletonAnimationKeyFrame {
 		this.time = time;
 	}
 
-	SkeletonAnimationKeyFrame(String name, Skeleton skeleton, float time, Map<String, float[]> jointKeyFrames) {
+	SkeletonAnimationKeyFrame(String name, float time, Map<String, float[]> jointKeyFrames) {
 		this.name = name;
-		this.skeleton = skeleton;
 		this.time = time;
 		this.jointKeyFrames = jointKeyFrames;
 	}
