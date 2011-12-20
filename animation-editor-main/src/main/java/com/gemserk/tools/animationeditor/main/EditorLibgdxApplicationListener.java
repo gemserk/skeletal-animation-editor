@@ -1,6 +1,7 @@
 package com.gemserk.tools.animationeditor.main;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,6 +39,7 @@ import com.gemserk.tools.animationeditor.core.Skin;
 import com.gemserk.tools.animationeditor.core.SkinPatch;
 import com.gemserk.tools.animationeditor.core.tree.AnimationEditor;
 import com.gemserk.tools.animationeditor.core.tree.SkeletonEditor;
+import com.gemserk.util.ScreenshotSaver;
 
 public class EditorLibgdxApplicationListener extends Game {
 
@@ -65,6 +67,8 @@ public class EditorLibgdxApplicationListener extends Game {
 		public static final String CancelStateButton = "cancelStateButton";
 
 		public static final String SecondActionButton = "secondActionButton";
+		
+		public static final String ExportAnimationButton = "exportAnimationButton";
 
 	}
 
@@ -149,7 +153,74 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		@Override
 		public void render() {
+			renderSkin(skin);
 			renderSkeleton(skeleton);
+		}
+
+	}
+
+	class ExportingAnimationState implements EditorState {
+
+		private TimelineAnimation timelineAnimation;
+		private Skeleton skeleton;
+		
+		int sequence;
+		float fps;
+		
+		String animationPath;
+
+		public ExportingAnimationState() {
+			SkeletonAnimation currentAnimation = animationEditor.getCurrentAnimation();
+
+			ArrayList<SkeletonAnimationKeyFrame> keyFrames = currentAnimation.getKeyFrames();
+
+			skeleton = skeletonEditor.getSkeleton();
+
+			if (keyFrames.size() == 0) {
+				timelineAnimation = null;
+				return;
+			}
+
+			Timeline timeline = JointUtils.getTimeline(skeleton.getRoot(), keyFrames);
+
+			timelineAnimation = new TimelineAnimation(timeline, (float) keyFrames.size() - 1);
+			timelineAnimation.setSpeed(1f);
+			timelineAnimation.setDelay(0f);
+			timelineAnimation.start(1);
+			
+			sequence = 0;
+			fps = 5;
+			
+			animationPath = "/tmp/superanimation";
+		}
+
+		@Override
+		public void update() {
+
+			if (timelineAnimation == null)
+				return;
+			
+			float updateTime = 1f / fps;
+			
+			try {
+				ScreenshotSaver.saveScreenshot(new File(animationPath + sequence + ".png"), true);
+			} catch (IOException e) {
+				logger.error("failed to save frame for animation ", e);
+			}
+
+			sequence++;
+
+			timelineAnimation.update(updateTime);
+
+			if (timelineAnimation.isFinished()) 
+				currentState = new NormalEditorState();
+
+		}
+
+		@Override
+		public void render() {
+			renderSkin(skin);
+			// renderSkeleton(skeleton);
 		}
 
 	}
@@ -177,6 +248,11 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			if (inputMonitor.getButton(Actions.ModifySkinPatchButton).isReleased()) {
 				currentState = new ModifyingSkinPatchState();
+				return;
+			}
+			
+			if (inputMonitor.getButton(Actions.ExportAnimationButton).isReleased()) {
+				currentState = new ExportingAnimationState();
 				return;
 			}
 
@@ -214,6 +290,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		@Override
 		public void render() {
+			renderSkin(skin);
 			renderSkeleton(skeletonEditor.getSkeleton());
 		}
 
@@ -248,6 +325,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		@Override
 		public void render() {
+			renderSkin(skin);
 			renderSkeleton(skeletonEditor.getSkeleton());
 		}
 
@@ -281,6 +359,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		@Override
 		public void render() {
+			renderSkin(skin);
 			renderSkeleton(skeletonEditor.getSkeleton());
 		}
 
@@ -347,6 +426,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		@Override
 		public void render() {
+			renderSkin(skin);
 			renderSkeleton(skeletonEditor.getSkeleton());
 		}
 
@@ -396,7 +476,7 @@ public class EditorLibgdxApplicationListener extends Game {
 	public void create() {
 		Gdx.graphics.setVSync(true);
 
-		Gdx.graphics.getGL10().glClearColor(0.25f, 0.25f, 0.25f, 1f);
+		Gdx.graphics.getGL10().glClearColor(0.25f, 0.25f, 0.25f, 0f);
 
 		Texture.setEnforcePotImages(false);
 
@@ -418,6 +498,8 @@ public class EditorLibgdxApplicationListener extends Game {
 				monitorKey(Actions.CancelStateButton, Keys.ESCAPE);
 
 				monitorKey(Actions.SecondActionButton, Keys.SHIFT_LEFT);
+				
+				monitorKey(Actions.ExportAnimationButton, Keys.E);
 			}
 		};
 
@@ -474,7 +556,10 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	private void realRender() {
 		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
+		currentState.render();
+	}
 
+	private void renderSkin(Skin skin) {
 		spriteBatch.begin();
 		for (int i = 0; i < skin.patchesCount(); i++) {
 			SkinPatch patch = skin.getPatch(i);
@@ -485,8 +570,6 @@ public class EditorLibgdxApplicationListener extends Game {
 			patchSprite.draw(spriteBatch);
 		}
 		spriteBatch.end();
-
-		currentState.render();
 	}
 
 	private void renderSkeleton(Skeleton skeleton) {
@@ -542,13 +625,13 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			@Override
 			public void run() {
-				
+
 				skeletonEditor.setSkeleton(skeleton);
-				
+
 				skinSprites.clear();
 				texturePaths.clear();
 				texturePaths.putAll(newTexturePaths);
-				
+
 				skin = newSkin;
 
 				resourceManager.unloadAll();
