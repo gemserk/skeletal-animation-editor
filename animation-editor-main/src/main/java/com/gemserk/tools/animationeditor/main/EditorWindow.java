@@ -15,6 +15,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
@@ -261,7 +263,7 @@ public class EditorWindow {
 
 					saveSkeleton(project, editor.getSkeleton());
 					saveSkin(project, editorApplication.skin);
-					saveAnimations(project, editor.getCurrentAnimation());
+					saveAnimations(project, Arrays.asList(editor.getCurrentAnimation()));
 					saveProject(project);
 				}
 			}
@@ -284,7 +286,7 @@ public class EditorWindow {
 				}
 			}
 			
-			private void saveAnimations(Project project, SkeletonAnimation animation) {
+			private void saveAnimations(Project project, List<SkeletonAnimation> animations) {
 				try {
 					Gson gson = new GsonBuilder() //
 							.setPrettyPrinting() //
@@ -292,7 +294,7 @@ public class EditorWindow {
 
 					FileWriter writer = new FileWriter(new File(project.animationsFile));
 
-					gson.toJson(animation, writer);
+					gson.toJson(animations, writer);
 
 					writer.flush();
 					writer.close();
