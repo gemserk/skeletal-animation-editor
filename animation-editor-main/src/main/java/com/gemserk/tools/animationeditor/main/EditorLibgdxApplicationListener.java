@@ -378,9 +378,9 @@ public class EditorLibgdxApplicationListener extends Game {
 						.magFilter(TextureFilter.Linear));
 
 				String jointId = selectedNode.getId();
-				
+
 				resourceBuilder.sprite(jointId, textureId);
-				
+
 				Resource<Sprite> resource = resourceManager.get(jointId);
 
 				skin.addPatch(jointId, textureId);
@@ -535,33 +535,44 @@ public class EditorLibgdxApplicationListener extends Game {
 		resourceManager.unloadAll();
 	}
 
-	public void updateResources(Map<String, String> texturePaths, Skin skin) {
-		this.skinSprites.clear();
-		this.texturePaths.clear();
-		this.texturePaths.putAll(texturePaths);
+	public void updateResources(final Map<String, String> newTexturePaths, final Skin newSkin) {
 
-		resourceManager.unloadAll();
+		Gdx.app.postRunnable(new Runnable() {
 
-		Set<String> keySet = texturePaths.keySet();
+			@Override
+			public void run() {
 
-		for (String textureId : keySet) {
-			resourceBuilder.resource(textureId, resourceBuilder //
-					.texture2(Gdx.files.absolute(texturePaths.get(textureId)))//
-					.minFilter(TextureFilter.Linear) //
-					.magFilter(TextureFilter.Linear));
-		}
+				skinSprites.clear();
+				texturePaths.clear();
+				texturePaths.putAll(newTexturePaths);
 
-		ArrayList<SkinPatch> patchList = skin.getPatchList();
-		for (int i = 0; i < patchList.size(); i++) {
-			SkinPatch patch = patchList.get(i);
-			String jointId = patch.getJointId();
-			String textureId = patch.getTextureId();
-			
-			resourceBuilder.sprite(jointId, textureId);
+				resourceManager.unloadAll();
 
-			Resource<Sprite> resource = resourceManager.get(jointId);
-			skinSprites.put(jointId, resource);
-		}
+				Set<String> keySet = texturePaths.keySet();
+
+				for (String textureId : keySet) {
+					resourceBuilder.resource(textureId, resourceBuilder //
+							.texture2(Gdx.files.absolute(texturePaths.get(textureId)))//
+							.minFilter(TextureFilter.Linear) //
+							.magFilter(TextureFilter.Linear));
+				}
+
+				ArrayList<SkinPatch> patchList = newSkin.getPatchList();
+				for (int i = 0; i < patchList.size(); i++) {
+					SkinPatch patch = patchList.get(i);
+					String jointId = patch.getJointId();
+					String textureId = patch.getTextureId();
+
+					resourceBuilder.sprite(jointId, textureId);
+
+					Resource<Sprite> resource = resourceManager.get(jointId);
+					skinSprites.put(jointId, resource);
+				}
+
+				skin = newSkin;
+
+			}
+		});
 
 	}
 }
