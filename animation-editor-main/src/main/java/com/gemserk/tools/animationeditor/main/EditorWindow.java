@@ -243,9 +243,7 @@ public class EditorWindow {
 				JFileChooser chooser = new JFileChooser();
 
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("Project files only", //
-						Project.PROJECT_EXTENSION, //
-						Project.SKELETON_EXTENSION, //
-						Project.SKIN_EXTENSION);
+						Project.PROJECT_EXTENSION);
 
 				chooser.setFileFilter(filter);
 				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
