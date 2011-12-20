@@ -1,17 +1,21 @@
 TODO
 ==========================
 
+* Save relative paths to the project not absolute
+* Export a sequence of images given an animation, a destination folder, a target FPS and a viewport (could be automatic calculated from the boundings of the skeleton)
+	- automatic viewport
+	- fixed viewport
+
 * Import a list of images to the images panel to be used to easily edit the skin of each Joint.
 * Zoom with ctrl + mouse wheel (and possibly a gui component)
 * Undo with ctrl + z
 * Edit menu with all the stuff with Copy/Paste/Undo/Etc.
 * Cut/Copy part of the skeleton and paste it as child of another Skeleton Joint.
-* Save relative paths to the project not absolute
+
 * Specify the duration of a keyframe of the current animation
 * Panel with a list of animations to switch between animations
 * BUG: be able to resize the viewport when the application is resized
 * BUG: cant select a node from the JTree when we are modifying a Skin
-* Save button to save the current project
 * Title bar shows the current project (updated when open or save as...)
 * Perform exit when EXIT button touched
 * Dialog when exit the application if project was modified since the last modification
@@ -19,9 +23,7 @@ TODO
 * Application configuration in the user home or something like that
 	- recent projects
 	- last opened folders for each operation
-* Export a sequence of images given an animation, a destination folder, a target FPS and a viewport (could be automatic calculated from the boundings of the skeleton)
-	- automatic viewport
-	- fixed viewport
+
 * Tooltips over each button of the GUI
 * Toggle buttons to enable different render stuff (joints, skins, joint axis for inner coordinate system, etc)
 * Keyframes stores only changes from the previous state, to be able to animate multiple animations and to be able to move parents and the animations continue the same (for example, an animaiton of only the left arm)
@@ -58,4 +60,5 @@ DONE
 * animation keyframes stores float[] for each joint instead a skeleton, to be easily serialized/deserialized
 * Save the list of project animations to a json file projectname.animations when saving the project
 * Load the list of saved animations when loading the project as well from the projectname.animations file
+* Save button saves the current project if there is one, show save as otherwise.
 
