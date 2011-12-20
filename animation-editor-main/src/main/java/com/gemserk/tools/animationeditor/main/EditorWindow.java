@@ -473,6 +473,8 @@ public class EditorWindow {
 
 				logger.info("Loading project from " + selectedFile);
 				Project project = gson.fromJson(new FileReader(selectedFile), Project.class);
+				
+				project.setProjectFile(selectedFile.getAbsolutePath());
 
 				// resourceManager.unloadAll();
 
