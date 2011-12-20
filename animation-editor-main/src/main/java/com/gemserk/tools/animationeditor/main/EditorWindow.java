@@ -193,7 +193,13 @@ public class EditorWindow {
 		JMenuItem mntmImport = new JMenuItem("Import");
 		mntmImport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser chooser = new JFileChooser();
+				JFileChooser chooser;
+
+				if (currentProject != null)
+					chooser = new JFileChooser(FilenameUtils.getFullPath(currentProject.getProjectFile()));
+				else
+					chooser = new JFileChooser();
+
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("Images only", "png", "jpg", "gif");
 
 				chooser.setFileFilter(filter);
@@ -213,14 +219,14 @@ public class EditorWindow {
 			}
 		});
 		mnFile.add(mntmImport);
-		
+
 		mnFile.addSeparator();
-		
+
 		JMenuItem mntmExport = new JMenuItem("Export animation...");
 		mntmExport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
-				
+
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG files", "png");
 
 				chooser.setFileFilter(filter);
@@ -230,12 +236,12 @@ public class EditorWindow {
 				int returnVal = chooser.showOpenDialog(frmGemserksAnimationEditor);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = chooser.getSelectedFile();
-					
+
 					String absolutePath = selectedFile.getAbsolutePath();
-					
+
 					String baseName = FilenameUtils.getBaseName(absolutePath);
 					String fullPath = FilenameUtils.getFullPath(absolutePath);
-					
+
 					editorApplication.exportAnimation(fullPath + baseName + "_");
 				}
 			}
@@ -502,7 +508,7 @@ public class EditorWindow {
 
 				logger.info("Loading project from " + selectedFile);
 				Project project = gson.fromJson(new FileReader(selectedFile), Project.class);
-				
+
 				project.setProjectFile(selectedFile.getAbsolutePath());
 
 				// resourceManager.unloadAll();
@@ -511,8 +517,8 @@ public class EditorWindow {
 				Skin skin = ProjectUtils.loadSkin(project);
 				List<SkeletonAnimation> animations = ProjectUtils.loadAnimations(project);
 
-//				editor.setSkeleton(skeleton);
-//				editorApplication.skin = skin;
+				// editor.setSkeleton(skeleton);
+				// editorApplication.skin = skin;
 
 				if (animations.size() > 0) {
 					SkeletonAnimation skeletonAnimation = animations.get(0);
