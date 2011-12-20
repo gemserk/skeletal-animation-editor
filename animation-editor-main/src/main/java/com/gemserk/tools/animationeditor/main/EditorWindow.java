@@ -180,10 +180,10 @@ public class EditorWindow {
 						logger.info("Loading project from " + selectedFile);
 						Project project = gson.fromJson(new FileReader(selectedFile), Project.class);
 
-						resourceManager.unloadAll();
+						// resourceManager.unloadAll();
 
 						Skeleton skeleton = ProjectUtils.loadSkeleton(project);
-						Skin skin = ProjectUtils.loadSkin(project, skeleton, resourceManager);
+						Skin skin = ProjectUtils.loadSkin(project);
 						List<SkeletonAnimation> animations = ProjectUtils.loadAnimations(project);
 
 						editor.setSkeleton(skeleton);
@@ -193,8 +193,12 @@ public class EditorWindow {
 							SkeletonAnimation skeletonAnimation = animations.get(0);
 							editor.setCurrentAnimation(skeletonAnimation);
 						}
-						
+
 						currentProject = project;
+
+						// convert to absolute paths again!
+						editorApplication.updateResources(project.texturePaths, skin);
+						// updateResourceMAnager(resourceManager, map of images, skin)
 
 					} catch (JsonSyntaxException e1) {
 						logger.error("Failed when loading project from file " + selectedFile, e1);
@@ -449,6 +453,10 @@ public class EditorWindow {
 	}
 
 	private void save(EditorLibgdxApplicationListener editorApplication) {
+		currentProject.texturePaths.clear();
+		// convert to relativ paths!
+		currentProject.texturePaths.putAll(editorApplication.texturePaths);
+
 		ProjectUtils.saveSkeleton(currentProject, editor.getSkeleton());
 		ProjectUtils.saveSkin(currentProject, editorApplication.skin);
 		ProjectUtils.saveAnimations(currentProject, Arrays.asList(editor.getCurrentAnimation()));
@@ -474,12 +482,19 @@ public class EditorWindow {
 
 			Project project = new Project(selectedFile.getAbsolutePath());
 
-			ProjectUtils.saveSkeleton(project, editor.getSkeleton());
-			ProjectUtils.saveSkin(project, editorApplication.skin);
-			ProjectUtils.saveAnimations(project, Arrays.asList(editor.getCurrentAnimation()));
-			ProjectUtils.saveProject(project);
-
 			currentProject = project;
+			save(editorApplication);
+
+			// project.texturePaths.clear();
+			// // convert to relativ paths!
+			// project.texturePaths.putAll(editorApplication.texturePaths);
+			//
+			// ProjectUtils.saveSkeleton(project, editor.getSkeleton());
+			// ProjectUtils.saveSkin(project, editorApplication.skin);
+			// ProjectUtils.saveAnimations(project, Arrays.asList(editor.getCurrentAnimation()));
+			// ProjectUtils.saveProject(project);
+			//
+			// currentProject = project;
 		}
 	}
 }

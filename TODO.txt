@@ -61,4 +61,6 @@ DONE
 * Save the list of project animations to a json file projectname.animations when saving the project
 * Load the list of saved animations when loading the project as well from the projectname.animations file
 * Save button saves the current project if there is one, show save as otherwise.
+* Skin patches are saved only with ids of the joints and the skeleton is a parameter of the update() method of the Skin and SkinPatch.
+* Loaded textures are stored in a map<textureid, path> as a property of the main project saved with it, when the project loads, the map of images is used to recreate the resource manager used by the editor and the skin.
 

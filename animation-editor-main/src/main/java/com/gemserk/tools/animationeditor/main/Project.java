@@ -1,6 +1,8 @@
 package com.gemserk.tools.animationeditor.main;
 
 import org.apache.commons.io.FilenameUtils;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Project {
 
@@ -10,6 +12,7 @@ public class Project {
 	public static final String ANIMATIONS_EXTENSION = "animations";
 
 	private String projectFile;
+	public Map<String, String> texturePaths = new HashMap<String, String>();
 
 	public Project(String projectPath) {
 		setProjectFile(projectPath);

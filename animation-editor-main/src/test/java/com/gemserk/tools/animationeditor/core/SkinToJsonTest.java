@@ -7,7 +7,6 @@ import org.junit.Test;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.gemserk.resources.Resource;
 import com.gemserk.resources.dataloaders.DataLoader;
-import com.gemserk.tools.animationeditor.core.Skin.SkinPatch;
 import com.gemserk.tools.animationeditor.json.SkinJsonDeserializer;
 import com.gemserk.tools.animationeditor.json.SkinJsonSerializer;
 import com.gemserk.tools.animationeditor.json.SkinPatchJsonSerializer;
@@ -48,7 +47,7 @@ public class SkinToJsonTest {
 			Float cx = jsonObject.get("cx").getAsFloat();
 			Float cy = jsonObject.get("cy").getAsFloat();
 
-			SkinPatch skinPatch = new SkinPatch(skeleton.getRoot().find(jointId), null, textureId);
+			SkinPatch skinPatch = new SkinPatch(jointId, textureId);
 
 			skinPatch.angle = angle.floatValue();
 			skinPatch.center.set(cx.floatValue(), cy.floatValue());
@@ -74,8 +73,8 @@ public class SkinToJsonTest {
 
 		Skin skin = new Skin();
 
-		skin.addPatch(root, new MockResource<Sprite>(null), "/tmp/body.png");
-		skin.addPatch(child, new MockResource<Sprite>(null), "/tmp/leg.png");
+		skin.addPatch(root.getId(), "/tmp/body.png");
+		skin.addPatch(child.getId(), "/tmp/leg.png");
 
 		SkinPatchJsonDeserializer skinPatchDeserializer = new SkinPatchJsonDeserializer(skeleton);
 

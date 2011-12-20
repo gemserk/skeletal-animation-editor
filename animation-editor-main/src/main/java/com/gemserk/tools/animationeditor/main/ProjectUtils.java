@@ -11,13 +11,12 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.gemserk.resources.ResourceManager;
 import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.JointImpl;
 import com.gemserk.tools.animationeditor.core.Skeleton;
 import com.gemserk.tools.animationeditor.core.SkeletonAnimation;
 import com.gemserk.tools.animationeditor.core.Skin;
-import com.gemserk.tools.animationeditor.core.Skin.SkinPatch;
+import com.gemserk.tools.animationeditor.core.SkinPatch;
 import com.gemserk.tools.animationeditor.json.JointJsonDeserializer;
 import com.gemserk.tools.animationeditor.json.JointJsonSerializer;
 import com.gemserk.tools.animationeditor.json.SkinJsonDeserializer;
@@ -53,20 +52,13 @@ public class ProjectUtils {
 		return gson.fromJson(new FileReader(skeletonFile), Skeleton.class);
 	}
 
-	public static Skin loadSkin(Project project, Skeleton skeleton, ResourceManager<String> resourceManager) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
+	public static Skin loadSkin(Project project) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
 		String skinFile = project.getSkinFile();
-
-		SkinPatchJsonDeserializer skinPatchJsonDeserializer = new SkinPatchJsonDeserializer();
-
-		skinPatchJsonDeserializer.setSkeleton(skeleton);
-		skinPatchJsonDeserializer.setResourceManager(resourceManager);
-
 		Gson gson = new GsonBuilder() //
 				.registerTypeAdapter(Skin.class, new SkinJsonDeserializer()) //
-				.registerTypeAdapter(SkinPatch.class, skinPatchJsonDeserializer) //
+				.registerTypeAdapter(SkinPatch.class, new SkinPatchJsonDeserializer()) //
 				.setPrettyPrinting() //
 				.create();
-
 		return gson.fromJson(new FileReader(skinFile), Skin.class);
 	}
 

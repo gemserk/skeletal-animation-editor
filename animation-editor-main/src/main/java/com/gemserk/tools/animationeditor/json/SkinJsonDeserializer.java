@@ -4,7 +4,7 @@ import java.lang.reflect.Type;
 import java.util.Map;
 
 import com.gemserk.tools.animationeditor.core.Skin;
-import com.gemserk.tools.animationeditor.core.Skin.SkinPatch;
+import com.gemserk.tools.animationeditor.core.SkinPatch;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
