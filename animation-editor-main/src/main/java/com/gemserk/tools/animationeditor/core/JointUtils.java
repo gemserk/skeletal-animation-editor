@@ -54,6 +54,8 @@ public class JointUtils {
 			Joint joint = joints.get(j);
 
 			TimelineValue timelineValue = new TimelineValueMutableObjectImpl<Joint>(joint, JointConverter.instance);
+			
+			boolean emptyTimelineValue = true;
 
 			for (int i = 0; i < frames.size(); i++) {
 				SkeletonAnimationKeyFrame skeletonAnimationKeyFrame = frames.get(i);
@@ -61,9 +63,11 @@ public class JointUtils {
 					continue;
 				float[] keyFrame = skeletonAnimationKeyFrame.getJointKeyFrame(joint.getId());
 				timelineValue.addKeyFrame(new KeyFrame(skeletonAnimationKeyFrame.getTime(), keyFrame));
+				emptyTimelineValue = false;
 			}
 
-			timelineValues.add(timelineValue);
+			if (!emptyTimelineValue)
+				timelineValues.add(timelineValue);
 
 		}
 

@@ -521,17 +521,17 @@ public class EditorWindow {
 				// editor.setSkeleton(skeleton);
 				// editorApplication.skin = skin;
 
-				if (animations.size() > 0) {
-					SkeletonAnimation skeletonAnimation = animations.get(0);
-					editor.setCurrentAnimation(skeletonAnimation);
-				}
-
 				currentProject = project;
 
 				// convert to absolute paths again!
 				Map<String, String> absoluteTexturePaths = project.getAbsoluteTexturePaths();
 				editorApplication.updateResources(skeleton, absoluteTexturePaths, skin);
 				// updateResourceMAnager(resourceManager, map of images, skin)
+				
+				if (animations.size() > 0) {
+					SkeletonAnimation skeletonAnimation = animations.get(0);
+					editor.setCurrentAnimation(skeletonAnimation);
+				}
 
 			} catch (JsonSyntaxException e1) {
 				logger.error("Failed when loading project from file " + selectedFile, e1);
