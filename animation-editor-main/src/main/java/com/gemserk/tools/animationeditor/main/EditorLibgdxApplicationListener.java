@@ -2,6 +2,8 @@ package com.gemserk.tools.animationeditor.main;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -355,6 +357,8 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	EditorState currentState;
 	Skin skin;
+	
+	Map<String, Resource<Sprite>> skinSprites;
 
 	public void setCurrentSkin(final File file) {
 
@@ -384,6 +388,7 @@ public class EditorLibgdxApplicationListener extends Game {
 					return;
 
 				skin.addPatch(selectedNode, resource, resourceId);
+				skinSprites.put(selectedNode.getId(), resource);
 			}
 		});
 
@@ -439,6 +444,8 @@ public class EditorLibgdxApplicationListener extends Game {
 		// texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
 		skin = new Skin();
+		skinSprites = new HashMap<String, Resource<Sprite>>();
+		
 		// skin.addPatch(root, new Sprite(resource.get()));
 	}
 
@@ -471,7 +478,7 @@ public class EditorLibgdxApplicationListener extends Game {
 		ArrayList<SkinPatch> patchList = skin.getPatchList();
 		for (int i = 0; i < patchList.size(); i++) {
 			SkinPatch skinPatch = patchList.get(i);
-			skinPatch.update();
+			skinPatch.update(skinPatch.getSprite());
 		}
 
 		// skin.update();
