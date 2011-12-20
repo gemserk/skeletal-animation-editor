@@ -9,7 +9,7 @@ import com.gemserk.commons.gdx.resources.LibgdxResourceBuilder;
 import com.gemserk.resources.Resource;
 import com.gemserk.resources.ResourceManager;
 import com.gemserk.tools.animationeditor.core.Skeleton;
-import com.gemserk.tools.animationeditor.core.Skin.SkinPatch;
+import com.gemserk.tools.animationeditor.core.SkinPatch;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;

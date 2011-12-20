@@ -2,7 +2,7 @@ package com.gemserk.tools.animationeditor.json;
 
 import java.lang.reflect.Type;
 
-import com.gemserk.tools.animationeditor.core.Skin.SkinPatch;
+import com.gemserk.tools.animationeditor.core.SkinPatch;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;

@@ -7,7 +7,6 @@ import org.junit.Test;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.gemserk.resources.Resource;
 import com.gemserk.resources.dataloaders.DataLoader;
-import com.gemserk.tools.animationeditor.core.Skin.SkinPatch;
 import com.gemserk.tools.animationeditor.json.SkinJsonDeserializer;
 import com.gemserk.tools.animationeditor.json.SkinJsonSerializer;
 import com.gemserk.tools.animationeditor.json.SkinPatchJsonSerializer;
