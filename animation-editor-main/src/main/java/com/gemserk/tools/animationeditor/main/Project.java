@@ -1,8 +1,12 @@
 package com.gemserk.tools.animationeditor.main;
 
-import org.apache.commons.io.FilenameUtils;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+
+import org.apache.commons.io.FilenameUtils;
+
+import com.gemserk.commons.files.FileUtils;
 
 public class Project {
 
@@ -12,7 +16,7 @@ public class Project {
 	public static final String ANIMATIONS_EXTENSION = "animations";
 
 	private String projectFile;
-	public Map<String, String> texturePaths = new HashMap<String, String>();
+	private Map<String, String> texturePaths = new HashMap<String, String>();
 
 	public Project(String projectPath) {
 		setProjectFile(projectPath);
@@ -47,5 +51,35 @@ public class Project {
 
 	public String getProjectFile() {
 		return projectFile;
+	}
+	
+	public Map<String, String> getAbsoluteTexturePaths() {
+		HashMap<String, String> textureAbsolutePaths = new HashMap<String, String>();
+		
+		Set<String> keySet = texturePaths.keySet();
+		
+		String basePath = FilenameUtils.getFullPath(projectFile);
+		
+		for (String textureId : keySet) {
+			String texturePath = texturePaths.get(textureId);
+			if (!FileUtils.isAbsolutePath(texturePath))
+				texturePath = basePath + texturePath;
+			textureAbsolutePaths.put(textureId, texturePath);
+		}
+		
+		return textureAbsolutePaths;
+	}
+
+	public void setTextureAbsolutePaths(Map<String, String> texturePaths) {
+		this.texturePaths.clear();
+		Set<String> keySet = texturePaths.keySet();
+		String basePath = FilenameUtils.getFullPath(projectFile);
+		for (String textureId : keySet) {
+			String textureAbsolutePath = texturePaths.get(textureId);
+			if (FileUtils.isSubPath(basePath, textureAbsolutePath)) {
+				textureAbsolutePath = FileUtils.removeSubPath(basePath, textureAbsolutePath);
+			}
+			this.texturePaths.put(textureId, textureAbsolutePath);
+		}
 	}
 }

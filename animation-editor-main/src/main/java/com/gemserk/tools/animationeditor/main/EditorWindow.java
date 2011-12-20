@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.swing.ImageIcon;
@@ -161,54 +162,7 @@ public class EditorWindow {
 		mntmOpen.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JFileChooser chooser = new JFileChooser();
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("Project files only", Project.PROJECT_EXTENSION);
-
-				chooser.setFileFilter(filter);
-				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-				chooser.setMultiSelectionEnabled(false);
-
-				int returnVal = chooser.showOpenDialog(frmGemserksAnimationEditor);
-				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					File selectedFile = chooser.getSelectedFile();
-
-					try {
-						Gson gson = new GsonBuilder() //
-								.setPrettyPrinting() //
-								.create();
-
-						logger.info("Loading project from " + selectedFile);
-						Project project = gson.fromJson(new FileReader(selectedFile), Project.class);
-
-						// resourceManager.unloadAll();
-
-						Skeleton skeleton = ProjectUtils.loadSkeleton(project);
-						Skin skin = ProjectUtils.loadSkin(project);
-						List<SkeletonAnimation> animations = ProjectUtils.loadAnimations(project);
-
-						editor.setSkeleton(skeleton);
-						editorApplication.skin = skin;
-
-						if (animations.size() > 0) {
-							SkeletonAnimation skeletonAnimation = animations.get(0);
-							editor.setCurrentAnimation(skeletonAnimation);
-						}
-
-						currentProject = project;
-
-						// convert to absolute paths again!
-						editorApplication.updateResources(project.texturePaths, skin);
-						// updateResourceMAnager(resourceManager, map of images, skin)
-
-					} catch (JsonSyntaxException e1) {
-						logger.error("Failed when loading project from file " + selectedFile, e1);
-					} catch (JsonIOException e1) {
-						logger.error("Failed when loading project from file " + selectedFile, e1);
-					} catch (FileNotFoundException e1) {
-						logger.error("Failed when loading project from file " + selectedFile, e1);
-					}
-
-				}
+				open(editorApplication);
 			}
 
 		});
@@ -453,9 +407,11 @@ public class EditorWindow {
 	}
 
 	private void save(EditorLibgdxApplicationListener editorApplication) {
-		currentProject.texturePaths.clear();
-		// convert to relativ paths!
-		currentProject.texturePaths.putAll(editorApplication.texturePaths);
+		// currentProject.texturePaths.clear();
+		// // convert to relativ paths!
+		// currentProject.texturePaths.putAll(editorApplication.texturePaths);
+
+		currentProject.setTextureAbsolutePaths(editorApplication.texturePaths);
 
 		ProjectUtils.saveSkeleton(currentProject, editor.getSkeleton());
 		ProjectUtils.saveSkin(currentProject, editorApplication.skin);
@@ -478,7 +434,7 @@ public class EditorWindow {
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = chooser.getSelectedFile();
 
-//			String projectFileNameWithoutExtension = FileUtils.getFileNameWithoutExtension(selectedFile.getAbsolutePath());
+			// String projectFileNameWithoutExtension = FileUtils.getFileNameWithoutExtension(selectedFile.getAbsolutePath());
 
 			Project project = new Project(selectedFile.getAbsolutePath());
 
@@ -495,6 +451,58 @@ public class EditorWindow {
 			// ProjectUtils.saveProject(project);
 			//
 			// currentProject = project;
+		}
+	}
+
+	private void open(final EditorLibgdxApplicationListener editorApplication) {
+		JFileChooser chooser = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Project files only", Project.PROJECT_EXTENSION);
+
+		chooser.setFileFilter(filter);
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		chooser.setMultiSelectionEnabled(false);
+
+		int returnVal = chooser.showOpenDialog(frmGemserksAnimationEditor);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			File selectedFile = chooser.getSelectedFile();
+
+			try {
+				Gson gson = new GsonBuilder() //
+						.setPrettyPrinting() //
+						.create();
+
+				logger.info("Loading project from " + selectedFile);
+				Project project = gson.fromJson(new FileReader(selectedFile), Project.class);
+
+				// resourceManager.unloadAll();
+
+				Skeleton skeleton = ProjectUtils.loadSkeleton(project);
+				Skin skin = ProjectUtils.loadSkin(project);
+				List<SkeletonAnimation> animations = ProjectUtils.loadAnimations(project);
+
+//				editor.setSkeleton(skeleton);
+//				editorApplication.skin = skin;
+
+				if (animations.size() > 0) {
+					SkeletonAnimation skeletonAnimation = animations.get(0);
+					editor.setCurrentAnimation(skeletonAnimation);
+				}
+
+				currentProject = project;
+
+				// convert to absolute paths again!
+				Map<String, String> absoluteTexturePaths = project.getAbsoluteTexturePaths();
+				editorApplication.updateResources(skeleton, absoluteTexturePaths, skin);
+				// updateResourceMAnager(resourceManager, map of images, skin)
+
+			} catch (JsonSyntaxException e1) {
+				logger.error("Failed when loading project from file " + selectedFile, e1);
+			} catch (JsonIOException e1) {
+				logger.error("Failed when loading project from file " + selectedFile, e1);
+			} catch (FileNotFoundException e1) {
+				logger.error("Failed when loading project from file " + selectedFile, e1);
+			}
+
 		}
 	}
 }

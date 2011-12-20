@@ -467,7 +467,8 @@ public class EditorLibgdxApplicationListener extends Game {
 			SkinPatch patch = patchList.get(i);
 			String jointId = patch.getJointId();
 			Joint joint = skeletonEditor.getSkeleton().find(jointId);
-			patch.update(skinSprites.get(jointId).get(), joint);
+			Resource<Sprite> resource = skinSprites.get(jointId);
+			patch.update(resource.get(), joint);
 		}
 	}
 
@@ -535,16 +536,20 @@ public class EditorLibgdxApplicationListener extends Game {
 		resourceManager.unloadAll();
 	}
 
-	public void updateResources(final Map<String, String> newTexturePaths, final Skin newSkin) {
+	public void updateResources(final Skeleton skeleton, final Map<String, String> newTexturePaths, final Skin newSkin) {
 
 		Gdx.app.postRunnable(new Runnable() {
 
 			@Override
 			public void run() {
-
+				
+				skeletonEditor.setSkeleton(skeleton);
+				
 				skinSprites.clear();
 				texturePaths.clear();
 				texturePaths.putAll(newTexturePaths);
+				
+				skin = newSkin;
 
 				resourceManager.unloadAll();
 
@@ -557,7 +562,7 @@ public class EditorLibgdxApplicationListener extends Game {
 							.magFilter(TextureFilter.Linear));
 				}
 
-				ArrayList<SkinPatch> patchList = newSkin.getPatchList();
+				ArrayList<SkinPatch> patchList = skin.getPatchList();
 				for (int i = 0; i < patchList.size(); i++) {
 					SkinPatch patch = patchList.get(i);
 					String jointId = patch.getJointId();
@@ -568,8 +573,6 @@ public class EditorLibgdxApplicationListener extends Game {
 					Resource<Sprite> resource = resourceManager.get(jointId);
 					skinSprites.put(jointId, resource);
 				}
-
-				skin = newSkin;
 
 			}
 		});
