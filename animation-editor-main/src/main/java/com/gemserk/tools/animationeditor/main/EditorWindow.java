@@ -15,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -73,6 +74,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
 public class EditorWindow {
 
@@ -83,7 +85,7 @@ public class EditorWindow {
 	private EditorInterceptorImpl editor;
 
 	private ResourceManager<String> resourceManager;
-	
+
 	private ResourceBundle messages;
 
 	/**
@@ -190,15 +192,21 @@ public class EditorWindow {
 					try {
 						logger.info("Loading project from " + selectedFile);
 						Project project = gson.fromJson(new FileReader(selectedFile), Project.class);
-						
+
 						resourceManager.unloadAll();
-						
+
 						Skeleton skeleton = loadSkeleton(project);
 						Skin skin = loadSkin(project, skeleton, resourceManager);
-						
+						List<SkeletonAnimation> animations = loadAnimations(project);
+
 						editor.setSkeleton(skeleton);
 						editorApplication.skin = skin;
 						
+						if (animations.size()> 0) {
+							SkeletonAnimation skeletonAnimation = animations.get(0);
+							editor.setCurrentAnimation(skeletonAnimation);
+						}
+
 					} catch (JsonSyntaxException e1) {
 						logger.error("Failed when loading project from file " + selectedFile, e1);
 					} catch (JsonIOException e1) {
@@ -208,6 +216,14 @@ public class EditorWindow {
 					}
 
 				}
+			}
+
+			private List<SkeletonAnimation> loadAnimations(Project project) throws JsonIOException, JsonSyntaxException, FileNotFoundException {
+				Type animationsListType = new TypeToken<List<SkeletonAnimation>>() {}.getType();
+				Gson gson = new GsonBuilder() //
+						.setPrettyPrinting() //
+						.create();
+				return gson.fromJson(new FileReader(project.animationsFile), animationsListType);
 			}
 
 			private Skeleton loadSkeleton(Project project) throws JsonSyntaxException, JsonIOException, FileNotFoundException {
@@ -283,7 +299,7 @@ public class EditorWindow {
 					logger.error("Failed to save project file to " + project.projectFile, e1);
 				}
 			}
-			
+
 			private void saveAnimations(Project project, List<SkeletonAnimation> animations) {
 				try {
 					Gson gson = new GsonBuilder() //
@@ -377,13 +393,13 @@ public class EditorWindow {
 		mntmExit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int showConfirmDialog = JOptionPane.showConfirmDialog(frmGemserksAnimationEditor, // 
+				int showConfirmDialog = JOptionPane.showConfirmDialog(frmGemserksAnimationEditor, //
 						messages.getString(Messages.DialogExitMessage), //
-						messages.getString(Messages.DialogExitTitle), // 
+						messages.getString(Messages.DialogExitTitle), //
 						JOptionPane.YES_NO_OPTION);
 				if (showConfirmDialog == JOptionPane.NO_OPTION)
 					return;
-				Gdx.app.exit();		
+				Gdx.app.exit();
 			}
 		});
 		mnFile.add(mntmExit);

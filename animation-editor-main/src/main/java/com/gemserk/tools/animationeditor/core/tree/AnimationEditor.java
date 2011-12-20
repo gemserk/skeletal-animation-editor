@@ -7,6 +7,8 @@ public interface AnimationEditor {
 	
 	SkeletonAnimation getCurrentAnimation();
 	
+	void setCurrentAnimation(SkeletonAnimation animation);
+	
 	SkeletonAnimationKeyFrame addKeyFrame();
 	
 	void selectKeyFrame(SkeletonAnimationKeyFrame keyFrame);

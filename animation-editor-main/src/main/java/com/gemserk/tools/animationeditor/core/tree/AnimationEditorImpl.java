@@ -1,10 +1,10 @@
 package com.gemserk.tools.animationeditor.core.tree;
 
+import com.gemserk.tools.animationeditor.core.JointUtils;
+import com.gemserk.tools.animationeditor.core.Skeleton;
 import com.gemserk.tools.animationeditor.core.SkeletonAnimation;
 import com.gemserk.tools.animationeditor.core.SkeletonAnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.SkeletonAnimationUtils;
-import com.gemserk.tools.animationeditor.core.JointUtils;
-import com.gemserk.tools.animationeditor.core.Skeleton;
 
 public class AnimationEditorImpl implements AnimationEditor {
 
@@ -76,6 +76,12 @@ public class AnimationEditorImpl implements AnimationEditor {
 	@Override
 	public void stopAnimation() {
 		playing = false;
+	}
+
+	@Override
+	public void setCurrentAnimation(SkeletonAnimation animation) {
+		this.currentAnimation = animation;
+		this.selectedKeyFrame = null;
 	}
 
 }

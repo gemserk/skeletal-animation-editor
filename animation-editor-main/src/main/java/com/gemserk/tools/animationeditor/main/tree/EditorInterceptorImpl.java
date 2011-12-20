@@ -14,10 +14,10 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
-import com.gemserk.tools.animationeditor.core.SkeletonAnimation;
-import com.gemserk.tools.animationeditor.core.SkeletonAnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.Skeleton;
+import com.gemserk.tools.animationeditor.core.SkeletonAnimation;
+import com.gemserk.tools.animationeditor.core.SkeletonAnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.tree.AnimationEditor;
 import com.gemserk.tools.animationeditor.core.tree.AnimationEditorImpl;
 import com.gemserk.tools.animationeditor.core.tree.SkeletonEditor;
@@ -86,12 +86,12 @@ public class EditorInterceptorImpl implements SkeletonEditor, AnimationEditor {
 		skeletonEditor.setSkeleton(skeleton);
 		treeNodes.clear();
 		// model.get
-		
+
 		DefaultMutableTreeNode treeRoot = (DefaultMutableTreeNode) model.getRoot();
 		if (treeRoot == null)
 			throw new IllegalStateException("Expected to have a root DefaultMutableTreeNode in the TreeModel");
 		treeRoot.removeAllChildren();
-		
+
 		internalAdd(skeleton.getRoot());
 	}
 
@@ -201,9 +201,7 @@ public class EditorInterceptorImpl implements SkeletonEditor, AnimationEditor {
 	@Override
 	public void removeKeyFrame() {
 		animationEditor.removeKeyFrame();
-		SkeletonAnimation currentAnimation = animationEditor.getCurrentAnimation();
-		keyFramesList.setModel(new AnimationKeyFrameListModel(currentAnimation.getKeyFrames()));
-		keyFramesList.setSelectedIndex(0);
+		updateAnimationView(animationEditor.getCurrentAnimation());
 	}
 
 	@Override
@@ -225,6 +223,18 @@ public class EditorInterceptorImpl implements SkeletonEditor, AnimationEditor {
 
 	public void updateKeyFrame() {
 		animationEditor.updateKeyFrame();
+	}
+
+	@Override
+	public void setCurrentAnimation(SkeletonAnimation animation) {
+		animationEditor.setCurrentAnimation(animation);
+		updateAnimationView(animation);
+	}
+
+	private void updateAnimationView(SkeletonAnimation animation) {
+		keyFramesList.setModel(new AnimationKeyFrameListModel(animation.getKeyFrames()));
+		if (animation.getKeyFrames().size() > 0)
+			keyFramesList.setSelectedIndex(0);
 	}
 
 }
