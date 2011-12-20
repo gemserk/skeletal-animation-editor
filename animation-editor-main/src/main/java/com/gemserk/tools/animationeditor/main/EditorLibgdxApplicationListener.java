@@ -25,12 +25,12 @@ import com.gemserk.componentsengine.input.InputDevicesMonitorImpl;
 import com.gemserk.componentsengine.input.LibgdxInputMappingBuilder;
 import com.gemserk.resources.Resource;
 import com.gemserk.resources.ResourceManager;
-import com.gemserk.tools.animationeditor.core.SkeletonAnimation;
-import com.gemserk.tools.animationeditor.core.SkeletonAnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.JointImpl;
 import com.gemserk.tools.animationeditor.core.JointUtils;
 import com.gemserk.tools.animationeditor.core.Skeleton;
+import com.gemserk.tools.animationeditor.core.SkeletonAnimation;
+import com.gemserk.tools.animationeditor.core.SkeletonAnimationKeyFrame;
 import com.gemserk.tools.animationeditor.core.Skin;
 import com.gemserk.tools.animationeditor.core.SkinPatch;
 import com.gemserk.tools.animationeditor.core.tree.AnimationEditor;
@@ -115,14 +115,14 @@ public class EditorLibgdxApplicationListener extends Game {
 			ArrayList<SkeletonAnimationKeyFrame> keyFrames = currentAnimation.getKeyFrames();
 
 			skeleton = skeletonEditor.getSkeleton();
-			
+
 			if (keyFrames.size() == 0) {
 				timelineAnimation = null;
 				return;
 			}
 
 			Timeline timeline = JointUtils.getTimeline(skeleton.getRoot(), keyFrames);
-			
+
 			timelineAnimation = new TimelineAnimation(timeline, (float) keyFrames.size() - 1);
 			timelineAnimation.setSpeed(1f);
 			timelineAnimation.setDelay(0f);
@@ -131,8 +131,8 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		@Override
 		public void update() {
-			
-			if (timelineAnimation == null) 
+
+			if (timelineAnimation == null)
 				return;
 
 			timelineAnimation.update(Gdx.graphics.getDeltaTime());
@@ -363,7 +363,7 @@ public class EditorLibgdxApplicationListener extends Game {
 			@Override
 			public void run() {
 				String resourceId = file.getAbsolutePath();
-				
+
 				Resource<Sprite> resource = resourceManager.get(resourceId);
 
 				if (resource == null) {
@@ -464,7 +464,17 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		currentState.update();
 
-		skin.update();
+		updateSkin();
+	}
+
+	private void updateSkin() {
+		ArrayList<SkinPatch> patchList = skin.getPatchList();
+		for (int i = 0; i < patchList.size(); i++) {
+			SkinPatch skinPatch = patchList.get(i);
+			skinPatch.update();
+		}
+
+		// skin.update();
 	}
 
 	private void realRender() {

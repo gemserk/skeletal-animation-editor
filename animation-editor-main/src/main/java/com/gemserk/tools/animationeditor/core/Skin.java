@@ -3,7 +3,6 @@ package com.gemserk.tools.animationeditor.core;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.gemserk.resources.Resource;
@@ -44,14 +43,6 @@ public class Skin {
 			Joint j = joints.get(i);
 			SkinPatch patch = patches.remove(j.getId());
 			patchList.remove(patch);
-		}
-	}
-
-	public void update() {
-		Set<String> keySet = patches.keySet();
-		for (String jointId : keySet) {
-			SkinPatch skinPatch = patches.get(jointId);
-			skinPatch.update();
 		}
 	}
 

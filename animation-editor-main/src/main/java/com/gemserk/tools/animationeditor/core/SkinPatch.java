@@ -31,7 +31,7 @@ public class SkinPatch {
 		this.textureId = textureId;
 	}
 
-	void update() {
+	public void update() {
 		float angle = this.angle + joint.getAngle();
 		
 		Sprite sprite = this.sprite.get();
