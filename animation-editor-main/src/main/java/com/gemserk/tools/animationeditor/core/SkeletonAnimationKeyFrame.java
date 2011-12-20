@@ -36,7 +36,7 @@ public class SkeletonAnimationKeyFrame {
 		this.time = time;
 	}
 
-	SkeletonAnimationKeyFrame(String name, float time, Map<String, float[]> jointKeyFrames) {
+	public SkeletonAnimationKeyFrame(String name, float time, Map<String, float[]> jointKeyFrames) {
 		this.name = name;
 		this.time = time;
 		this.jointKeyFrames = jointKeyFrames;

@@ -31,8 +31,6 @@ public class SkeletonAnimationUtils {
 
 		keyframe.jointKeyFrames.clear();
 		keyframe.jointKeyFrames.putAll(jointKeyFrames);
-
-		// keyframe.setSkeleton(JointUtils.cloneSkeleton(skeleton));
 	}
 
 	/**
