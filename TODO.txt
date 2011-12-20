@@ -6,6 +6,9 @@ TODO
 	- automatic viewport
 	- fixed viewport
 
+* Skin patches are saved only with ids of the joints and the skeleton is a parameter of the update() method of the Skin and SkinPatch.
+* Used images are saved as a property of the project or something like that, declaring resources when the project is loaded, which will later be used by the skin patches, not sure how yet.
+
 * Import a list of images to the images panel to be used to easily edit the skin of each Joint.
 * Zoom with ctrl + mouse wheel (and possibly a gui component)
 * Undo with ctrl + z
