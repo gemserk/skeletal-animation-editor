@@ -6,9 +6,6 @@ TODO
 	- automatic viewport
 	- fixed viewport
 
-* Skin patches are saved only with ids of the joints and the skeleton is a parameter of the update() method of the Skin and SkinPatch.
-* Used images are saved as a property of the project or something like that, declaring resources when the project is loaded, which will later be used by the skin patches, not sure how yet.
-
 * Import a list of images to the images panel to be used to easily edit the skin of each Joint.
 * Zoom with ctrl + mouse wheel (and possibly a gui component)
 * Undo with ctrl + z
@@ -64,4 +61,6 @@ DONE
 * Save the list of project animations to a json file projectname.animations when saving the project
 * Load the list of saved animations when loading the project as well from the projectname.animations file
 * Save button saves the current project if there is one, show save as otherwise.
+* Skin patches are saved only with ids of the joints and the skeleton is a parameter of the update() method of the Skin and SkinPatch.
+* Loaded textures are stored in a map<textureid, path> as a property of the main project saved with it, when the project loads, the map of images is used to recreate the resource manager used by the editor and the skin.
 

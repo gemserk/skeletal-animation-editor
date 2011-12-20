@@ -323,8 +323,6 @@ public class EditorLibgdxApplicationListener extends Game {
 				skinPatch.angle += rotation;
 			} else if (inputMonitor.getButton(Actions.LeftMouseButton).isHolded()) {
 
-				// move center
-
 				positionModifier.x = Gdx.input.getX();
 				positionModifier.y = Gdx.graphics.getHeight() - Gdx.input.getY();
 
@@ -334,11 +332,6 @@ public class EditorLibgdxApplicationListener extends Game {
 
 				positionModifier.x /= nodeSprite.getWidth();
 				positionModifier.y /= nodeSprite.getHeight();
-
-				// centerModification.set((currentX - position.x) / skinPatch.getSprite().getWidth(), //
-				// (currentY - position.y) / skinPatch.getSprite().getHeight());
-
-				// centerModification.rotate(-skinPatch.angle);
 
 				skinPatch.center.x -= positionModifier.x;
 				skinPatch.center.y += positionModifier.y;
@@ -438,21 +431,9 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		resourceBuilder = new LibgdxResourceBuilder(resourceManager);
 
-		// resourceBuilder.resource("DefaultBone", resourceBuilder //
-		// .texture2(Gdx.files.internal("data/bone.png"))//
-		// .minFilter(TextureFilter.Linear) //
-		// .magFilter(TextureFilter.Linear));
-		//
-		// Resource<Texture> resource = resourceManager.get("DefaultBone");
-
-		// Texture texture = new Texture(Gdx.files.internal("data/bone.png"));
-		// texture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-
 		skin = new Skin();
 		skinSprites = new HashMap<String, Resource<Sprite>>();
 		texturePaths = new HashMap<String, String>();
-
-		// skin.addPatch(root, new Sprite(resource.get()));
 	}
 
 	@Override
@@ -581,8 +562,6 @@ public class EditorLibgdxApplicationListener extends Game {
 			Resource<Sprite> resource = resourceManager.get(jointId);
 			skinSprites.put(jointId, resource);
 		}
-
-		// skinSprites.put(selectedNode.getId(), resource);
 
 	}
 }
