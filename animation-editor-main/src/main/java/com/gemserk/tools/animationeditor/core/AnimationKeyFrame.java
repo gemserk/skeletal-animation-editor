@@ -24,6 +24,10 @@ public class AnimationKeyFrame {
 		return skeleton;
 	}
 	
+	public Joint getJoint(String id) {
+		return skeleton.getRoot().find(id);
+	}
+	
 	public void setSkeleton(Skeleton skeleton) {
 		this.skeleton = skeleton;
 	}

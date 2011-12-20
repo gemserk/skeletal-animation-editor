@@ -57,8 +57,10 @@ public class JointUtils {
 
 			for (int i = 0; i < frames.size(); i++) {
 				AnimationKeyFrame animationKeyFrame = frames.get(i);
-				Joint treeState = animationKeyFrame.getSkeleton().getRoot();
-				Joint nodeState = treeState.find(joint.getId());
+				// Joint treeState = animationKeyFrame.getSkeleton().getRoot();
+				// Joint nodeState = treeState.find(joint.getId());
+				
+				Joint nodeState = animationKeyFrame.getJoint(joint.getId());
 				
 				if (nodeState == null)
 					continue;
