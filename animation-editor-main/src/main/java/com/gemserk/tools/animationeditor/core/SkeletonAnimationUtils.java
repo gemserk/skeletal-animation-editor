@@ -47,6 +47,8 @@ public class SkeletonAnimationUtils {
 		for (String jointId : keySet) {
 			float[] jointKeyFrame = keyframe.getJointKeyFrame(jointId);
 			Joint joint = skeleton.getRoot().find(jointId);
+			if (joint == null)
+				continue;
 			jointConverter.copyToObject(joint, jointKeyFrame);
 		}
 	}
