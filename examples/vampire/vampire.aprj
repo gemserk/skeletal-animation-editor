@@ -1,0 +1,11 @@
+{
+  "projectFile": "/tmp/tito/vampire.aprj",
+  "texturePaths": {
+    "texture2": "images/arm-top.png",
+    "texture1": "images/head.png",
+    "texture0": "images/body-top.png",
+    "texture5": "images/arm-bottom.png",
+    "texture4": "images/arm-bottom.png",
+    "texture3": "images/arm-top.png"
+  }
+}

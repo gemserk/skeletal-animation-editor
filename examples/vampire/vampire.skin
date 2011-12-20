@@ -1,0 +1,46 @@
+{
+  "patches": {
+    "node-650": {
+      "jointId": "node-650",
+      "textureId": "texture1",
+      "angle": 0.0,
+      "cx": 0.59999996,
+      "cy": 0.019607846
+    },
+    "node-905": {
+      "jointId": "node-905",
+      "textureId": "texture2",
+      "angle": 0.0,
+      "cx": 0.70000005,
+      "cy": 0.75
+    },
+    "root": {
+      "jointId": "root",
+      "textureId": "texture0",
+      "angle": 0.0,
+      "cx": 0.46875,
+      "cy": 0.74000007
+    },
+    "node-191": {
+      "jointId": "node-191",
+      "textureId": "texture4",
+      "angle": 0.0,
+      "cx": 0.5799999,
+      "cy": 0.89215684
+    },
+    "node-220": {
+      "jointId": "node-220",
+      "textureId": "texture5",
+      "angle": 0.0,
+      "cx": 0.5400001,
+      "cy": 0.89215684
+    },
+    "node-896": {
+      "jointId": "node-896",
+      "textureId": "texture3",
+      "angle": 0.0,
+      "cx": 0.70000005,
+      "cy": 0.78125
+    }
+  }
+}
