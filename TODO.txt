@@ -5,6 +5,8 @@ TODO
 	- automatic viewport
 	- fixed viewport
 
+* runnable jar (with all dependencies) on github uploads
+
 * Import a list of images to the images panel to be used to easily edit the skin of each Joint.
 * Zoom with ctrl + mouse wheel (and possibly a gui component)
 * Undo with ctrl + z
