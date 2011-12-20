@@ -9,7 +9,7 @@ public class SkinPatch {
 	Joint joint;
 	// Sprite sprite;
 
-	Resource<Sprite> sprite;
+	// Resource<Sprite> sprite;
 
 	public float angle;
 	public Vector2 center = new Vector2(0.5f, 0.5f);
@@ -21,19 +21,19 @@ public class SkinPatch {
 		return joint;
 	}
 
-	public Sprite getSprite() {
-		return sprite.get();
-	}
+	// public Sprite getSprite() {
+	// return sprite.get();
+	// }
 
 	public SkinPatch(Joint joint, Resource<Sprite> sprite, String textureId) {
 		this.joint = joint;
-		this.sprite = sprite;
+		// this.sprite = sprite;
 		this.textureId = textureId;
 	}
 
 	public void update(Sprite sprite) {
 		float angle = this.angle + joint.getAngle();
-		
+
 		sprite.setRotation(angle);
 
 		float ox = sprite.getWidth() * center.x;
@@ -51,9 +51,9 @@ public class SkinPatch {
 		sprite.setPosition(x, y);
 	}
 
-	public void project(Vector2 position) {
-		Sprite sprite = this.sprite.get();
-		
+	public void project(Vector2 position, Sprite sprite) {
+		// Sprite sprite = this.sprite.get();
+
 		float centerX = sprite.getX() + sprite.getOriginX();
 		float centerY = sprite.getY() + sprite.getOriginY();
 

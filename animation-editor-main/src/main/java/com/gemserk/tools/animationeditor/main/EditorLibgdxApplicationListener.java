@@ -306,12 +306,15 @@ public class EditorLibgdxApplicationListener extends Game {
 		@Override
 		public void update() {
 
+			Joint selectedNode = skeletonEditor.getSelectedNode();
+			Sprite nodeSprite = skinSprites.get(selectedNode.getId()).get();
+			
 			if (inputMonitor.getButton(Actions.CancelStateButton).isReleased()) {
 				currentState = new NormalEditorState();
 				return;
 			}
 
-			SkinPatch skinPatch = skin.getPatch(skeletonEditor.getSelectedNode());
+			SkinPatch skinPatch = skin.getPatch(selectedNode);
 
 			if (inputMonitor.getButton(Actions.RotateButton).isHolded()) {
 				int currentY = Gdx.graphics.getHeight() - Gdx.input.getY();
@@ -323,13 +326,13 @@ public class EditorLibgdxApplicationListener extends Game {
 
 				positionModifier.x = Gdx.input.getX();
 				positionModifier.y = Gdx.graphics.getHeight() - Gdx.input.getY();
-
-				skinPatch.project(positionModifier);
+				
+				skinPatch.project(positionModifier, nodeSprite);
 
 				positionModifier.sub(position);
 
-				positionModifier.x /= skinPatch.getSprite().getWidth();
-				positionModifier.y /= skinPatch.getSprite().getHeight();
+				positionModifier.x /= nodeSprite.getWidth();
+				positionModifier.y /= nodeSprite.getHeight();
 
 				// centerModification.set((currentX - position.x) / skinPatch.getSprite().getWidth(), //
 				// (currentY - position.y) / skinPatch.getSprite().getHeight());
@@ -345,7 +348,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			previousY = Gdx.graphics.getHeight() - Gdx.input.getY();
 
-			skinPatch.project(position);
+			skinPatch.project(position, nodeSprite);
 		}
 
 		@Override
@@ -478,7 +481,7 @@ public class EditorLibgdxApplicationListener extends Game {
 		ArrayList<SkinPatch> patchList = skin.getPatchList();
 		for (int i = 0; i < patchList.size(); i++) {
 			SkinPatch skinPatch = patchList.get(i);
-			skinPatch.update(skinPatch.getSprite());
+			skinPatch.update(skinSprites.get(skinPatch.getJoint().getId()).get());
 		}
 
 		// skin.update();
@@ -490,7 +493,9 @@ public class EditorLibgdxApplicationListener extends Game {
 		spriteBatch.begin();
 		for (int i = 0; i < skin.patchesCount(); i++) {
 			SkinPatch patch = skin.getPatch(i);
-			patch.getSprite().draw(spriteBatch);
+			Sprite patchSprite = skinSprites.get(patch.getJoint().getId()).get();
+			patchSprite.draw(spriteBatch);
+			// patch.getSprite().draw(spriteBatch);
 		}
 		spriteBatch.end();
 
