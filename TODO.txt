@@ -57,4 +57,5 @@ DONE
 * Exit button shows an exit dialog and let the user exit the application
 * animation keyframes stores float[] for each joint instead a skeleton, to be easily serialized/deserialized
 * Save the list of project animations to a json file projectname.animations when saving the project
+* Load the list of saved animations when loading the project as well from the projectname.animations file
 
