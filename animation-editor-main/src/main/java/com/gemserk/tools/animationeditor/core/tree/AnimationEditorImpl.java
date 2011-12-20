@@ -39,8 +39,8 @@ public class AnimationEditorImpl implements AnimationEditor {
 		if (selectedKeyFrame == null)
 			return;
 		// throw new IllegalStateException("cant store current skeleton to no keyframe");
-
-		selectedKeyFrame.setSkeleton(JointUtils.cloneSkeleton(skeletonEditor.getSkeleton()));
+		// then we should disable the button when you can't save a keyframe!!
+		AnimationUtils.updateKeyFrame(skeletonEditor.getSkeleton(), selectedKeyFrame);
 	}
 
 	@Override

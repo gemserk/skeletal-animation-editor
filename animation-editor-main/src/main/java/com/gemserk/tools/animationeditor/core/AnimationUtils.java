@@ -8,18 +8,22 @@ public class AnimationUtils {
 		return new AnimationKeyFrame(name, skeleton, time);
 	}
 
+	public static void updateKeyFrame(Skeleton skeleton, AnimationKeyFrame keyframe) {
+		keyframe.setSkeleton(JointUtils.cloneSkeleton(skeleton));
+	}
+
 	/**
 	 * Modifies the Skeleton to matches the keyframe.
 	 * 
 	 * @param skeleton
 	 *            The Skeleton to be modified.
-	 * @param keyFrame
+	 * @param keyframe
 	 *            The keyframe of the skeleton.
 	 */
-	public static void setKeyframeToSkeleton(Skeleton skeleton, AnimationKeyFrame keyFrame) {
+	public static void setKeyframeToSkeleton(Skeleton skeleton, AnimationKeyFrame keyframe) {
 		ArrayList<Joint> joints = JointUtils.toArrayList(skeleton.getRoot());
 
-		Skeleton keyFrameSkeleton = keyFrame.getSkeleton();
+		Skeleton keyFrameSkeleton = keyframe.getSkeleton();
 
 		for (int i = 0; i < joints.size(); i++) {
 			Joint joint = joints.get(i);
