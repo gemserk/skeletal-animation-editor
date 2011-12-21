@@ -23,6 +23,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.gemserk.animation4j.timeline.Timeline;
 import com.gemserk.animation4j.timeline.TimelineAnimation;
+import com.gemserk.commons.gdx.camera.Camera;
+import com.gemserk.commons.gdx.camera.CameraImpl;
 import com.gemserk.commons.gdx.camera.Libgdx2dCamera;
 import com.gemserk.commons.gdx.camera.Libgdx2dCameraTransformImpl;
 import com.gemserk.commons.gdx.graphics.ImmediateModeRendererUtils;
@@ -70,6 +72,9 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		public static final String SecondActionButton = "secondActionButton";
 
+		public static final String ZoomIn = "zoomIn";
+		public static final String ZoomOut = "zoomOut";
+
 	}
 
 	SpriteBatch spriteBatch;
@@ -89,7 +94,8 @@ public class EditorLibgdxApplicationListener extends Game {
 	ResourceManager<String> resourceManager;
 	LibgdxResourceBuilder resourceBuilder;
 
-	Libgdx2dCamera camera;
+	Libgdx2dCamera libgdxCamera;
+	Camera camera;
 
 	private InputDevicesMonitorImpl<String> inputMonitor;
 
@@ -228,14 +234,20 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	class NormalEditorState implements EditorState {
 
+		private final Vector2 mousePosition = new Vector2();
+
 		public NormalEditorState() {
 			logger.debug("Current state: none");
 		}
 
 		public void update() {
 
-			int x = Gdx.input.getX();
-			int y = Gdx.graphics.getHeight() - Gdx.input.getY();
+			// int x = Gdx.input.getX();
+			// int y = Gdx.graphics.getHeight() - Gdx.input.getY();
+
+			mousePosition.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+
+			libgdxCamera.unproject(mousePosition);
 
 			position.set(nearNode.getX(), nearNode.getY());
 
@@ -267,7 +279,7 @@ public class EditorLibgdxApplicationListener extends Game {
 			}
 
 			if (inputMonitor.getButton(Actions.LeftMouseButton).isPressed()) {
-				if (position.dst(x, y) < selectDistance) {
+				if (position.dst(mousePosition.x, mousePosition.y) < selectDistance) {
 					skeletonEditor.select(nearNode);
 					currentState = new DraggingJointState();
 					return;
@@ -277,9 +289,17 @@ public class EditorLibgdxApplicationListener extends Game {
 			if (inputMonitor.getButton(Actions.LeftMouseButton).isReleased()) {
 				Joint newNode = new JointImpl("node-" + MathUtils.random(111, 999));
 				skeletonEditor.add(newNode);
-				newNode.setPosition(x, y);
+				newNode.setPosition(mousePosition.x, mousePosition.y);
 
 				skeletonEditor.select(newNode.getParent());
+			}
+
+			if (inputMonitor.getButton(Actions.ZoomIn).isReleased()) {
+				camera.setZoom(camera.getZoom() * 2f);
+			}
+
+			if (inputMonitor.getButton(Actions.ZoomOut).isReleased()) {
+				camera.setZoom(camera.getZoom() * 0.5f);
 			}
 
 		}
@@ -495,12 +515,15 @@ public class EditorLibgdxApplicationListener extends Game {
 
 				monitorKey(Actions.SecondActionButton, Keys.SHIFT_LEFT);
 
+				monitorKey(Actions.ZoomIn, Keys.UP);
+				monitorKey(Actions.ZoomOut, Keys.DOWN);
+
 			}
 		};
 
 		Joint root = new JointImpl("root");
 
-		root.setPosition(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f);
+		root.setPosition(0f, 0f);
 		root.setAngle(0f);
 
 		skeletonEditor.setSkeleton(new Skeleton(root));
@@ -512,8 +535,10 @@ public class EditorLibgdxApplicationListener extends Game {
 		skinSprites = new HashMap<String, Resource<Sprite>>();
 		texturePaths = new HashMap<String, String>();
 
-		camera = new Libgdx2dCameraTransformImpl();
-		camera.zoom(1f);
+		libgdxCamera = new Libgdx2dCameraTransformImpl(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f);
+		libgdxCamera.zoom(1f);
+
+		camera = new CameraImpl(0f, 0f, 1f, 0f);
 	}
 
 	@Override
@@ -531,10 +556,11 @@ public class EditorLibgdxApplicationListener extends Game {
 	private void realUpdate() {
 		inputMonitor.update();
 
-		int x = Gdx.input.getX();
-		int y = Gdx.graphics.getHeight() - Gdx.input.getY();
+		position.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+		
+		libgdxCamera.unproject(position);
 
-		nearNode = skeletonEditor.getNearestNode(x, y);
+		nearNode = skeletonEditor.getNearestNode(position.x, position.y);
 
 		currentState.update();
 
@@ -553,12 +579,15 @@ public class EditorLibgdxApplicationListener extends Game {
 	}
 
 	private void realRender() {
+		libgdxCamera.move(camera.getX(), camera.getY());
+		libgdxCamera.zoom(camera.getZoom());
+
 		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
 		currentState.render();
 	}
 
 	private void renderSkin(Skin skin) {
-		spriteBatch.setProjectionMatrix(camera.getCombinedMatrix());
+		spriteBatch.setProjectionMatrix(libgdxCamera.getCombinedMatrix());
 		spriteBatch.begin();
 		for (int i = 0; i < skin.patchesCount(); i++) {
 			SkinPatch patch = skin.getPatch(i);
@@ -572,7 +601,7 @@ public class EditorLibgdxApplicationListener extends Game {
 	}
 
 	private void renderSkeleton(Skeleton skeleton) {
-		ImmediateModeRendererUtils.getProjectionMatrix().set(camera.getCombinedMatrix());
+		ImmediateModeRendererUtils.getProjectionMatrix().set(libgdxCamera.getCombinedMatrix());
 		renderNodeTree(skeleton.getRoot());
 	}
 
