@@ -636,8 +636,8 @@ public class EditorLibgdxApplicationListener extends Game {
 	}
 
 	private void renderTransparentTexture() {
-		float tw = transparentTexture.getWidth();
-		float th = transparentTexture.getHeight();
+		float tw = transparentTexture.getWidth() / camera.getZoom();
+		float th = transparentTexture.getHeight() / camera.getZoom();
 
 		float w = Gdx.graphics.getWidth() / camera.getZoom();
 		float h = Gdx.graphics.getHeight() / camera.getZoom();
