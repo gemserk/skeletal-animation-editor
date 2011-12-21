@@ -535,12 +535,14 @@ public class EditorWindow {
 	}
 	
 	private void exit() {
+		// if project has modifications and was not saved ->
 		int showConfirmDialog = JOptionPane.showConfirmDialog(mainFrame, //
 				messages.getString(Messages.DialogExitMessage), //
 				messages.getString(Messages.DialogExitTitle), //
 				JOptionPane.YES_NO_OPTION);
 		if (showConfirmDialog == JOptionPane.NO_OPTION)
 			return;
+		// else exit without asking!!!
 		Gdx.app.exit();
 	}
 

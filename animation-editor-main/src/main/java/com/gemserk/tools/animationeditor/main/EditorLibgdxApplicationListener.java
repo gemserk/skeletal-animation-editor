@@ -75,6 +75,8 @@ public class EditorLibgdxApplicationListener extends Game {
 		public static final String ZoomIn = "zoomIn";
 		public static final String ZoomOut = "zoomOut";
 
+		public static final String InsertJoint = "insertJoint";
+		
 	}
 
 	SpriteBatch spriteBatch;
@@ -283,14 +285,16 @@ public class EditorLibgdxApplicationListener extends Game {
 					skeletonEditor.select(nearNode);
 					currentState = new DraggingJointState();
 					return;
+				} else {
+					currentState = new DraggingCameraState();
+					return;
 				}
 			}
 
-			if (inputMonitor.getButton(Actions.LeftMouseButton).isReleased()) {
+			if (inputMonitor.getButton(Actions.InsertJoint).isReleased()) {
 				Joint newNode = new JointImpl("node-" + MathUtils.random(111, 999));
 				skeletonEditor.add(newNode);
 				newNode.setPosition(mousePosition.x, mousePosition.y);
-
 				skeletonEditor.select(newNode.getParent());
 			}
 
@@ -302,6 +306,40 @@ public class EditorLibgdxApplicationListener extends Game {
 				camera.setZoom(camera.getZoom() * 0.5f);
 			}
 
+		}
+
+		@Override
+		public void render() {
+			renderSkin(skin);
+			renderSkeleton(skeletonEditor.getSkeleton());
+		}
+
+	}
+
+	class DraggingCameraState implements EditorState {
+
+		private final Vector2 previousPosition = new Vector2();
+
+		public DraggingCameraState() {
+			previousPosition.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			logger.debug("Current state: dragging camera");
+		}
+
+		@Override
+		public void update() {
+			position.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+
+			if (inputMonitor.getButton(Actions.LeftMouseButton).isReleased()) {
+				currentState = new NormalEditorState();
+				return;
+			}
+			
+			Vector2 diff = new Vector2(previousPosition);
+			diff.sub(position);
+			
+			camera.setPosition(camera.getX() + diff.x, camera.getY() + diff.y);
+
+			previousPosition.set(position);
 		}
 
 		@Override
@@ -517,7 +555,8 @@ public class EditorLibgdxApplicationListener extends Game {
 
 				monitorKey(Actions.ZoomIn, Keys.UP);
 				monitorKey(Actions.ZoomOut, Keys.DOWN);
-
+				
+				monitorKey(Actions.InsertJoint, Keys.PLUS);
 			}
 		};
 
@@ -557,7 +596,7 @@ public class EditorLibgdxApplicationListener extends Game {
 		inputMonitor.update();
 
 		position.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-		
+
 		libgdxCamera.unproject(position);
 
 		nearNode = skeletonEditor.getNearestNode(position.x, position.y);
