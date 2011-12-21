@@ -23,6 +23,8 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.gemserk.animation4j.timeline.Timeline;
 import com.gemserk.animation4j.timeline.TimelineAnimation;
+import com.gemserk.commons.gdx.camera.Libgdx2dCamera;
+import com.gemserk.commons.gdx.camera.Libgdx2dCameraTransformImpl;
 import com.gemserk.commons.gdx.graphics.ImmediateModeRendererUtils;
 import com.gemserk.commons.gdx.resources.LibgdxResourceBuilder;
 import com.gemserk.componentsengine.input.InputDevicesMonitorImpl;
@@ -86,6 +88,8 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	ResourceManager<String> resourceManager;
 	LibgdxResourceBuilder resourceBuilder;
+
+	Libgdx2dCamera camera;
 
 	private InputDevicesMonitorImpl<String> inputMonitor;
 
@@ -202,7 +206,7 @@ public class EditorLibgdxApplicationListener extends Game {
 				return;
 
 			float updateTime = 1f / fps;
-			
+
 			renderSkin(skin);
 
 			try {
@@ -217,7 +221,6 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			if (timelineAnimation.isFinished())
 				currentState = new NormalEditorState();
-
 
 		}
 
@@ -508,6 +511,9 @@ public class EditorLibgdxApplicationListener extends Game {
 		skin = new Skin();
 		skinSprites = new HashMap<String, Resource<Sprite>>();
 		texturePaths = new HashMap<String, String>();
+
+		camera = new Libgdx2dCameraTransformImpl();
+		camera.zoom(1f);
 	}
 
 	@Override
@@ -552,6 +558,7 @@ public class EditorLibgdxApplicationListener extends Game {
 	}
 
 	private void renderSkin(Skin skin) {
+		spriteBatch.setProjectionMatrix(camera.getCombinedMatrix());
 		spriteBatch.begin();
 		for (int i = 0; i < skin.patchesCount(); i++) {
 			SkinPatch patch = skin.getPatch(i);
@@ -565,6 +572,7 @@ public class EditorLibgdxApplicationListener extends Game {
 	}
 
 	private void renderSkeleton(Skeleton skeleton) {
+		ImmediateModeRendererUtils.getProjectionMatrix().set(camera.getCombinedMatrix());
 		renderNodeTree(skeleton.getRoot());
 	}
 

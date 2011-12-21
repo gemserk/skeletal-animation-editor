@@ -36,6 +36,7 @@ import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
+import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -84,6 +85,12 @@ public class EditorWindow {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					try {
+						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					} catch (Exception ex) {
+
+					}
+					
 					EditorWindow window = new EditorWindow();
 					window.frmGemserksAnimationEditor.setVisible(true);
 				} catch (Exception e) {
@@ -156,7 +163,7 @@ public class EditorWindow {
 		JMenuBar menuBar = new JMenuBar();
 		frmGemserksAnimationEditor.setJMenuBar(menuBar);
 
-		JMenu mnFile = new JMenu("File");
+		JMenu mnFile = new JMenu(messages.getString(Messages.MenuFileTitle));
 		menuBar.add(mnFile);
 
 		JMenuItem mntmOpen = new JMenuItem("Open");
@@ -251,7 +258,7 @@ public class EditorWindow {
 
 		mnFile.addSeparator();
 
-		JMenuItem mntmExit = new JMenuItem("Exit");
+		JMenuItem mntmExit = new JMenuItem(messages.getString(Messages.MenuFileExit));
 		mntmExit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
