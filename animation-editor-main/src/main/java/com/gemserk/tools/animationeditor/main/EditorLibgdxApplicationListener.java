@@ -15,8 +15,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL11;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -76,7 +78,7 @@ public class EditorLibgdxApplicationListener extends Game {
 		public static final String ZoomOut = "zoomOut";
 
 		public static final String InsertJoint = "insertJoint";
-		
+
 	}
 
 	SpriteBatch spriteBatch;
@@ -333,10 +335,10 @@ public class EditorLibgdxApplicationListener extends Game {
 				currentState = new NormalEditorState();
 				return;
 			}
-			
+
 			Vector2 diff = new Vector2(previousPosition);
 			diff.sub(position);
-			
+
 			camera.setPosition(camera.getX() + diff.x, camera.getY() + diff.y);
 
 			previousPosition.set(position);
@@ -365,7 +367,7 @@ public class EditorLibgdxApplicationListener extends Game {
 		public void update() {
 			mousePosition.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 			libgdxCamera.unproject(mousePosition);
-			
+
 			if (inputMonitor.getButton(Actions.LeftMouseButton).isReleased()) {
 				currentState = new NormalEditorState();
 				return;
@@ -492,6 +494,8 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	public Map<String, String> texturePaths = new HashMap<String, String>();
 
+	private Texture transparentTexture;
+
 	public void setCurrentSkin(final File file) {
 
 		Gdx.app.postRunnable(new Runnable() {
@@ -529,13 +533,17 @@ public class EditorLibgdxApplicationListener extends Game {
 	public void create() {
 		Gdx.graphics.setVSync(true);
 
-		Gdx.graphics.getGL10().glClearColor(0.25f, 0.25f, 0.25f, 0f);
+		Gdx.graphics.getGL10().glClearColor(1f, 1f, 1f, 1f);
 
 		Texture.setEnforcePotImages(false);
 
 		currentState = new NormalEditorState();
 
 		spriteBatch = new SpriteBatch();
+		spriteBatch.setBlendFunction(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+		transparentTexture = new Texture(Gdx.files.internal("data/transparent.png"));
+		transparentTexture.setWrap(TextureWrap.Repeat, TextureWrap.Repeat);
 
 		inputMonitor = new InputDevicesMonitorImpl<String>();
 
@@ -554,7 +562,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 				monitorKey(Actions.ZoomIn, Keys.UP);
 				monitorKey(Actions.ZoomOut, Keys.DOWN);
-				
+
 				monitorKey(Actions.InsertJoint, Keys.PLUS);
 			}
 		};
@@ -621,7 +629,25 @@ public class EditorLibgdxApplicationListener extends Game {
 		libgdxCamera.zoom(camera.getZoom());
 
 		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
+
+		renderTransparentTexture();
+
 		currentState.render();
+	}
+
+	private void renderTransparentTexture() {
+		float tw = transparentTexture.getWidth();
+		float th = transparentTexture.getHeight();
+
+		int w = Gdx.graphics.getWidth();
+		int h = Gdx.graphics.getHeight();
+
+		spriteBatch.setProjectionMatrix(libgdxCamera.getCombinedMatrix());
+		spriteBatch.begin();
+		spriteBatch.disableBlending();
+		spriteBatch.draw(transparentTexture, camera.getX() - w / 2, camera.getY() - h / 2, w, h, 0f, 0f, w / tw, h / th);
+		spriteBatch.enableBlending();
+		spriteBatch.end();
 	}
 
 	private void renderSkin(Skin skin) {
