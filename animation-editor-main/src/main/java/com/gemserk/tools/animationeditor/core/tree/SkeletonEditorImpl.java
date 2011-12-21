@@ -4,8 +4,8 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.math.Vector2;
 import com.gemserk.tools.animationeditor.core.Joint;
-import com.gemserk.tools.animationeditor.core.JointUtils;
 import com.gemserk.tools.animationeditor.core.Skeleton;
+import com.gemserk.tools.animationeditor.utils.JointUtils;
 
 public class SkeletonEditorImpl implements SkeletonEditor {
 

@@ -1,10 +1,10 @@
 package com.gemserk.tools.animationeditor.core.tree;
 
-import com.gemserk.tools.animationeditor.core.JointUtils;
 import com.gemserk.tools.animationeditor.core.Skeleton;
 import com.gemserk.tools.animationeditor.core.SkeletonAnimation;
 import com.gemserk.tools.animationeditor.core.SkeletonAnimationKeyFrame;
-import com.gemserk.tools.animationeditor.core.SkeletonAnimationUtils;
+import com.gemserk.tools.animationeditor.utils.JointUtils;
+import com.gemserk.tools.animationeditor.utils.SkeletonAnimationUtils;
 
 public class AnimationEditorImpl implements AnimationEditor {
 

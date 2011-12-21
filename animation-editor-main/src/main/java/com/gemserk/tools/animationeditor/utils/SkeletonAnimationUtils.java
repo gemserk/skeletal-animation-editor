@@ -1,10 +1,13 @@
-package com.gemserk.tools.animationeditor.core;
+package com.gemserk.tools.animationeditor.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
 import com.gemserk.tools.animationeditor.converters.JointConverter;
+import com.gemserk.tools.animationeditor.core.Joint;
+import com.gemserk.tools.animationeditor.core.Skeleton;
+import com.gemserk.tools.animationeditor.core.SkeletonAnimationKeyFrame;
 
 public class SkeletonAnimationUtils {
 

@@ -10,7 +10,7 @@ public class SkeletonAnimationKeyFrame {
 	String name;
 	float time;
 
-	Map<String, float[]> jointKeyFrames;
+	public Map<String, float[]> jointKeyFrames;
 
 	public String getName() {
 		return name;

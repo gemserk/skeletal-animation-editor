@@ -31,7 +31,6 @@ import com.gemserk.resources.Resource;
 import com.gemserk.resources.ResourceManager;
 import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.JointImpl;
-import com.gemserk.tools.animationeditor.core.JointUtils;
 import com.gemserk.tools.animationeditor.core.Skeleton;
 import com.gemserk.tools.animationeditor.core.SkeletonAnimation;
 import com.gemserk.tools.animationeditor.core.SkeletonAnimationKeyFrame;
@@ -39,6 +38,7 @@ import com.gemserk.tools.animationeditor.core.Skin;
 import com.gemserk.tools.animationeditor.core.SkinPatch;
 import com.gemserk.tools.animationeditor.core.tree.AnimationEditor;
 import com.gemserk.tools.animationeditor.core.tree.SkeletonEditor;
+import com.gemserk.tools.animationeditor.utils.JointUtils;
 import com.gemserk.util.ScreenshotSaver;
 
 public class EditorLibgdxApplicationListener extends Game {

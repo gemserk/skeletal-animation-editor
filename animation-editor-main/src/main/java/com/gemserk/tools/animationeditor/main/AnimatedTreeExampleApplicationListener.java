@@ -12,11 +12,11 @@ import com.gemserk.animation4j.transitions.TimeTransition;
 import com.gemserk.animation4j.transitions.TransitionFloatArrayImpl;
 import com.gemserk.commons.gdx.graphics.ImmediateModeRendererUtils;
 import com.gemserk.tools.animationeditor.core.SkeletonAnimation;
-import com.gemserk.tools.animationeditor.core.SkeletonAnimationUtils;
 import com.gemserk.tools.animationeditor.core.Joint;
 import com.gemserk.tools.animationeditor.core.JointImpl;
-import com.gemserk.tools.animationeditor.core.JointUtils;
 import com.gemserk.tools.animationeditor.core.Skeleton;
+import com.gemserk.tools.animationeditor.utils.JointUtils;
+import com.gemserk.tools.animationeditor.utils.SkeletonAnimationUtils;
 
 public class AnimatedTreeExampleApplicationListener extends Game {
 

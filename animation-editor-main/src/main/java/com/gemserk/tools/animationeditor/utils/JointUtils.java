@@ -1,4 +1,4 @@
-package com.gemserk.tools.animationeditor.core;
+package com.gemserk.tools.animationeditor.utils;
 
 import java.util.ArrayList;
 
@@ -7,6 +7,10 @@ import com.gemserk.animation4j.timeline.Timeline;
 import com.gemserk.animation4j.timeline.TimelineValue;
 import com.gemserk.animation4j.timeline.TimelineValueMutableObjectImpl;
 import com.gemserk.tools.animationeditor.converters.JointConverter;
+import com.gemserk.tools.animationeditor.core.Joint;
+import com.gemserk.tools.animationeditor.core.JointImpl;
+import com.gemserk.tools.animationeditor.core.Skeleton;
+import com.gemserk.tools.animationeditor.core.SkeletonAnimationKeyFrame;
 
 public class JointUtils {
 

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.gemserk.tools.animationeditor.utils.JointUtils;
+
 
 public class Skin {
 
