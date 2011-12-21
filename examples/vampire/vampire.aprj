@@ -1,11 +1,18 @@
 {
-  "projectFile": "/tmp/tito/vampire.aprj",
+  "projectFile": "/tmp/vampire/vampire.aprj",
   "texturePaths": {
     "texture2": "images/arm-top.png",
     "texture1": "images/head.png",
     "texture0": "images/body-top.png",
+    "texture6": "images/body-bottom.png",
     "texture5": "images/arm-bottom.png",
     "texture4": "images/arm-bottom.png",
-    "texture3": "images/arm-top.png"
+    "texture3": "images/arm-top.png",
+    "texture9": "images/foot.png",
+    "texture8": "images/leg-bottom.png",
+    "texture7": "images/leg-top.png",
+    "texture12": "images/foot.png",
+    "texture11": "images/leg-bottom.png",
+    "texture10": "images/leg-top.png"
   }
 }

@@ -1,18 +1,11 @@
 {
   "patches": {
-    "node-650": {
-      "jointId": "node-650",
-      "textureId": "texture1",
+    "node-538": {
+      "jointId": "node-538",
+      "textureId": "texture8",
       "angle": 0.0,
-      "cx": 0.59999996,
-      "cy": 0.019607846
-    },
-    "node-905": {
-      "jointId": "node-905",
-      "textureId": "texture2",
-      "angle": 0.0,
-      "cx": 0.70000005,
-      "cy": 0.75
+      "cx": 0.45,
+      "cy": 0.92857146
     },
     "root": {
       "jointId": "root",
@@ -21,12 +14,61 @@
       "cx": 0.46875,
       "cy": 0.74000007
     },
+    "node-896": {
+      "jointId": "node-896",
+      "textureId": "texture3",
+      "angle": 0.0,
+      "cx": 0.70000005,
+      "cy": 0.78125
+    },
+    "node-650": {
+      "jointId": "node-650",
+      "textureId": "texture1",
+      "angle": 0.0,
+      "cx": 0.59999996,
+      "cy": 0.019607846
+    },
+    "node-945": {
+      "jointId": "node-945",
+      "textureId": "texture12",
+      "angle": 0.0,
+      "cx": 0.31395355,
+      "cy": 0.6860466
+    },
+    "node-933": {
+      "jointId": "node-933",
+      "textureId": "texture6",
+      "angle": 0.0,
+      "cx": 0.55263156,
+      "cy": 0.8600001
+    },
+    "node-905": {
+      "jointId": "node-905",
+      "textureId": "texture2",
+      "angle": 0.0,
+      "cx": 0.70000005,
+      "cy": 0.75
+    },
+    "node-219": {
+      "jointId": "node-219",
+      "textureId": "texture11",
+      "angle": 0.0,
+      "cx": 0.55,
+      "cy": 0.8571429
+    },
     "node-191": {
       "jointId": "node-191",
       "textureId": "texture4",
       "angle": 0.0,
       "cx": 0.5799999,
       "cy": 0.89215684
+    },
+    "node-861": {
+      "jointId": "node-861",
+      "textureId": "texture7",
+      "angle": 0.0,
+      "cx": 0.41666663,
+      "cy": 0.8055557
     },
     "node-220": {
       "jointId": "node-220",
@@ -35,12 +77,19 @@
       "cx": 0.5400001,
       "cy": 0.89215684
     },
-    "node-896": {
-      "jointId": "node-896",
-      "textureId": "texture3",
+    "node-524": {
+      "jointId": "node-524",
+      "textureId": "texture9",
       "angle": 0.0,
-      "cx": 0.70000005,
-      "cy": 0.78125
+      "cx": 0.2674418,
+      "cy": 0.6860466
+    },
+    "node-501": {
+      "jointId": "node-501",
+      "textureId": "texture10",
+      "angle": 0.0,
+      "cx": 0.41666666,
+      "cy": 0.8333335
     }
   }
 }
