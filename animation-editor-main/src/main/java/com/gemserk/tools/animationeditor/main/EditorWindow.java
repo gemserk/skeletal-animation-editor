@@ -9,6 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -138,7 +140,14 @@ public class EditorWindow {
 		BorderLayout borderLayout = (BorderLayout) mainFrame.getContentPane().getLayout();
 		borderLayout.setHgap(1);
 		mainFrame.setBounds(100, 100, 800, 600);
-		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		mainFrame.addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				exit();
+			}
+		});
 
 		JMenuBar menuBar = new JMenuBar();
 		mainFrame.setJMenuBar(menuBar);
@@ -242,13 +251,7 @@ public class EditorWindow {
 		mntmExit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int showConfirmDialog = JOptionPane.showConfirmDialog(mainFrame, //
-						messages.getString(Messages.DialogExitMessage), //
-						messages.getString(Messages.DialogExitTitle), //
-						JOptionPane.YES_NO_OPTION);
-				if (showConfirmDialog == JOptionPane.NO_OPTION)
-					return;
-				Gdx.app.exit();
+				exit();
 			}
 		});
 		mnFile.add(mntmExit);
@@ -530,4 +533,15 @@ public class EditorWindow {
 
 		}
 	}
+	
+	private void exit() {
+		int showConfirmDialog = JOptionPane.showConfirmDialog(mainFrame, //
+				messages.getString(Messages.DialogExitMessage), //
+				messages.getString(Messages.DialogExitTitle), //
+				JOptionPane.YES_NO_OPTION);
+		if (showConfirmDialog == JOptionPane.NO_OPTION)
+			return;
+		Gdx.app.exit();
+	}
+
 }
