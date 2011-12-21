@@ -591,6 +591,10 @@ public class EditorLibgdxApplicationListener extends Game {
 	public void resize(int width, int height) {
 		super.resize(width, height);
 		System.out.println("game.resize " + width + "x" + height);
+		Gdx.gl.glViewport(0, 0, width, height);
+		
+		libgdxCamera = new Libgdx2dCameraTransformImpl(Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f);
+		libgdxCamera.zoom(1f);
 	}
 
 	@Override
