@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -36,7 +35,6 @@ import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
-import javax.swing.UIManager;
 import javax.swing.border.EtchedBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -69,7 +67,7 @@ public class EditorWindow {
 
 	protected static final Logger logger = LoggerFactory.getLogger(EditorWindow.class);
 
-	private JFrame frmGemserksAnimationEditor;
+	private JFrame mainFrame;
 	private JList keyFramesList;
 	private EditorInterceptorImpl editor;
 
@@ -78,26 +76,8 @@ public class EditorWindow {
 
 	private Project currentProject;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					try {
-						UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-					} catch (Exception ex) {
-
-					}
-					
-					EditorWindow window = new EditorWindow();
-					window.frmGemserksAnimationEditor.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+	public JFrame getMainFrame() {
+		return mainFrame;
 	}
 
 	/**
@@ -151,17 +131,17 @@ public class EditorWindow {
 			}
 		};
 
-		frmGemserksAnimationEditor = new JFrame();
-		frmGemserksAnimationEditor.setPreferredSize(new Dimension(1024, 768));
-		frmGemserksAnimationEditor.setTitle("Gemserk's Animation Editor");
-		frmGemserksAnimationEditor.setMinimumSize(new Dimension(800, 600));
-		BorderLayout borderLayout = (BorderLayout) frmGemserksAnimationEditor.getContentPane().getLayout();
+		mainFrame = new JFrame();
+		mainFrame.setPreferredSize(new Dimension(1024, 768));
+		mainFrame.setTitle("Gemserk's Animation Editor");
+		mainFrame.setMinimumSize(new Dimension(800, 600));
+		BorderLayout borderLayout = (BorderLayout) mainFrame.getContentPane().getLayout();
 		borderLayout.setHgap(1);
-		frmGemserksAnimationEditor.setBounds(100, 100, 800, 600);
-		frmGemserksAnimationEditor.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		mainFrame.setBounds(100, 100, 800, 600);
+		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JMenuBar menuBar = new JMenuBar();
-		frmGemserksAnimationEditor.setJMenuBar(menuBar);
+		mainFrame.setJMenuBar(menuBar);
 
 		JMenu mnFile = new JMenu(messages.getString(Messages.MenuFileTitle));
 		menuBar.add(mnFile);
@@ -211,7 +191,7 @@ public class EditorWindow {
 				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				chooser.setMultiSelectionEnabled(false);
 
-				int returnVal = chooser.showOpenDialog(frmGemserksAnimationEditor);
+				int returnVal = chooser.showOpenDialog(mainFrame);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = chooser.getSelectedFile();
 
@@ -241,7 +221,7 @@ public class EditorWindow {
 				chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 				chooser.setMultiSelectionEnabled(false);
 
-				int returnVal = chooser.showOpenDialog(frmGemserksAnimationEditor);
+				int returnVal = chooser.showOpenDialog(mainFrame);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = chooser.getSelectedFile();
 
@@ -262,7 +242,7 @@ public class EditorWindow {
 		mntmExit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int showConfirmDialog = JOptionPane.showConfirmDialog(frmGemserksAnimationEditor, //
+				int showConfirmDialog = JOptionPane.showConfirmDialog(mainFrame, //
 						messages.getString(Messages.DialogExitMessage), //
 						messages.getString(Messages.DialogExitTitle), //
 						JOptionPane.YES_NO_OPTION);
@@ -275,7 +255,7 @@ public class EditorWindow {
 
 		JPanel panelTools = new JPanel();
 		panelTools.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		frmGemserksAnimationEditor.getContentPane().add(panelTools, BorderLayout.WEST);
+		mainFrame.getContentPane().add(panelTools, BorderLayout.WEST);
 		panelTools.setMinimumSize(new Dimension(300, 400));
 		panelTools.setPreferredSize(new Dimension(200, 400));
 		panelTools.setLayout(new BorderLayout(0, 0));
@@ -320,7 +300,7 @@ public class EditorWindow {
 
 		JPanel panel = new JPanel();
 		panel.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
-		frmGemserksAnimationEditor.getContentPane().add(panel, BorderLayout.CENTER);
+		mainFrame.getContentPane().add(panel, BorderLayout.CENTER);
 		panel.setLayout(new BorderLayout(0, 0));
 
 		JPanel panelEditor = new JPanel();
@@ -360,7 +340,7 @@ public class EditorWindow {
 		panelStructure.setBorder(new EtchedBorder(EtchedBorder.LOWERED, null, null));
 		panelStructure.setPreferredSize(new Dimension(200, 10));
 		panelStructure.setMinimumSize(new Dimension(150, 10));
-		frmGemserksAnimationEditor.getContentPane().add(panelStructure, BorderLayout.EAST);
+		mainFrame.getContentPane().add(panelStructure, BorderLayout.EAST);
 		panelStructure.setLayout(new BorderLayout(0, 0));
 
 		JSplitPane splitPane_1 = new JSplitPane();
@@ -472,7 +452,7 @@ public class EditorWindow {
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setMultiSelectionEnabled(false);
 
-		int returnVal = chooser.showSaveDialog(frmGemserksAnimationEditor);
+		int returnVal = chooser.showSaveDialog(mainFrame);
 
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = chooser.getSelectedFile();
@@ -505,7 +485,7 @@ public class EditorWindow {
 		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		chooser.setMultiSelectionEnabled(false);
 
-		int returnVal = chooser.showOpenDialog(frmGemserksAnimationEditor);
+		int returnVal = chooser.showOpenDialog(mainFrame);
 		if (returnVal == JFileChooser.APPROVE_OPTION) {
 			File selectedFile = chooser.getSelectedFile();
 
@@ -534,7 +514,7 @@ public class EditorWindow {
 				Map<String, String> absoluteTexturePaths = project.getAbsoluteTexturePaths();
 				editorApplication.updateResources(skeleton, absoluteTexturePaths, skin);
 				// updateResourceMAnager(resourceManager, map of images, skin)
-				
+
 				if (animations.size() > 0) {
 					SkeletonAnimation skeletonAnimation = animations.get(0);
 					editor.setCurrentAnimation(skeletonAnimation);
