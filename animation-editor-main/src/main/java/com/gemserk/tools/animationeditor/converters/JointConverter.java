@@ -1,6 +1,7 @@
-package com.gemserk.tools.animationeditor.core;
+package com.gemserk.tools.animationeditor.converters;
 
 import com.gemserk.animation4j.converters.TypeConverter;
+import com.gemserk.tools.animationeditor.core.Joint;
 
 public class JointConverter implements TypeConverter<Joint> {
 	

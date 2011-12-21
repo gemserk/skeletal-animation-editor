@@ -6,6 +6,7 @@ import com.gemserk.animation4j.timeline.KeyFrame;
 import com.gemserk.animation4j.timeline.Timeline;
 import com.gemserk.animation4j.timeline.TimelineValue;
 import com.gemserk.animation4j.timeline.TimelineValueMutableObjectImpl;
+import com.gemserk.tools.animationeditor.converters.JointConverter;
 
 public class JointUtils {
 

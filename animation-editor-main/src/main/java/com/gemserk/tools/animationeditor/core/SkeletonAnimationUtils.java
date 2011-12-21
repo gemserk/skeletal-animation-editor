@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
+import com.gemserk.tools.animationeditor.converters.JointConverter;
+
 public class SkeletonAnimationUtils {
 
 	static JointConverter jointConverter = JointConverter.instance;

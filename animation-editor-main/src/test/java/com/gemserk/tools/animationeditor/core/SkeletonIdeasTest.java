@@ -9,7 +9,6 @@ import org.hamcrest.core.IsEqual;
 import org.junit.Test;
 
 import com.gemserk.animation4j.timeline.KeyFrame;
-import com.gemserk.animation4j.transitions.TransitionFloatArrayImpl;
 
 public class SkeletonIdeasTest {
 
@@ -98,49 +97,6 @@ public class SkeletonIdeasTest {
 		for (int i = 0; i < joints.size(); i++) {
 			System.out.println(joints.get(i));
 		}
-
-	}
-
-	@Test
-	public void transitionTest() {
-
-		JointImpl root = new JointImpl("AAA", 0f, 0f, 0f);
-		JointImpl leaf1 = new JointImpl("BBB", 30f, 30f, 30f);
-		JointImpl leaf2 = new JointImpl("CCC", 60f, 60f, 60f);
-
-		leaf1.setParent(root);
-		leaf2.setParent(root);
-
-		KeyFrame frame1 = new KeyFrame(0f, SkeletonConverter.instance.copyFromObject(new Skeleton(root), null));
-
-		root.setPosition(-100f, -100f);
-		
-		KeyFrame frame2 = new KeyFrame(0f, SkeletonConverter.instance.copyFromObject(new Skeleton(root), null));
-		
-		TransitionFloatArrayImpl transition = new TransitionFloatArrayImpl(frame1.getValue());
-		transition.set(frame2.getValue(), 5f);
-
-		float[] x = transition.get();
-		for (int i = 0; i < x.length; i++) {
-			System.out.print("" + x[i] + ",");
-		}
-		System.out.println();
-
-		transition.update(2.5f);
-
-		x = transition.get();
-		for (int i = 0; i < x.length; i++) {
-			System.out.print("" + x[i] + ",");
-		}
-		System.out.println();
-		
-		transition.update(2.5f);
-
-		x = transition.get();
-		for (int i = 0; i < x.length; i++) {
-			System.out.print("" + x[i] + ",");
-		}
-		System.out.println();
 
 	}
 
