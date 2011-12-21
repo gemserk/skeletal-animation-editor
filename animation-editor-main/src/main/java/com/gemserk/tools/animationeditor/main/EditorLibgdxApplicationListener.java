@@ -639,8 +639,8 @@ public class EditorLibgdxApplicationListener extends Game {
 		float tw = transparentTexture.getWidth();
 		float th = transparentTexture.getHeight();
 
-		int w = Gdx.graphics.getWidth();
-		int h = Gdx.graphics.getHeight();
+		float w = Gdx.graphics.getWidth() / camera.getZoom();
+		float h = Gdx.graphics.getHeight() / camera.getZoom();
 
 		spriteBatch.setProjectionMatrix(libgdxCamera.getCombinedMatrix());
 		spriteBatch.begin();
