@@ -352,29 +352,28 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	class DraggingJointState implements EditorState {
 
-		private int x0;
-		private int y0;
+		private final Vector2 position = new Vector2();
+		private final Vector2 mousePosition = new Vector2();
 
 		public DraggingJointState() {
-			x0 = Gdx.input.getX();
-			y0 = Gdx.graphics.getHeight() - Gdx.input.getY();
+			position.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			libgdxCamera.unproject(position);
 			logger.debug("Current state: dragging joint");
 		}
 
 		@Override
 		public void update() {
-			int x1 = Gdx.input.getX();
-			int y1 = Gdx.graphics.getHeight() - Gdx.input.getY();
-
+			mousePosition.set(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+			libgdxCamera.unproject(mousePosition);
+			
 			if (inputMonitor.getButton(Actions.LeftMouseButton).isReleased()) {
 				currentState = new NormalEditorState();
 				return;
 			}
 
-			skeletonEditor.moveSelected(x1 - x0, y1 - y0);
+			skeletonEditor.moveSelected(mousePosition.x - position.x, mousePosition.y - position.y);
 
-			x0 = x1;
-			y0 = y1;
+			position.set(mousePosition);
 		}
 
 		@Override
