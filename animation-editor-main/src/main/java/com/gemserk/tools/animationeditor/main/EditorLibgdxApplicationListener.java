@@ -165,6 +165,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		@Override
 		public void render() {
+			renderTransparentTexture();
 			renderSkin(skin);
 			renderSkeleton(skeleton);
 		}
@@ -312,6 +313,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		@Override
 		public void render() {
+			renderTransparentTexture();
 			renderSkin(skin);
 			renderSkeleton(skeletonEditor.getSkeleton());
 		}
@@ -346,6 +348,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		@Override
 		public void render() {
+			renderTransparentTexture();
 			renderSkin(skin);
 			renderSkeleton(skeletonEditor.getSkeleton());
 		}
@@ -380,6 +383,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		@Override
 		public void render() {
+			renderTransparentTexture();
 			renderSkin(skin);
 			renderSkeleton(skeletonEditor.getSkeleton());
 		}
@@ -414,6 +418,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		@Override
 		public void render() {
+			renderTransparentTexture();
 			renderSkin(skin);
 			renderSkeleton(skeletonEditor.getSkeleton());
 		}
@@ -481,6 +486,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 		@Override
 		public void render() {
+			renderTransparentTexture();
 			renderSkin(skin);
 			renderSkeleton(skeletonEditor.getSkeleton());
 		}
@@ -533,7 +539,7 @@ public class EditorLibgdxApplicationListener extends Game {
 	public void create() {
 		Gdx.graphics.setVSync(true);
 
-		Gdx.graphics.getGL10().glClearColor(1f, 1f, 1f, 1f);
+		Gdx.graphics.getGL10().glClearColor(1f, 1f, 1f, 0f);
 
 		Texture.setEnforcePotImages(false);
 
@@ -637,8 +643,6 @@ public class EditorLibgdxApplicationListener extends Game {
 		libgdxCamera.zoom(camera.getZoom());
 
 		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
-
-		renderTransparentTexture();
 
 		currentState.render();
 	}
