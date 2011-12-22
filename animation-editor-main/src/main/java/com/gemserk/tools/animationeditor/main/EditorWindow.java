@@ -218,11 +218,20 @@ public class EditorWindow {
 
 		JMenuItem mntmExport = new JMenuItem("Export animation...");
 		mntmExport.addActionListener(new ActionListener() {
+			
+			private String lastExportDir;
+			
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
 
-				if (currentProject != null)
-					chooser = new JFileChooser(FilenameUtils.getFullPath(currentProject.getProjectFile()));
+				String startDir = null;
+				if(lastExportDir!=null)
+					startDir = lastExportDir;
+				else if(currentProject!=null)
+					startDir = currentProject.getProjectFile();
+				
+				if (startDir!=null)
+					chooser = new JFileChooser(FilenameUtils.getFullPath(startDir));
 
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG files", "png");
 
@@ -233,7 +242,7 @@ public class EditorWindow {
 				int returnVal = chooser.showOpenDialog(mainFrame);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = chooser.getSelectedFile();
-
+					lastExportDir = selectedFile.getParent() + File.separatorChar;
 					String absolutePath = selectedFile.getAbsolutePath();
 
 					String baseName = FilenameUtils.getBaseName(absolutePath);
