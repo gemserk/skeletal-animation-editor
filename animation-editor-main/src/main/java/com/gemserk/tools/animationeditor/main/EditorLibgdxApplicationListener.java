@@ -340,6 +340,8 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			Vector2 diff = new Vector2(previousPosition);
 			diff.sub(position);
+			
+			diff.mul(1f / camera.getZoom());
 
 			camera.setPosition(camera.getX() + diff.x, camera.getY() + diff.y);
 
