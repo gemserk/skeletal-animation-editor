@@ -8,4 +8,6 @@ public class Messages {
 	public static final String MenuFileTitle = "menu.file.title";
 	public static final String MenuFileExit = "menu.file.exit";
 	
+	public static final String MenuFileNew = "menu.file.new";
+	
 }

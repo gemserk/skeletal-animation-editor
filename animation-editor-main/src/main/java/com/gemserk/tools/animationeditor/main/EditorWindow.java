@@ -78,6 +78,8 @@ public class EditorWindow {
 
 	private Project currentProject;
 
+	private EditorLibgdxApplicationListener editorApplication;
+
 	public JFrame getMainFrame() {
 		return mainFrame;
 	}
@@ -102,7 +104,7 @@ public class EditorWindow {
 		injector.bind("resourceManager", resourceManager);
 		injector.bind("messages", messages);
 
-		final EditorLibgdxApplicationListener editorApplication = injector.getInstance(EditorLibgdxApplicationListener.class);
+		editorApplication = injector.getInstance(EditorLibgdxApplicationListener.class);
 
 		final Canvas canvasEditor = new Canvas() {
 
@@ -140,7 +142,7 @@ public class EditorWindow {
 		BorderLayout borderLayout = (BorderLayout) mainFrame.getContentPane().getLayout();
 		borderLayout.setHgap(1);
 		mainFrame.setBounds(100, 100, 800, 600);
-		
+
 		mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		mainFrame.addWindowListener(new WindowAdapter() {
 			@Override
@@ -154,6 +156,16 @@ public class EditorWindow {
 
 		JMenu mnFile = new JMenu(messages.getString(Messages.MenuFileTitle));
 		menuBar.add(mnFile);
+
+		JMenuItem mntmNewProject = new JMenuItem(messages.getString(Messages.MenuFileNew));
+		mntmNewProject.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				newProject();
+			}
+
+		});
+		mnFile.add(mntmNewProject);
 
 		JMenuItem mntmOpen = new JMenuItem("Open");
 		mntmOpen.addActionListener(new ActionListener() {
@@ -218,19 +230,19 @@ public class EditorWindow {
 
 		JMenuItem mntmExport = new JMenuItem("Export animation...");
 		mntmExport.addActionListener(new ActionListener() {
-			
+
 			private String lastExportDir;
-			
+
 			public void actionPerformed(ActionEvent e) {
 				JFileChooser chooser = new JFileChooser();
 
 				String startDir = null;
-				if(lastExportDir!=null)
+				if (lastExportDir != null)
 					startDir = lastExportDir;
-				else if(currentProject!=null)
+				else if (currentProject != null)
 					startDir = currentProject.getProjectFile();
-				
-				if (startDir!=null)
+
+				if (startDir != null)
 					chooser = new JFileChooser(FilenameUtils.getFullPath(startDir));
 
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("PNG files", "png");
@@ -542,7 +554,7 @@ public class EditorWindow {
 
 		}
 	}
-	
+
 	private void exit() {
 		// if project has modifications and was not saved ->
 		int showConfirmDialog = JOptionPane.showConfirmDialog(mainFrame, //
@@ -553,6 +565,23 @@ public class EditorWindow {
 			return;
 		// else exit without asking!!!
 		Gdx.app.exit();
+	}
+
+	private void newProject() {
+
+		// should ask if want to save if project was modified...
+
+		currentProject = null;
+
+		editorApplication.newProject();
+
+		// Skeleton skeleton = new Skeleton(new JointImpl("root", 0f, 0f, 0f));
+		// Skin skin = new Skin();
+		//
+		// Map<String, String> absoluteTexturePaths = new HashMap<String, String>();
+		// editorApplication.updateResources(skeleton, absoluteTexturePaths, skin);
+		// editor.setCurrentAnimation(new SkeletonAnimation());
+
 	}
 
 }

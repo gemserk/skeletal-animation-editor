@@ -555,7 +555,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 	public Map<String, String> texturePaths = new HashMap<String, String>();
 
-	Resource<Texture> transparentTextureResource;
+	Texture transparentTexture;
 
 	public void setCurrentSkin(final File file) {
 
@@ -625,15 +625,25 @@ public class EditorLibgdxApplicationListener extends Game {
 			}
 		};
 
+		resourceBuilder = new LibgdxResourceBuilder(resourceManager);
+
+		transparentTexture = resourceBuilder.texture2(Gdx.files.internal("data/transparent.png")) //
+			.textureWrap(TextureWrap.Repeat, TextureWrap.Repeat) //
+			.build();
+		
+		newProject();
+	}
+
+	public void newProject() {
 		Joint root = new JointImpl("root");
 
 		root.setPosition(0f, 0f);
 		root.setAngle(0f);
+		
+		animationEditor.setCurrentAnimation(new SkeletonAnimation());
 
 		skeletonEditor.setSkeleton(new Skeleton(root));
 		skeletonEditor.select(root);
-
-		resourceBuilder = new LibgdxResourceBuilder(resourceManager);
 
 		skin = new Skin();
 		skinSprites = new HashMap<String, Resource<Sprite>>();
@@ -643,13 +653,6 @@ public class EditorLibgdxApplicationListener extends Game {
 		libgdxCamera.zoom(1f);
 
 		camera = new CameraImpl(0f, 0f, 1f, 0f);
-
-		resourceBuilder.resource("TransparentTexture", resourceBuilder //
-				.texture2(Gdx.files.internal("data/transparent.png"))//
-				.textureWrap(TextureWrap.Repeat, TextureWrap.Repeat) //
-				);
-
-		transparentTextureResource = resourceManager.get("TransparentTexture");
 	}
 
 	@Override
@@ -706,8 +709,6 @@ public class EditorLibgdxApplicationListener extends Game {
 	}
 
 	private void renderTransparentTexture() {
-		Texture transparentTexture = transparentTextureResource.get();
-
 		float textureWidth = transparentTexture.getWidth() / camera.getZoom();
 		float textureHeight = transparentTexture.getHeight() / camera.getZoom();
 
@@ -800,12 +801,6 @@ public class EditorLibgdxApplicationListener extends Game {
 				skin = newSkin;
 
 				resourceManager.unloadAll();
-
-				resourceBuilder.resource("TransparentTexture", resourceBuilder //
-						.texture2(Gdx.files.internal("data/transparent.png"))//
-						.textureWrap(TextureWrap.Repeat, TextureWrap.Repeat) //
-						);
-				transparentTextureResource = resourceManager.get("TransparentTexture");
 
 				Set<String> keySet = texturePaths.keySet();
 
