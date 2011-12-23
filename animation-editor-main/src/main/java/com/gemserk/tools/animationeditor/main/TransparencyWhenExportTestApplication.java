@@ -19,14 +19,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.gemserk.commons.gdx.ApplicationListenerGameStateBasedImpl;
 import com.gemserk.commons.gdx.graphics.Mesh2d;
-import com.gemserk.commons.gdx.graphics.Mesh2dBuilder;
 import com.gemserk.util.ScreenshotSaver;
 
 public class TransparencyWhenExportTestApplication {
 
 	static class TransparencyWhenExportApplicationListener extends ApplicationListenerGameStateBasedImpl {
 
-		private Mesh2d mesh;
 		private Texture texture1;
 		private Texture texture2;
 		private Sprite sprite1;
@@ -38,29 +36,6 @@ public class TransparencyWhenExportTestApplication {
 		public void create() {
 			super.create();
 
-			mesh = new Mesh2dBuilder() //
-					.color(1f, 1f, 1f, 1f) //
-					.texCoord(0f, 0f) //
-					.vertex(-0.5f, -0.5f) //
-					.color(1f, 1f, 1f, 1f) //
-					.texCoord(0f, 1f) //
-					.vertex(-0.5f, 0.5f) //
-					.color(1f, 1f, 1f, 1f) //
-					.texCoord(1f, 1f) //
-					.vertex(0.5f, 0.5f) //
-
-					.color(1f, 1f, 1f, 1f) //
-					.texCoord(0f, 0f) //
-					.vertex(-0.5f, -0.5f) //
-					.color(1f, 1f, 1f, 1f) //
-					.texCoord(1f, 1f) //
-					.vertex(0.5f, 0.5f) //
-					.color(1f, 1f, 1f, 1f) //
-					.texCoord(1f, 0f) //
-					.vertex(0.5f, -0.5f) //
-
-					.build();
-
 			Texture.setEnforcePotImages(false);
 
 			texture1 = new Texture(Gdx.files.internal("alphatest/body-top.png"));
@@ -71,20 +46,20 @@ public class TransparencyWhenExportTestApplication {
 			sprite3 = new Sprite(texture2);
 
 			int size = 100;
-			renderMesh = new Mesh(VertexDataType.VertexArray, false, size * 4, size * 6, new VertexAttribute(Usage.Position, 2, ShaderProgram.POSITION_ATTRIBUTE), // 
-					new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE), // 
+			renderMesh = new Mesh(VertexDataType.VertexArray, false, size * 4, size * 6, new VertexAttribute(Usage.Position, 2, ShaderProgram.POSITION_ATTRIBUTE), //
+					new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE), //
 					new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
-			
+
 			int len = size * 6;
 			short[] indices = new short[len];
 			short j = 0;
 			for (int i = 0; i < len; i += 6, j += 4) {
-				indices[i + 0] = (short)(j + 0);
-				indices[i + 1] = (short)(j + 1);
-				indices[i + 2] = (short)(j + 2);
-				indices[i + 3] = (short)(j + 2);
-				indices[i + 4] = (short)(j + 3);
-				indices[i + 5] = (short)(j + 0);
+				indices[i + 0] = (short) (j + 0);
+				indices[i + 1] = (short) (j + 1);
+				indices[i + 2] = (short) (j + 2);
+				indices[i + 3] = (short) (j + 2);
+				indices[i + 4] = (short) (j + 3);
+				indices[i + 5] = (short) (j + 0);
 			}
 			renderMesh.setIndices(indices);
 
@@ -97,7 +72,7 @@ public class TransparencyWhenExportTestApplication {
 			sprite1.setPosition(0f, 0f);
 			sprite2.setPosition(-0.3f, 0f);
 			sprite3.setPosition(0.2f, 0f);
-			
+
 			sprite1.setSize(0.5f, 0.5f);
 			sprite2.setSize(0.5f, 0.5f);
 			sprite3.setSize(0.5f, 0.5f);
@@ -125,33 +100,34 @@ public class TransparencyWhenExportTestApplication {
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
 			GL11.glEnable(GL11.GL_BLEND);
+			// GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_DST_ALPHA);
 
 			GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_SRC_ALPHA, GL11.GL_DST_ALPHA);
 
 			Gdx.graphics.getGL10().glEnable(GL10.GL_TEXTURE_2D);
-			
+
 			sprite1.getTexture().bind();
-			
+
 			renderMesh.setVertices(sprite1.getVertices());
 			renderMesh.render(GL10.GL_TRIANGLES, 0, 1 * 6);
-			
+
 			sprite2.getTexture().bind();
-			
+
 			renderMesh.setVertices(sprite2.getVertices());
 			renderMesh.render(GL10.GL_TRIANGLES, 0, 1 * 6);
-			
+
 			sprite3.getTexture().bind();
-			
+
 			renderMesh.setVertices(sprite3.getVertices());
 			renderMesh.render(GL10.GL_TRIANGLES, 0, 1 * 6);
-			
+
 			// mesh.render(GL10.GL_TRIANGLES, 0, spritesInBatch * 6);
 
 			// sprite1.getVertices();
 
-//			renderMesh(mesh, texture2, -0.3f, 0f);
-//			renderMesh(mesh, texture1, 0f, 0f);
-//			renderMesh(mesh, texture2, 0.2f, 0f);
+			// renderMesh(mesh, texture2, -0.3f, 0f);
+			// renderMesh(mesh, texture1, 0f, 0f);
+			// renderMesh(mesh, texture2, 0.2f, 0f);
 
 			if (Gdx.input.justTouched()) {
 
