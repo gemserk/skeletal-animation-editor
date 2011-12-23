@@ -69,5 +69,5 @@ DONE
 * Loaded textures are stored in a map<textureid, path> as a property of the main project saved with it, when the project loads, the map of images is used to recreate the resource manager used by the editor and the skin.
 * Save skin, skeleton and animations file in a relative path to the project.
 * Save relative paths of images if the images are in the same base path of the project.
-
+* Remember path of last export image, it will initialize the filechooser on that dir the next time it prompts for an image export
 
