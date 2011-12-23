@@ -653,6 +653,8 @@ public class EditorLibgdxApplicationListener extends Game {
 		libgdxCamera.zoom(1f);
 
 		camera = new CameraImpl(0f, 0f, 1f, 0f);
+		
+		resourceManager.unloadAll();
 	}
 
 	@Override

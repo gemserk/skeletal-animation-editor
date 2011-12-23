@@ -16,6 +16,7 @@ TODO
 * Edit menu with all the stuff with Copy/Paste/Undo/Etc.
 * Cut/Copy part of the skeleton and paste it as child of another Skeleton Joint.
 
+* detect project changes to be able to know when to show open/new/etc dialogs
 * Specify the duration of a keyframe of the current animation
 * Panel with a list of animations to switch between animations
 * BUG: be able to resize the viewport when the application is resized
@@ -32,7 +33,6 @@ TODO
 * Toggle buttons to enable different render stuff (joints, skins, joint axis for inner coordinate system, etc)
 * Keyframes stores only changes from the previous state, to be able to animate multiple animations and to be able to move parents and the animations continue the same (for example, an animaiton of only the left arm)
 * Status bar shows current editor state (modifying the SKin, etc etc etc)
-* New Project
 * Change keyframes order
 * Control to get a frame between two keyframes (possibly a timeline)
 * Joint restrictions, 
@@ -70,4 +70,5 @@ DONE
 * Save skin, skeleton and animations file in a relative path to the project.
 * Save relative paths of images if the images are in the same base path of the project.
 * Remember path of last export image, it will initialize the filechooser on that dir the next time it prompts for an image export
+* New project option in File menu to let us start new project without having to restart the application
 

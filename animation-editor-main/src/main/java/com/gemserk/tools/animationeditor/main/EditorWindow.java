@@ -585,15 +585,13 @@ public class EditorWindow {
 		}
 		
 		currentProject = null;
-
-		editorApplication.newProject();
-
-		// Skeleton skeleton = new Skeleton(new JointImpl("root", 0f, 0f, 0f));
-		// Skin skin = new Skin();
-		//
-		// Map<String, String> absoluteTexturePaths = new HashMap<String, String>();
-		// editorApplication.updateResources(skeleton, absoluteTexturePaths, skin);
-		// editor.setCurrentAnimation(new SkeletonAnimation());
+		
+		Gdx.app.postRunnable(new Runnable() {
+			@Override
+			public void run() {
+				editorApplication.newProject();
+			}
+		});
 
 	}
 
