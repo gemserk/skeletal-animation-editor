@@ -1,11 +1,10 @@
 package com.gemserk.tools.animationeditor.main;
 
-import static org.lwjgl.opengl.GL11.GL_BLEND;
-
 import java.io.File;
 import java.io.IOException;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
@@ -63,8 +62,8 @@ public class TransparencyWhenExportTestApplication {
 
 			// GL20 gl20 = Gdx.graphics.getGL20();
 
-			GL11.glClearColor(1f, 1f, 1f, 0f);
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+//			GL11.glClearColor(1f, 1f, 1f, 0f);
+//			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
 			// gl20.glDisable(GL10.GL_SCISSOR_TEST);
 			//
@@ -75,33 +74,42 @@ public class TransparencyWhenExportTestApplication {
 
 			// Mesh2dRenderUtils.draw(GL11.GL_TRIANGLES, mesh);
 
-			GL11.glEnable(GL_BLEND);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			// GL11.glEnable(GL_BLEND);
+			// GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-			// glDisable(GL_SCISSOR_TEST);
-			// glBlendFuncSeparate(
-			// GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA,
-			// GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);
-			// glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-			// glClear(GL_COLOR_BUFFER_BIT);
+//			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_SRC_ALPHA);
 
+			GL11.glDisable(GL11.GL_SCISSOR_TEST);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 
+					GL11.GL_ZERO, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+			GL11.glEnable(GL11.GL_SCISSOR_TEST);
+
+			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_SRC_ALPHA);
 			renderMesh(mesh, texture2, -0.3f, 0f);
-			renderMesh(mesh, texture1, 0f, 0f);
-
-			GL11.glDisable(GL_BLEND);
+			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			
+//			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_SRC_ALPHA);
+			renderMesh(mesh, texture1, 0f, 0f);
+//			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+			GL11.glDisable(GL11.GL_BLEND);
+
+
 			if (Gdx.input.justTouched()) {
-				
+
 				try {
 					ScreenshotSaver.saveScreenshot(new File("/tmp/output.png"), true);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
+
 			}
 
 		}
-		
+
 		private void renderMesh(Mesh2d mesh, Texture texture, float x, float y) {
 			GL11.glPushMatrix();
 			GL11.glTranslatef(x, y, 0f);
@@ -112,7 +120,7 @@ public class TransparencyWhenExportTestApplication {
 		private void renderMesh(Mesh2d mesh, Texture texture) {
 			GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
 			GL11.glVertexPointer(3, 0, mesh.getVertexArray());
-			
+
 			if (mesh.getColorArray() != null) {
 				GL11.glEnableClientState(GL11.GL_COLOR_ARRAY);
 				GL11.glColorPointer(4, 0, mesh.getColorArray());
