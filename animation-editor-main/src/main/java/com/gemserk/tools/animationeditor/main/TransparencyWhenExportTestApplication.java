@@ -62,8 +62,8 @@ public class TransparencyWhenExportTestApplication {
 
 			// GL20 gl20 = Gdx.graphics.getGL20();
 
-//			GL11.glClearColor(1f, 1f, 1f, 0f);
-//			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+			// GL11.glClearColor(1f, 1f, 1f, 0f);
+			// GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
 			// gl20.glDisable(GL10.GL_SCISSOR_TEST);
 			//
@@ -77,26 +77,18 @@ public class TransparencyWhenExportTestApplication {
 			// GL11.glEnable(GL_BLEND);
 			// GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-//			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_SRC_ALPHA);
+			// GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_SRC_ALPHA);
 
-			GL11.glDisable(GL11.GL_SCISSOR_TEST);
-			GL11.glEnable(GL11.GL_BLEND);
-			GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 
-					GL11.GL_ZERO, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+			GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-			GL11.glEnable(GL11.GL_SCISSOR_TEST);
 
-			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_SRC_ALPHA);
+			GL11.glEnable(GL11.GL_BLEND);
+
+			GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
 			renderMesh(mesh, texture2, -0.3f, 0f);
-			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-			
-//			GL11.glBlendFunc(GL11.GL_ONE, GL11.GL_SRC_ALPHA);
 			renderMesh(mesh, texture1, 0f, 0f);
-//			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-
-			GL11.glDisable(GL11.GL_BLEND);
-
+			renderMesh(mesh, texture2, 0.2f, 0f);
 
 			if (Gdx.input.justTouched()) {
 
