@@ -16,6 +16,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.GL11;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
@@ -218,7 +219,29 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			float updateTime = 1f / fps;
 
-			renderSkin(skin);
+			GL10 gl10 = Gdx.graphics.getGL10();
+
+			if (Gdx.graphics.isGL20Available()) {
+
+				GL20 gl20 = Gdx.graphics.getGL20();
+
+				gl20.glClearColor(0f, 0f, 0f, 0f);
+				gl20.glClear(GL10.GL_COLOR_BUFFER_BIT);
+
+				gl20.glDisable(GL10.GL_SCISSOR_TEST);
+
+				gl20.glBlendFuncSeparate(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA, GL10.GL_ZERO, GL10.GL_ONE_MINUS_SRC_ALPHA);
+
+				gl20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+				gl20.glClear(GL10.GL_COLOR_BUFFER_BIT);
+				
+				
+
+			}
+
+			// renderSkin(skin);
+
+			// render quad
 
 			try {
 				ScreenshotSaver.saveScreenshot(new File(animationPath + sequence + ".png"), true);
@@ -340,7 +363,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			Vector2 diff = new Vector2(previousPosition);
 			diff.sub(position);
-			
+
 			diff.mul(1f / camera.getZoom());
 
 			camera.setPosition(camera.getX() + diff.x, camera.getY() + diff.y);
@@ -644,7 +667,10 @@ public class EditorLibgdxApplicationListener extends Game {
 		libgdxCamera.move(camera.getX(), camera.getY());
 		libgdxCamera.zoom(camera.getZoom());
 
-		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
+		GL10 gl10 = Gdx.graphics.getGL10();
+
+		gl10.glClearColor(1f, 1f, 1f, 0f);
+		gl10.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		currentState.render();
 	}
