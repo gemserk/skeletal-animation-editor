@@ -181,7 +181,7 @@ public class EditorWindow {
 		mntmSave.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (currentProject != null)
-					save(editorApplication);
+					save();
 				else
 					saveAs(editorApplication);
 			}
@@ -453,7 +453,7 @@ public class EditorWindow {
 		panel_7.add(buttonStoreKeyFrame);
 	}
 
-	private void save(EditorLibgdxApplicationListener editorApplication) {
+	private void save() {
 		// currentProject.texturePaths.clear();
 		// // convert to relativ paths!
 		// currentProject.texturePaths.putAll(editorApplication.texturePaths);
@@ -486,7 +486,7 @@ public class EditorWindow {
 			Project project = new Project(selectedFile.getAbsolutePath());
 
 			currentProject = project;
-			save(editorApplication);
+			save();
 
 			// project.texturePaths.clear();
 			// // convert to relativ paths!
@@ -569,8 +569,21 @@ public class EditorWindow {
 
 	private void newProject() {
 
-		// should ask if want to save if project was modified...
+		// should ask if want to save only if project was modified...
 
+		int showConfirmDialog = JOptionPane.showConfirmDialog(mainFrame, //
+				messages.getString(Messages.DialogNewMessage), //
+				messages.getString(Messages.DialogNewTitle), //
+				JOptionPane.YES_NO_CANCEL_OPTION);
+		
+		if (showConfirmDialog == JOptionPane.CANCEL_OPTION) 
+			return;
+		
+		if (showConfirmDialog == JOptionPane.YES_OPTION) {
+			if (currentProject != null)
+				save();
+		}
+		
 		currentProject = null;
 
 		editorApplication.newProject();
