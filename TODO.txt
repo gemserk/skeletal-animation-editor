@@ -7,34 +7,45 @@ TODO
 
 * runnable jar (with all dependencies) on Github uploads
 
-* Import a list of images to the images panel to be used to easily edit the skin of each Joint.
-
-* move skin patches between different layers back/over
-
-* Zoom with ctrl + mouse wheel (and possibly a gui component)
-* Undo with ctrl + z
-* Edit menu with all the stuff with Copy/Paste/Undo/Etc.
-* Cut/Copy part of the skeleton and paste it as child of another Skeleton Joint.
-
-* detect project changes to be able to know when to show open/new/etc dialogs
-* Specify the duration of a keyframe of the current animation
-* Panel with a list of animations to switch between animations
+[bugs]
 * BUG: be able to resize the viewport when the application is resized
 * BUG: cant select a node from the JTree when we are modifying a Skin
-* Title bar shows the current project (updated when open or save as...)
 * Perform exit when EXIT button touched
-* Dialog when exit the application if project was modified since the last modification
-* Dialog when opening a new project the application if project was modified since the last modification
+* when renaming a node name in the jtree editor maps using joint id should be updated, or we should use another property for the node name instead the id.
+
+[skins]
+* move skin patches between different layers back/over
+* Import a list of images to the images panel to be used to easily edit the skin of each Joint.
+
+[project]
 * Application configuration in the user home or something like that
 	- recent projects
 	- last opened folders for each operation
 
+[editor]
+* Zoom with ctrl + mouse wheel (and possibly a gui component)
+* label shows current zoom in status bar
+* combo box to select default zooms
+* Undo with ctrl + z
+* Edit menu with all the stuff with Copy/Paste/Undo/Etc.
+* Cut/Copy part of the skeleton and paste it as child of another Skeleton Joint.
+* detect project changes to be able to know when to show open/new/etc dialogs
+* Dialog when exit the application if project was modified since the last modification
+* Dialog when opening a new project the application if project was modified since the last modification
+* Title bar shows the current project (updated when open or save as...)
 * Tooltips over each button of the GUI
 * Toggle buttons to enable different render stuff (joints, skins, joint axis for inner coordinate system, etc)
-* Keyframes stores only changes from the previous state, to be able to animate multiple animations and to be able to move parents and the animations continue the same (for example, an animaiton of only the left arm)
 * Status bar shows current editor state (modifying the SKin, etc etc etc)
+* skeleton has its own state, independent of the animation edition
+* separate the skeleton edition from the animation edition (use tabs or something like that) to be able to define joint relations there.
+
+[animations]
+* Specify the duration of a keyframe of the current animation
+* Panel with a list of animations to switch between animations
+* Keyframes stores only changes from the previous state, to be able to animate multiple animations and to be able to move parents and the animations continue the same (for example, an animaiton of only the left arm)
 * Change keyframes order
-* Control to get a frame between two keyframes (possibly a timeline)
+* Control to get a frame between two keyframes (possibly a timeline), data should be interpolated between previous and next keyframes (for each joint)
+
 * Joint restrictions, 
 	- distance between two joints (min, max)
 
