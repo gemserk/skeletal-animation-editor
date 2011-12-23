@@ -30,23 +30,23 @@ public class TransparencyWhenExportTestApplication {
 			mesh = new Mesh2dBuilder() //
 					.color(1f, 1f, 1f, 1f) //
 					.texCoord(0f, 0f) //
-					.vertex(0f, 0f) //
+					.vertex(-0.5f, -0.5f) //
 					.color(1f, 1f, 1f, 1f) //
 					.texCoord(0f, 1f) //
-					.vertex(0f, 0.5f) //
+					.vertex(-0.5f, 0.5f) //
 					.color(1f, 1f, 1f, 1f) //
 					.texCoord(1f, 1f) //
 					.vertex(0.5f, 0.5f) //
 
 					.color(1f, 1f, 1f, 1f) //
 					.texCoord(0f, 0f) //
-					.vertex(0f, 0f) //
+					.vertex(-0.5f, -0.5f) //
 					.color(1f, 1f, 1f, 1f) //
 					.texCoord(1f, 1f) //
 					.vertex(0.5f, 0.5f) //
 					.color(1f, 1f, 1f, 1f) //
 					.texCoord(1f, 0f) //
-					.vertex(0.5f, 0f) //
+					.vertex(0.5f, -0.5f) //
 
 					.build();
 
