@@ -1,0 +1,67 @@
+{
+  "patches": {
+    "node-626": {
+      "jointId": "node-626",
+      "textureId": "texture4",
+      "angle": 0.0,
+      "cx": 0.47460938,
+      "cy": 0.7441406
+    },
+    "node-789": {
+      "jointId": "node-789",
+      "textureId": "texture1",
+      "angle": 0.0,
+      "cx": 0.515625,
+      "cy": 0.3203125
+    },
+    "node-606": {
+      "jointId": "node-606",
+      "textureId": "texture3",
+      "angle": 0.0,
+      "cx": 0.48242188,
+      "cy": 0.60546875
+    },
+    "node-614": {
+      "jointId": "node-614",
+      "textureId": "texture7",
+      "angle": 0.0,
+      "cx": 0.48242188,
+      "cy": 0.6875
+    },
+    "node-698": {
+      "jointId": "node-698",
+      "textureId": "texture10",
+      "angle": 0.0,
+      "cx": 0.44335938,
+      "cy": 0.53515625
+    },
+    "node-299": {
+      "jointId": "node-299",
+      "textureId": "texture6",
+      "angle": 0.0,
+      "cx": 0.45117188,
+      "cy": 0.5234375
+    },
+    "root": {
+      "jointId": "root",
+      "textureId": "texture2",
+      "angle": 0.0,
+      "cx": 0.48046875,
+      "cy": 0.7519531
+    },
+    "node-434": {
+      "jointId": "node-434",
+      "textureId": "texture9",
+      "angle": 0.0,
+      "cx": 0.49023438,
+      "cy": 0.7597656
+    },
+    "node-423": {
+      "jointId": "node-423",
+      "textureId": "texture5",
+      "angle": 0.0,
+      "cx": 0.49023438,
+      "cy": 0.75390625
+    }
+  }
+}

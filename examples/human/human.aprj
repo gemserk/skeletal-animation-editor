@@ -1,0 +1,16 @@
+{
+  "projectFile": "/tmp/human/human.aprj",
+  "texturePaths": {
+    "texture2": "images/body.png",
+    "texture1": "images/head.png",
+    "texture10": "images/foot.png",
+    "texture0": "images/body.png",
+    "texture6": "images/foot.png",
+    "texture5": "images/leg-bottom.png",
+    "texture4": "images/leg-top.png",
+    "texture3": "images/body-bottom.png",
+    "texture9": "images/leg-bottom.png",
+    "texture8": "images/leg-top.png",
+    "texture7": "images/leg-top.png"
+  }
+}
