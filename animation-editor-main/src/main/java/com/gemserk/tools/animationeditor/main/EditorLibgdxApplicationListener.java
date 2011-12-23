@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.lwjgl.opengl.GL14;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,11 +17,16 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.GL11;
+import com.badlogic.gdx.graphics.Mesh;
+import com.badlogic.gdx.graphics.Mesh.VertexDataType;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.Texture.TextureWrap;
+import com.badlogic.gdx.graphics.VertexAttribute;
+import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.gemserk.animation4j.timeline.Timeline;
@@ -181,6 +187,7 @@ public class EditorLibgdxApplicationListener extends Game {
 		float fps;
 
 		String animationPath;
+		private Mesh mesh;
 
 		public ExportingAnimationState(String animationPath, float fps) {
 			SkeletonAnimation currentAnimation = animationEditor.getCurrentAnimation();
@@ -204,6 +211,24 @@ public class EditorLibgdxApplicationListener extends Game {
 			sequence = 0;
 			this.fps = fps;
 			this.animationPath = animationPath;
+
+			int size = 100;
+			mesh = new Mesh(VertexDataType.VertexArray, false, size * 4, size * 6, new VertexAttribute(Usage.Position, 2, ShaderProgram.POSITION_ATTRIBUTE), //
+					new VertexAttribute(Usage.ColorPacked, 4, ShaderProgram.COLOR_ATTRIBUTE), //
+					new VertexAttribute(Usage.TextureCoordinates, 2, ShaderProgram.TEXCOORD_ATTRIBUTE + "0"));
+
+			int len = size * 6;
+			short[] indices = new short[len];
+			short j = 0;
+			for (int i = 0; i < len; i += 6, j += 4) {
+				indices[i + 0] = (short) (j + 0);
+				indices[i + 1] = (short) (j + 1);
+				indices[i + 2] = (short) (j + 2);
+				indices[i + 3] = (short) (j + 2);
+				indices[i + 4] = (short) (j + 3);
+				indices[i + 5] = (short) (j + 0);
+			}
+			mesh.setIndices(indices);
 		}
 
 		@Override
@@ -218,7 +243,35 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			float updateTime = 1f / fps;
 
-			renderSkin(skin);
+			GL10 gl10 = Gdx.graphics.getGL10();
+
+			gl10.glPushMatrix();
+
+			gl10.glClearColor(0.0f, 0f, 0f, 0.0f);
+			gl10.glClear(GL10.GL_COLOR_BUFFER_BIT);
+
+			gl10.glEnable(GL10.GL_BLEND);
+			gl10.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_DST_ALPHA);
+
+			// GL14.glBlendFuncSeparate(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA, GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
+			GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE);
+
+			gl10.glEnable(GL10.GL_TEXTURE_2D);
+
+			for (int i = 0; i < skin.patchesCount(); i++) {
+				SkinPatch patch = skin.getPatch(i);
+
+				String jointId = patch.getJointId();
+
+				Sprite patchSprite = skinSprites.get(jointId).get();
+
+				patchSprite.getTexture().bind();
+
+				mesh.setVertices(patchSprite.getVertices());
+				mesh.render(GL10.GL_TRIANGLES, 0, 1 * 6);
+			}
+
+			gl10.glPushMatrix();
 
 			try {
 				ScreenshotSaver.saveScreenshot(new File(animationPath + sequence + ".png"), true);
@@ -340,7 +393,7 @@ public class EditorLibgdxApplicationListener extends Game {
 
 			Vector2 diff = new Vector2(previousPosition);
 			diff.sub(position);
-			
+
 			diff.mul(1f / camera.getZoom());
 
 			camera.setPosition(camera.getX() + diff.x, camera.getY() + diff.y);
@@ -644,7 +697,10 @@ public class EditorLibgdxApplicationListener extends Game {
 		libgdxCamera.move(camera.getX(), camera.getY());
 		libgdxCamera.zoom(camera.getZoom());
 
-		Gdx.graphics.getGL10().glClear(GL10.GL_COLOR_BUFFER_BIT);
+		GL10 gl10 = Gdx.graphics.getGL10();
+
+		gl10.glClearColor(1f, 1f, 1f, 0f);
+		gl10.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
 		currentState.render();
 	}
@@ -652,16 +708,16 @@ public class EditorLibgdxApplicationListener extends Game {
 	private void renderTransparentTexture() {
 		Texture transparentTexture = transparentTextureResource.get();
 
-		float tw = transparentTexture.getWidth() / camera.getZoom();
-		float th = transparentTexture.getHeight() / camera.getZoom();
+		float textureWidth = transparentTexture.getWidth() / camera.getZoom();
+		float textureHeight = transparentTexture.getHeight() / camera.getZoom();
 
-		float w = Gdx.graphics.getWidth() / camera.getZoom();
-		float h = Gdx.graphics.getHeight() / camera.getZoom();
+		float width = Gdx.graphics.getWidth() / camera.getZoom();
+		float height = Gdx.graphics.getHeight() / camera.getZoom();
 
 		spriteBatch.setProjectionMatrix(libgdxCamera.getCombinedMatrix());
 		spriteBatch.begin();
 		spriteBatch.disableBlending();
-		spriteBatch.draw(transparentTexture, camera.getX() - w / 2, camera.getY() - h / 2, w, h, 0f, 0f, w / tw, h / th);
+		spriteBatch.draw(transparentTexture, camera.getX() - width / 2, camera.getY() - height / 2, width, height, 0f, 0f, width / textureWidth, height / textureHeight);
 		spriteBatch.enableBlending();
 		spriteBatch.end();
 	}
